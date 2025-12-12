@@ -1,6 +1,8 @@
 # AI中文编程提示词项目
 
 <div align="center">
+
+> **Latest Update:** 19/10/2025
   
 ![版本](https://img.shields.io/badge/版本-1.0.0-blue)
 ![许可](https://img.shields.io/badge/许可-MIT-green)
@@ -78,11 +80,6 @@
 <div align="left">
   <sub>如有任何问题或建议，欢迎提交Issue</sub>
 </div>
-
-## 联系作者
-
-- 📱 公众号： 祥子AI
-- 💬 微信： wailbil
 
 ## 📜 许可
 
