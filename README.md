@@ -2,7 +2,7 @@
 
 <div align="center">
 
-> **Latest Update:** 19/10/2025
+> **Latest Update:** 2025-12-13
   
 ![版本](https://img.shields.io/badge/版本-1.0.0-blue)
 ![许可](https://img.shields.io/badge/许可-MIT-green)
@@ -17,22 +17,65 @@
 > **声明：** 本项目仅供学习研究使用。项目中的所有提示词和模型文档仅用于帮助开发者理解AI工具的工作原理。详细的免责声明请查看[DISCLAIMER.md](./DISCLAIMER.md)文件。
 
 ## 🚀 项目内容
+
+本项目收录了超过 35+ 主流 AI 编程工具的系统提示词和模型设计文档，包括但不限于：
+
+- **代码编辑器集成工具**: Cursor, VSCode Agent, Windsurf, Xcode, Augment Code
+- **AI 编程助手**: Devin AI, Replit, v0, Bolt, Cline, RooCode, Claude Code
+- **专业开发平台**: Lovable, Same.dev, Manus Agent, Leap.new, Amp
+- **新兴 AI 工具**: Kiro, Emergent, Traycer AI, Poke, Qoder, dia, Junie
+- **企业级工具**: NotionAI, Perplexity, Google Gemini, Doubao, Anthropic
+- **开发辅助工具**: CodeBuddy, Comet Assistant, Cluely, Orchids.app, Trae, Warp.dev, Z.ai Code
+- **开源项目**: Bolt, Cline, RooCode, Lumo, Gemini CLI 等
  
 
 ## 📂 目录结构
 
 ```
 .
-├── Cursor Prompts/               # Cursor编辑器的提示词
-├── Devin AI/                     # Devin AI的系统提示词
-├── VSCode Agent/                 # VSCode Agent的相关文档
-├── Replit/                       # Replit的提示词和工具
-├── Windsurf/                     # Windsurf相关文档
-├── Same.dev/                     # Same.dev平台的提示词
-├── Lovable/                      # Lovable AI助手文档
-├── Manus Agent Tools & Prompt/   # Manus Agent的工具和提示词
-├── Open Source prompts/          # 开源AI工具的提示词
-└── v0 Prompts and Tools/         # v0的提示词和工具
+├── Cursor Prompts/               # Cursor 编辑器的提示词与工具
+├── Devin AI/                     # Devin AI 的系统提示词
+├── VSCode Agent/                 # VSCode Agent 多模型支持文档
+├── Windsurf/                     # Windsurf 提示词与工具
+├── Replit/                       # Replit 的提示词和工具配置
+├── v0 Prompts and Tools/         # v0 的提示词和工具定义
+├── Lovable/                      # Lovable AI 助手完整文档
+├── Same.dev/                     # Same.dev 平台的提示词
+├── Manus Agent Tools & Prompt/   # Manus Agent 的工具和提示词
+├── Open Source prompts/          # 开源 AI 工具提示词集合
+│   ├── Bolt/                     # Bolt AI 提示词
+│   ├── Cline/                    # Cline 助手提示词
+│   ├── RooCode/                  # RooCode 提示词
+│   ├── Lumo/                     # Lumo 提示词
+│   └── Gemini CLI/               # Google Gemini CLI 系统提示词
+├── Google/                       # Google AI 工具集合
+│   ├── Gemini/                   # Gemini AI Studio
+│   └── Antigravity/              # Antigravity 快速模式
+├── Anthropic/                    # Anthropic Claude 相关提示词
+├── Claude Code/                  # Claude Code 编程助手
+├── Xcode/                        # Xcode AI 功能提示词
+├── Augment Code/                 # Augment Code AI 编程工具
+├── Amp/                          # Amp AI 开发平台
+├── Kiro/                         # Kiro AI (Vibe/Spec/Mode)
+├── Emergent/                     # Emergent AI 提示词与工具
+├── Traycer AI/                   # Traycer AI 计划与阶段模式
+├── Leap.new/                     # Leap.new 提示词与工具
+├── Poke/                         # Poke Agent 多阶段提示词
+├── Qoder/                        # Qoder Quest 设计与动作
+├── Trae/                         # Trae Builder 提示词与工具
+├── Orchids.app/                  # Orchids 决策与系统提示词
+├── dia/                          # dia AI 提示词
+├── Warp.dev/                     # Warp 终端 AI 提示词
+├── Z.ai Code/                    # Z.ai 代码助手提示词
+├── Doubao(dola)/                 # 豆包 AI 提示词
+├── Junie/                        # Junie AI 提示词
+├── NotionAi/                     # Notion AI 提示词与工具
+├── Perplexity/                   # Perplexity AI 提示词
+├── CodeBuddy Prompts/            # CodeBuddy Chat 与 Craft 提示词
+├── Comet Assistant/              # Comet 助手系统提示词
+├── Cluely/                       # Cluely 企业版与默认提示词
+├── DISCLAIMER.md                 # 免责声明
+└── LICENSE.md                    # MIT 许可证
 ```
 
 ## 🔍 使用方法
@@ -67,13 +110,27 @@
 
 我致力于建立一个完整的中文AI工具资源库，帮助更多开发者充分利用AI辅助编程的潜力。
 
+## ✨ 项目特色
+
+- 📚 **全面覆盖**: 收录 35+ 主流和新兴 AI 编程工具
+- 🔄 **持续更新**: 跟踪最新版本的提示词变化
+- 🌏 **中文友好**: 为中文开发者提供本地化文档
+- 🛠️ **实用性强**: 包含工具配置和实际应用案例
+- 🎯 **结构清晰**: 按工具类型和功能分类整理
+
 ## 🔗 相关链接
 
+### 主流工具官网
 - [原始英文项目](https://github.com/x1xhlol/system-prompts-and-models-of-ai-tools)
-- [Cursor官网](https://cursor.sh/)
-- [Devin AI官网](https://www.cognition.ai/)
-- [VSCode官网](https://code.visualstudio.com/)
-- [Replit官网](https://replit.com/)
+- [Cursor](https://cursor.sh/) | [Windsurf](https://codeium.com/windsurf) | [VSCode](https://code.visualstudio.com/)
+- [Devin AI](https://www.cognition.ai/) | [Replit](https://replit.com/) | [v0](https://v0.dev/)
+- [Lovable](https://lovable.dev/) | [Bolt](https://bolt.new/) | [Cline](https://github.com/cline/cline)
+- [Anthropic Claude](https://www.anthropic.com/) | [Augment Code](https://augmentcode.com/)
+
+### 新兴工具
+- [Warp](https://www.warp.dev/) | [Leap.new](https://leap.new/) | [Same.dev](https://same.dev/)
+- [Perplexity](https://www.perplexity.ai/) | [NotionAI](https://www.notion.so/product/ai)
+- [Amp](https://withamp.com/) | [Kiro](https://kiro.ai/) | [Z.ai](https://z.ai/)
 
 ---
 
