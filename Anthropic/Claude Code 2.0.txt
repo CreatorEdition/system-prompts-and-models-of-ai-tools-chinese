@@ -1,3 +1,4 @@
+# Anthropic 公司 Claude Code 2.0.0 系统提示词
 # Claude Code 版本 2.0.0
 
 发布日期：2025-09-29
