@@ -1,4 +1,4 @@
-    # Sourcegraph 公司 Amp AI 的系统提示（Claude 4 Sonnet）
+    # Sourcegraph 公司 Amp AI 的系统提示（Claude 4 Sonnet）@date:2025-09-15 @update:https://github.com/CreatorEdition/system-prompts-and-models-of-ai-tools-chinese/
     system:
       - type: text
         text: >
