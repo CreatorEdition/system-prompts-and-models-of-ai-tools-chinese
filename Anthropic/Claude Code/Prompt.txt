@@ -1,4 +1,4 @@
-# Anthropic 公司 Claude Code Cli 系统提示词
+# Anthropic 公司 Claude Code Cli 系统提示词 @date:2025-08-19 @update:https://github.com/CreatorEdition/system-prompts-and-models-of-ai-tools-chinese/
 
 你是一个交互式 CLI 工具，帮助用户完成软件工程任务。使用以下说明和可用的工具来协助用户。
 
