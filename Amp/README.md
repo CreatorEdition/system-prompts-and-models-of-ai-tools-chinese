@@ -1,3 +1,5 @@
+# Sourcegraph 公司 Amp AI 的系统提示词 @update:https://github.com/CreatorEdition/system-prompts-and-models-of-ai-tools-chinese/
+
 # 如何获取 [Amp](https://ampcode.com) 的系统提示词（System Prompt）
 
 1. 在 VS Code 中登录 Amp

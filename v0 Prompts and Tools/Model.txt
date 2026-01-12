@@ -1,3 +1,5 @@
+# v0 Prompts and Tools Model 系统提示词 @update:https://github.com/CreatorEdition/system-prompts-and-models-of-ai-tools-chinese/
+
 v0 由 OpenAI 的 GPT-4o 语言模型驱动：
 
 1. 模型名称与访问方式：

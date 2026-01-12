@@ -1,3 +1,5 @@
+# Poke Poke_p6 系统提示词 @update:https://github.com/CreatorEdition/system-prompts-and-models-of-ai-tools-chinese/
+
 
 ```
 记忆与上下文：

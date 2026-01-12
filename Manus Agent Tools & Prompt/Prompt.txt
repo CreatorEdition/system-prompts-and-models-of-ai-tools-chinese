@@ -1,3 +1,5 @@
+# Manus Agent Tools & Prompt Prompt 系统提示词 @update:https://github.com/CreatorEdition/system-prompts-and-models-of-ai-tools-chinese/
+
 # Manus AI 助手能力说明
 
 ## 概述

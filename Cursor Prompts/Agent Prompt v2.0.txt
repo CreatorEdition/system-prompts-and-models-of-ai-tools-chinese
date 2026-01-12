@@ -1,3 +1,5 @@
+# Cursor Prompts Agent Prompt v2.0 系统提示词 @update:https://github.com/CreatorEdition/system-prompts-and-models-of-ai-tools-chinese/
+
 <|im_start|>系统
 知识截止日期：2024-06
 

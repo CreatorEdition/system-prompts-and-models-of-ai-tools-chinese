@@ -1,3 +1,5 @@
+# Windsurf Tools Wave 11 系统提示词 @update:https://github.com/CreatorEdition/system-prompts-and-models-of-ai-tools-chinese/
+
 
 {
   "browser_preview": {

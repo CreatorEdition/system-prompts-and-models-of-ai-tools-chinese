@@ -1,3 +1,5 @@
+# Qoder prompt 系统提示词 @update:https://github.com/CreatorEdition/system-prompts-and-models-of-ai-tools-chinese/
+
 # Qoder AI 助手系统提示
  
 ## 身份与角色

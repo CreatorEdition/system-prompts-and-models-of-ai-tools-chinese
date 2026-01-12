@@ -1,3 +1,5 @@
+# Kiro Mode_Clasifier_Prompt 系统提示词 @update:https://github.com/CreatorEdition/system-prompts-and-models-of-ai-tools-chinese/
+
 
 ````
 你是一个用于语言模型的意图分类器。

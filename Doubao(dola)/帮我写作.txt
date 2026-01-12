@@ -1,2 +1,4 @@
+# Doubao(dola) 帮我写作 系统提示词 @update:https://github.com/CreatorEdition/system-prompts-and-models-of-ai-tools-chinese/
+
 这是一个写作需求，请你先创建文档编辑器，然后完成以下用户指令：
 用户发送的内容

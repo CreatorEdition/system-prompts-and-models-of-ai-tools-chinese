@@ -1,4 +1,4 @@
-    # Sourcegraph 公司 Amp AI 的系统提示（GPT-5）@date:2025-09-15 @update:https://github.com/CreatorEdition/system-prompts-and-models-of-ai-tools-chinese/
+# Sourcegraph 公司 Amp AI 的系统提示（GPT-5）@date:2025-09-15 @update:https://github.com/CreatorEdition/system-prompts-and-models-of-ai-tools-chinese/
 ~debug:
   lastInferenceUsage: *ref_0
   lastInferenceInput:

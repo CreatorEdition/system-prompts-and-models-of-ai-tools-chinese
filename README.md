@@ -2,7 +2,7 @@
 
 <div align="center">
 
-> **Latest Update:** 2025-12-13
+> **Latest Update:** 2026-01-13
   
 ![版本](https://img.shields.io/badge/版本-1.0.0-blue)
 ![许可](https://img.shields.io/badge/许可-MIT-green)
@@ -12,7 +12,7 @@
 
 ## 📖 项目简介
 
-本项目是对[system-prompts-and-models-of-ai-tools](https://github.com/x1xhlol/system-prompts-and-models-of-ai-tools)的中文翻译版本，旨在为中文开发者和AI爱好者提供各种流行AI编程工具的系统提示词和模型设计文档。通过这些资料，您可以深入了解各类AI助手的工作原理，以及如何更有效地与它们交互。
+本项目是对[system-prompts-and-models-of-ai-tools](https://github.com/x1xhlol/system-prompts-and-models-of-ai-tools)的中文翻译及扩充版本，旨在为中文开发者和AI爱好者提供各种流行AI编程工具的系统提示词和模型设计文档。通过这些资料，您可以深入了解各类AI助手的工作原理，以及如何更有效地与它们交互。
 
 > **声明：** 本项目仅供学习研究使用。项目中的所有提示词和模型文档仅用于帮助开发者理解AI工具的工作原理。详细的免责声明请查看[DISCLAIMER.md](./DISCLAIMER.md)文件。
 
@@ -96,6 +96,8 @@
 3. 提交您的更改 (`git commit -m '添加对XX工具的翻译'`)
 4. 推送到分支 (`git push origin feature/amazing-translation`)
 5. 开启一个Pull Request
+
+> **💡 提示：** 提交新文件时，建议在文件开头添加标准头部信息（包含描述、日期 @date:YYYY-MM-DD 和更新链接），以保持规范统一。
 
 
 

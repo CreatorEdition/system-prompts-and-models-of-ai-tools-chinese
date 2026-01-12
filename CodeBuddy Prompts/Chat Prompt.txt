@@ -1,3 +1,5 @@
+# CodeBuddy Prompts Chat Prompt 系统提示词 @update:https://github.com/CreatorEdition/system-prompts-and-models-of-ai-tools-chinese/
+
 <environment_details>
 # CodeBuddy 可见文件
 {visible_files}

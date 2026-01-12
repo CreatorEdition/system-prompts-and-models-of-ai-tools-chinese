@@ -1,4 +1,3 @@
-
 MIT License
 
 Copyright (c) 2024 AI工具系统提示词和模型中文翻译项目
