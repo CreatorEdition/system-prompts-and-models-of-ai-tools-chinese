@@ -1,515 +1,515 @@
+# Aggregated tools 系统提示词（Claude 4 sonnet） @update:https://github.com/CreatorEdition/system-prompts-and-models-of-ai-tools-chinese/
 {
-  "tools": [
-    {
-      "name": "str-replace-editor",
-      "description": "用于编辑文件的工具。\n* `path` 是相对于工作区根目录的文件路径\n* `insert` 和 `str_replace` 命令为每个条目输出一个编辑部分的片段。此片段反映了应用所有编辑和 IDE 自动格式化后的文件的最终状态。\n* 首先生成 `instruction_reminder` 以提醒自己将编辑限制在最多 150 行。\n\n使用 `str_replace` 命令的注意事项:\n* 为第一次替换指定 `old_str_1`、`new_str_1`、`old_str_start_line_number_1` 和 `old_str_end_line_number_1` 属性；为第二次替换指定 `old_str_2`、`new_str_2`、`old_str_start_line_number_2` 和 `old_str_end_line_number_2`，依此类推\n* `old_str_start_line_number_1` 和 `old_str_end_line_number_1` 参数是基于 1 的行号\n* `old_str_start_line_number_1` 和 `old_str_end_line_number_1` 都是**包含**的\n* `old_str_1` 参数应**完全匹配**原始文件中连续的一行或多行。请注意**空格**!\n* 只有当文件为空或仅包含空格时,才允许空 `old_str_1`\n* 必须指定 `old_str_start_line_number_1` 和 `old_str_end_line_number_1` 以便在文件中存在多个 `old_str_1` 时进行区分\n* 确保 `old_str_start_line_number_1` 和 `old_str_end_line_number_1` 不与其他 `old_str_start_line_number_2` 和 `old_str_end_line_number_2` 条目重叠\n* `new_str_1` 参数应包含用于替换 `old_str_1` 的编辑后的行。可以是空字符串以删除内容\n* 要在一次工具调用中进行多次替换,请添加多组替换参数。例如, 第一次替换的 `old_str_1`、`new_str_1`、`old_str_start_line_number_1` 和 `old_str_end_line_number_1` 属性；第二次替换的 `old_str_2`、`new_str_2`、`old_str_start_line_number_2`、`old_str_end_line_number_2` 等。\n\n使用 `insert` 命令的注意事项:\n* 为第一次插入指定 `insert_line_1` 和 `new_str_1` 属性；为第二次插入指定 `insert_line_2` 和 `new_str_2`，依此类推\n* `insert_line_1` 参数指定新字符串要插入到**其后**的行号\n* `insert_line_1` 参数是基于 1 的行号\n* 要在文件最开头插入,请使用 `insert_line_1: 0`\n* 要在一次工具调用中进行多次插入,请添加多组插入参数。例如, 第一次插入的 `insert_line_1` 和 `new_str_1` 属性；第二次插入的 `insert_line_2` 和 `new_str_2` 等。\n\n**重要提示 (IMPORTANT)**:\n* 这是您应该用于编辑文件的**唯一**工具。\n* 如果它失败了,请尽力修复输入并重试。\n* **不要**退回到删除整个文件并从头开始重新创建。\n* **不要**使用 sed 或任何其他命令行工具来编辑文件。\n* 尝试在一次工具调用中包含尽可能多的编辑\n* 在编辑文件之前,请使用 **view** 工具读取文件。",
-      "parameters": {
-        "type": "object",
-        "properties": {
-          "command": {
-            "type": "string",
-            "enum": ["str_replace", "insert"],
-            "description": "要运行的命令。允许的选项有: 'str_replace', 'insert'。"
-          },
-          "path": {
-            "type": "string",
-            "description": "相对于工作区根目录的完整文件路径,例如 'services/api_proxy/file.py' 或 'services/api_proxy'。"
-          },
-          "instruction_reminder": {
-            "type": "string",
-            "description": "提醒将编辑限制在最多 150 行。应精确为以下字符串: 'ALWAYS BREAK DOWN EDITS INTO SMALLER CHUNKS OF AT MOST 150 LINES EACH。' (总是将编辑分解成最多 150 行的小块。)"
-          },
-          "old_str_1": {
-            "type": "string",
-            "description": "`str_replace` 命令的必需参数,包含 `path` 中要替换的字符串。"
-          },
-          "new_str_1": {
-            "type": "string",
-            "description": "`str_replace` 命令的必需参数,包含新字符串。可以是空字符串以删除内容。`insert` 命令的必需参数,包含要插入的字符串。"
-          },
-          "old_str_start_line_number_1": {
-            "type": "integer",
-            "description": "`old_str_1` 在文件中的第一行的行号。用于在文件中存在多个 `old_str_1` 时进行区分。"
-          },
-          "old_str_end_line_number_1": {
-            "type": "integer",
-            "description": "`old_str_1` 在文件中的最后一行的行号。用于在文件中存在多个 `old_str_1` 时进行区分。"
-          },
-          "insert_line_1": {
-            "type": "integer",
-            "description": "`insert` 命令的必需参数。要插入新字符串到**其后**的行号。此行号是相对于在当前工具调用中应用任何插入之前的文件的状态。"
-          }
-        },
-        "required": ["command", "path", "instruction_reminder"]
-      }
-    },
-    {
-      "name": "open-browser",
-      "description": "在默认浏览器中打开一个 URL。\n\n1. 此工具接受一个 URL 并在默认浏览器中打开它。\n2. 此工具不会返回任何内容。它旨在供用户目视检查和与页面交互。您将无法访问它。\n3. 您不应对在对话历史中已经调用过该工具的 URL 使用 `open-browser`, 因为该页面已在用户的浏览器中打开, 用户可以自己查看和刷新它。每次您调用 `open-browser`, 都会将用户跳转到浏览器窗口, 这对用户来说非常烦人。",
-      "parameters": {
-        "type": "object",
-        "properties": {
-          "url": {
-            "type": "string",
-            "description": "要在浏览器中打开的 URL。"
-          }
-        },
-        "required": ["url"]
-      }
-    },
-    {
-      "name": "diagnostics",
-      "description": "从 IDE 获取问题 (错误、警告等)。您必须提供要获取问题的文件的路径。",
-      "parameters": {
-        "type": "object",
-        "properties": {
-          "paths": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "description": "必需的文件路径列表, 用于从 IDE 获取问题。"
-          }
-        },
-        "required": ["paths"]
-      }
-    },
-    {
-      "name": "read-terminal",
-      "description": "从活动或最近使用的 VSCode 终端读取输出。\n\n默认情况下, 它读取终端中可见的所有文本, 而不仅仅是最近命令的输出。\n\n如果您只想读取终端中选定的文本, 请在工具输入中设置 `only_selected=true`。\n仅在您知道用户已选择您想要读取的文本时才这样做。\n\n请注意, 这与 `list-processes` 和 `read-process` 工具无关, 后者与使用 `launch-process` 工具启动的进程进行交互。",
-      "parameters": {
-        "type": "object",
-        "properties": {
-          "only_selected": {
-            "type": "boolean",
-            "description": "是否只读取终端中选定的文本。"
-          }
-        },
-        "required": []
-      }
-    },
-    {
-      "name": "git-commit-retrieval",
-      "description": "此工具是 Augment 的上下文引擎, 具有 git commit 历史意识。它:\n1. 接受您正在寻找的代码的自然语言描述;\n2. 使用 git commit 历史作为检索的唯一上下文;\n3. 其他功能与标准 codebase-retrieval 工具类似。",
-      "parameters": {
-        "type": "object",
-        "properties": {
-          "information_request": {
-            "type": "string",
-            "description": "您需要的信息的描述。"
-          }
-        },
-        "required": ["information_request"]
-      }
-    },
-    {
-      "name": "launch-process",
-      "description": "使用 shell 命令启动一个新进程。进程可以是等待的 (`wait=true`) 或非等待的 (`wait=false`)。\n\n如果 `wait=true`, 则在交互式终端中启动进程, 并等待进程完成, 最长等待时间为 `max_wait_seconds` 秒。如果进程在此期间结束, 则工具调用返回。如果超时, 进程将继续在后台运行, 但工具调用将返回。然后您可以使用其他进程工具与进程进行交互。\n\n注意: 一次只能运行一个等待进程。如果您尝试在另一个等待进程正在运行时启动一个 `wait=true` 的进程, 则工具将返回一个错误。\n\n如果 `wait=false`, 则在单独的终端中启动一个后台进程。这将立即返回, 而进程继续在后台运行。\n\n注意事项:\n- 当命令预期较短时, 或在进程完成之前您无法继续任务时, 请使用 `wait=true` 进程。对于预期在后台运行的进程, 例如启动您需要交互的服务器, 或一个不需要在继续任务之前完成的长时间运行的进程, 请使用 `wait=false`。\n- 如果此工具返回时进程仍在运行, 您可以使用其他可用工具继续与进程进行交互。您可以等待进程、从它读取、写入它、终止它等。\n- 您可以使用此工具与用户的本地版本控制系统进行交互。不要为此目的使用检索工具。\n- 如果有更具体的工具可以执行该功能, 请使用该工具而不是此工具。\n\n操作系统是 win32。shell 是 'bash'。",
-      "parameters": {
-        "type": "object",
-        "properties": {
-          "command": {
-            "type": "string",
-            "description": "要执行的 shell 命令。"
-          },
-          "wait": {
-            "type": "boolean",
-            "description": "是否等待命令完成。"
-          },
-          "max_wait_seconds": {
-            "type": "number",
-            "description": "等待命令完成的秒数。仅在 wait=true 时相关。10 分钟可能是一个不错的默认值: 如果需要, 可以从那里增加。"
-          },
-          "cwd": {
-            "type": "string",
-            "description": "必需参数。命令的工作目录的绝对路径。"
-          }
-        },
-        "required": ["command", "wait", "max_wait_seconds", "cwd"]
-      }
-    },
-    {
-      "name": "kill-process",
-      "description": "通过终端 ID 终止一个进程。",
-      "parameters": {
-        "type": "object",
-        "properties": {
-          "terminal_id": {
-            "type": "integer",
-            "description": "要终止的终端 ID。"
-          }
-        },
-        "required": ["terminal_id"]
-      }
-    },
-    {
-      "name": "read-process",
-      "description": "从终端读取输出。\n\n如果 `wait=true` 且进程尚未完成, 则等待终端完成, 最长等待时间为 `max_wait_seconds` 秒, 然后返回其输出。\n\n如果 `wait=false` 或进程已完成, 则立即返回当前输出。",
-      "parameters": {
-        "type": "object",
-        "properties": {
-          "terminal_id": {
-            "type": "integer",
-            "description": "要读取的终端 ID。"
-          },
-          "wait": {
-            "type": "boolean",
-            "description": "是否等待命令完成。"
-          },
-          "max_wait_seconds": {
-            "type": "number",
-            "description": "等待命令完成的秒数。仅在 wait=true 时相关。1 分钟可能是一个不错的默认值: 如果需要, 可以从那里增加。"
-          }
-        },
-        "required": ["terminal_id", "wait", "max_wait_seconds"]
-      }
-    },
-    {
-      "name": "write-process",
-      "description": "向终端写入输入。",
-      "parameters": {
-        "type": "object",
-        "properties": {
-          "terminal_id": {
-            "type": "integer",
-            "description": "要写入的终端 ID。"
-          },
-          "input_text": {
-            "type": "string",
-            "description": "要写入进程标准输入的文本。"
-          }
-        },
-        "required": ["terminal_id", "input_text"]
-      }
-    },
-    {
-      "name": "list-processes",
-      "description": "列出使用 `launch-process` 工具创建的所有已知终端及其状态。",
-      "parameters": {
-        "type": "object",
-        "properties": {},
-        "required": []
-      }
-    },
-    {
-      "name": "web-search",
-      "description": "搜索网络信息。以 markdown 格式返回结果。\n每个结果都包含 URL、标题以及页面上的片段 (如果可用)。\n\n此工具使用 Google 的 Custom Search API 来查找相关的网页。",
-      "parameters": {
-        "type": "object",
-        "title": "WebSearchInput",
-        "description": "网络搜索工具的输入架构。",
-        "properties": {
-          "query": {
-            "title": "Query",
-            "description": "要发送的搜索查询。",
-            "type": "string"
-          },
-          "num_results": {
-            "title": "Num Results",
-            "description": "要返回的结果数量",
-            "default": 5,
-            "minimum": 1,
-            "maximum": 10,
-            "type": "integer"
-          }
-        },
-        "required": ["query"]
-      }
-    },
-    {
-      "name": "web-fetch",
-      "description": "从网页获取数据并将其转换为 Markdown 格式。\n\n1. 此工具接受一个 URL 并以 Markdown 格式返回页面的内容;\n2. 如果返回内容不是有效的 Markdown, 则表示该工具无法成功解析此页面。",
-      "parameters": {
-        "type": "object",
-        "properties": {
-          "url": {
-            "type": "string",
-            "description": "要获取的 URL。"
-          }
-        },
-        "required": ["url"]
-      }
-    },
-    {
-      "name": "codebase-retrieval",
-      "description": "此工具是 Augment 的上下文引擎, 是全球最好的代码库上下文引擎。它:\n1. 接受您正在寻找的代码的自然语言描述;\n2. 使用专有的检索/嵌入模型套件, 可从整个代码库中生成最高质量的相关代码片段召回;\n3. 维护代码库的实时索引, 因此结果始终是最新的, 并反映代码库的当前状态;\n4. 可以跨不同的编程语言进行检索;\n5. 仅反映代码库在磁盘上的当前状态, 并且没有版本控制或代码历史记录的信息。",
-      "parameters": {
-        "type": "object",
-        "properties": {
-          "information_request": {
-            "type": "string",
-            "description": "您需要的信息的描述。"
-          }
-        },
-        "required": ["information_request"]
-      }
-    },
-    {
-      "name": "remove-files",
-      "description": "移除文件。**仅**使用此工具删除用户工作区中的文件。这是以用户可以撤销更改的方式安全删除文件的唯一工具。**不要**使用 shell 或 `launch-process` 工具来移除文件。",
-      "parameters": {
-        "type": "object",
-        "properties": {
-          "file_paths": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "description": "要移除的文件的路径。"
-          }
-        },
-        "required": ["file_paths"]
-      }
-    },
-    {
-      "name": "save-file",
-      "description": "保存一个新文件。使用此工具写入带有附加内容的新文件。首先生成 `instructions_reminder` 以提醒自己将文件内容限制在最多 300 行。它**不能**修改现有文件。**不要**使用此工具通过完全覆盖现有文件来编辑它。请改用 `str-replace-editor` 工具来编辑现有文件。",
-      "parameters": {
-        "type": "object",
-        "properties": {
-          "instructions_reminder": {
-            "type": "string",
-            "description": "应精确为以下字符串: 'LIMIT THE FILE CONTENT TO AT MOST 300 LINES. IF MORE CONTENT NEEDS TO BE ADDED USE THE str-replace-editor TOOL TO EDIT THE FILE AFTER IT HAS BEEN CREATED。' (将文件内容限制在最多 300 行。如果需要添加更多内容, 请在文件创建后使用 str-replace-editor 工具进行编辑。)"
-          },
-          "path": {
-            "type": "string",
-            "description": "要保存的文件的路径。"
-          },
-          "file_content": {
-            "type": "string",
-            "description": "文件的内容。"
-          },
-          "add_last_line_newline": {
-            "type": "boolean",
-            "description": "是否在文件末尾添加换行符 (默认值: true)。"
-          }
-        },
-        "required": ["instructions_reminder", "path", "file_content"]
-      }
-    },
-    {
-      "name": "view_tasklist",
-      "description": "查看当前对话的任务列表。",
-      "parameters": {
-        "type": "object",
-        "properties": {},
-        "required": []
-      }
-    },
-    {
-      "name": "reorganize_tasklist",
-      "description": "重组当前对话的任务列表结构。仅用于重大的结构重组, 例如重新排序任务、更改层次结构。对于单个任务更新, 请使用 update_tasks 工具。",
-      "parameters": {
-        "type": "object",
-        "properties": {
-          "markdown": {
-            "type": "string",
-            "description": "要更新的任务列表的 markdown 表示。应采用 view_tasklist 工具指定的格式。新任务应具有 UUID 'NEW_UUID'。必须包含一个具有适当层次结构 (使用破折号缩进) 的根任务。"
-          }
-        },
-        "required": ["markdown"]
-      }
-    },
-    {
-      "name": "update_tasks",
-      "description": "更新一个或多个任务的属性 (状态、名称、描述)。可以在一次调用中更新单个任务或多个任务。用于复杂的连续工作序列的规划、进度跟踪和工作管理。",
-      "parameters": {
-        "type": "object",
-        "properties": {
-          "tasks": {
-            "type": "array",
-            "description": "要更新的任务数组。每个任务应具有 task_id 和要更新的属性。",
-            "items": {
-              "type": "object",
-              "properties": {
-                "task_id": {
-                  "type": "string",
-                  "description": "要更新的任务的 UUID。"
-                },
-                "state": {
-                  "type": "string",
-                  "enum": ["NOT_STARTED", "IN_PROGRESS", "CANCELLED", "COMPLETE"],
-                  "description": "新任务状态。NOT_STARTED 对应 [ ], IN_PROGRESS 对应 [/], CANCELLED 对应 [-], COMPLETE 对应 [x]。"
-                },
-                "name": {
-                  "type": "string",
-                  "description": "新任务名称。"
-                },
-                "description": {
-                  "type": "string",
-                  "description": "新任务描述。"
-                }
-              },
-              "required": ["task_id"]
-            }
-          }
-        },
-        "required": ["tasks"]
-      }
-    },
-    {
-      "name": "add_tasks",
-      "description": "向任务列表添加一个或多个新任务。可以在一次调用中添加单个任务或多个任务。任务可以添加为子任务或在特定任务之后。在规划复杂的工作序列时使用此工具。",
-      "parameters": {
-        "type": "object",
-        "properties": {
-          "tasks": {
-            "type": "array",
-            "description": "要创建的任务数组。每个任务应具有名称和描述。",
-            "items": {
-              "type": "object",
-              "properties": {
-                "name": {
-                  "type": "string",
-                  "description": "新任务的名称。"
-                },
-                "description": {
-                  "type": "string",
-                  "description": "新任务的描述。"
-                },
-                "state": {
-                  "type": "string",
-                  "enum": ["NOT_STARTED", "IN_PROGRESS", "CANCELLED", "COMPLETE"],
-                  "description": "任务的初始状态。默认为 NOT_STARTED。"
-                },
-                "parent_task_id": {
-                  "type": "string",
-                  "description": "如果这是一个子任务, 则为父任务的 UUID。"
-                },
-                "after_task_id": {
-                  "type": "string",
-                  "description": "应在此任务之后插入的新任务的 UUID。"
-                }
-              },
-              "required": ["name", "description"]
-            }
-          }
-        },
-        "required": ["tasks"]
-      }
-    },
-    {
-      "name": "remember",
-      "description": "当用户要求您执行以下操作时调用此工具:\n- 记住一些事情\n- 创建内存/记忆\n\n仅将此工具用于可长期有用的信息。\n不要将此工具用于临时信息。",
-      "parameters": {
-        "type": "object",
-        "properties": {
-          "memory": {
-            "type": "string",
-            "description": "要记住的简洁 (1 句话) 记忆。"
-          }
-        },
-        "required": ["memory"]
-      }
-    },
-    {
-      "name": "render-mermaid",
-      "description": "根据提供的定义渲染一个 Mermaid 图表。此工具接受 Mermaid 图表代码并将其渲染为带有平移/缩放控件和复制功能的交互式图表。",
-      "parameters": {
-        "type": "object",
-        "properties": {
-          "diagram_definition": {
-            "type": "string",
-            "description": "要渲染的 Mermaid 图表定义代码"
-          },
-          "title": {
-            "type": "string",
-            "default": "Mermaid Diagram",
-            "description": "图表的可选标题"
-          }
-        },
-        "required": ["diagram_definition"]
-      }
-    },
-    {
-      "name": "view-range-untruncated",
-      "description": "从**未截断**的内容中查看特定行范围",
-      "parameters": {
-        "type": "object",
-        "properties": {
-          "reference_id": {
-            "type": "string",
-            "description": "截断内容的引用 ID (可在截断脚注中找到)"
-          },
-          "start_line": {
-            "type": "integer",
-            "description": "起始行号 (基于 1, 包含)"
-          },
-          "end_line": {
-            "type": "integer",
-            "description": "结束行号 (基于 1, 包含)"
-          }
-        },
-        "required": ["reference_id", "start_line", "end_line"]
-      }
-    },
-    {
-      "name": "search-untruncated",
-      "description": "在**未截断**的内容中搜索术语",
-      "parameters": {
-        "type": "object",
-        "properties": {
-          "reference_id": {
-            "type": "string",
-            "description": "截断内容的引用 ID (可在截断脚注中找到)"
-          },
-          "search_term": {
-            "type": "string",
-            "description": "要在内容中搜索的术语"
-          },
-          "context_lines": {
-            "type": "integer",
-            "default": 2,
-            "description": "匹配项之前和之后要包含的上下文行数 (默认值: 2)"
-          }
-        },
-        "required": ["reference_id", "search_term"]
-      }
-    },
-    {
-      "name": "view",
-      "description": "用于查看文件和目录以及使用正则表达式查询在文件中进行搜索的自定义工具\n* `path` 是相对于工作区根目录的文件或目录路径\n* 对于文件: 显示对文件应用 `cat -n` 的结果\n* 对于目录: 列出文件和子目录, 最深 2 级\n* 如果输出很长, 它将被截断并标记为 `<response clipped>`\n\n正则表达式搜索 (仅适用于文件):\n* 使用 `search_query_regex` 通过正则表达式在文件中搜索模式\n* 使用 `case_sensitive` 参数控制大小写敏感性 (默认值: false)\n* 使用正则表达式搜索时, 将只显示匹配的行及其上下文\n* 使用 `context_lines_before` 和 `context_lines_after` 控制要显示的上下文行数 (默认值: 5)\n* 匹配项之间的不匹配部分将替换为 `...`\n* 如果还指定了 `view_range`, 则搜索将限制在该范围内\n\n`search_query_regex` 使用以下正则表达式语法:\n\n# Regex Syntax Reference\n\n仅支持 JavaScript 和 Rust 中通用的核心正则表达式功能。\n\n## Supported regex syntax\n\n* **Escaping** (转义) - 用反斜杠转义元字符: `\\.` `\\+` `\\?` `\\*` `\\|` `\\(` `\\)` `\\[`。\n* **Dot** (点) `.` - 匹配**除换行符** (`\\n`, `\\r`, `\\u2028`, `\\u2029`) 之外的任何字符。\n* **Character classes** (字符类) - `[abc]`, 范围, 例如 `[a-z]`, 和否定 `[^\u2026]`。使用明确的 ASCII 范围; 避免使用 `\\d` 等速记符。\n* **Alternation** (选择) - `foo|bar` 选择最左边成功的匹配分支。\n* **Quantifiers** (量词) - `*`, `+`, `?`, `{n}`, `{n,}`, `{n,m}` (贪婪)。在任何这些量词后添加 `?` 可获得惰性版本。\n* **Anchors** (锚点) - `^` (行首), `$` (行尾)。\n* **Special characters** (特殊字符) - 使用 `\\t` 表示制表符\n\n---\n\n## Do **Not** Use (Unsupported) (不要使用 (不支持))\n\n* 换行符 `\\n`。仅支持单行模式。\n* Look-ahead / look-behind (前瞻/后瞻) `(?= \u2026 )`, `(?<= \u2026 )`。\n* Back-references (反向引用) `\\1`, `\\k<name>`。\n* Groups (组) `(?<name> \u2026 )`, `(?P<name> \u2026 )`。\n* Shorthand classes (速记类) `\\d`, `\\s`, `\\w`, `\\b`, Unicode property escapes `\\p{\u2026}`。\n* Flags inside pattern (模式内的标志) `(?i)`, `(?m)` 等。\n* Recursion, conditionals, atomic groups, possessive quantifiers (递归、条件、原子组、占有量词)\n* Unicode escapes (Unicode 转义) 类似 `\\u{1F60A}` 或 `\\u1F60A`。\n\n\n使用工具的注意事项:\n* 在文件中查找特定符号时, **强烈建议**使用 `search_query_regex` 而不是 `view_range`。\n* 使用 `view_range` 参数指定要查看的行范围, 例如 [501, 1000] 将显示从 501 到 1000 的行\n* 索引是基于 1 且**包含**的\n* 设置 `[start_line, -1]` 将显示从 `start_line` 到文件末尾的所有行\n* `view_range` 和 `search_query_regex` 参数**仅**在查看文件时适用, **不**适用于目录",
-      "parameters": {
-        "type": "object",
-        "properties": {
-          "path": {
-            "type": "string",
-            "description": "相对于工作区根目录的文件或目录的完整路径,例如 'services/api_proxy/file.py' 或 'services/api_proxy'。"
-          },
-          "type": {
-            "type": "string",
-            "enum": ["file", "directory"],
-            "description": "要查看的路径类型。允许的选项有: 'file', 'directory'。"
-          },
-          "view_range": {
-            "type": "array",
-            "items": {
-              "type": "integer"
-            },
-            "description": "可选参数, 仅当 `path` 指向文件时适用。如果未给出, 则显示整个文件。如果提供了, 文件将显示在指示的行号范围内, 例如 [501, 1000] 将显示从 501 到 1000 的行。索引是基于 1 且包含的。设置 `[start_line, -1]` 将显示从 `start_line` 到文件末尾的所有行。"
-          },
-          "search_query_regex": {
-            "type": "string",
-            "description": "仅适用于文件的可选参数。要搜索的正则表达式模式。仅使用 JavaScript 和 Rust 通用的核心正则表达式语法。请参阅工具描述中的正则表达式语法指南。指定后, 将只显示匹配该模式的行 (加上上下文行)。不匹配的部分将替换为 '...'。"
-          },
-          "case_sensitive": {
-            "type": "boolean",
-            "default": false,
-            "description": "正则表达式搜索是否应区分大小写。仅在指定 `search_query_regex` 时使用。默认值: false (不区分大小写)。"
-          },
-          "context_lines_before": {
-            "type": "integer",
-            "default": 5,
-            "description": "在每个正则表达式匹配之前显示的行数。仅在指定 `search_query_regex` 时使用。默认值: 5。"
-          },
-          "context_lines_after": {
-            "type": "integer",
-            "default": 5,
-            "description": "在每个正则表达式匹配之后显示的行数。仅在指定 `search_query_regex` 时使用。默认值: 5。"
-          }
-        },
-        "required": ["path", "type"]
-      }
-    }
-  ]
+  "tools": [
+    {
+      "name": "str-replace-editor",
+      "description": "文件编辑工具。\n* `path` 是相对于工作空间根目录的文件路径\n* `insert` 和 `str_replace` 命令为每个条目输出已编辑部分的代码片段。此片段反映了应用所有编辑和 IDE 自动格式化后文件的最终状态。\n* 首先生成 `instruction_reminder` 以提醒自己将编辑限制在最多 150 行。\n\n使用 `str_replace` 命令的注意事项：\n* 为第一次替换指定 `old_str_1`、`new_str_1`、`old_str_start_line_number_1` 和 `old_str_end_line_number_1` 属性，为第二次替换指定 `old_str_2`、`new_str_2`、`old_str_start_line_number_2` 和 `old_str_end_line_number_2`，依此类推\n* `old_str_start_line_number_1` 和 `old_str_end_line_number_1` 参数是基于 1 的行号\n* `old_str_start_line_number_1` 和 `old_str_end_line_number_1` 都是包含性的\n* `old_str_1` 参数应该与原始文件中的一行或多行连续内容完全匹配。注意空格！\n* 只有当文件为空或仅包含空格时，才允许空的 `old_str_1`\n* 指定 `old_str_start_line_number_1` 和 `old_str_end_line_number_1` 以消除文件中 `old_str_1` 多次出现的歧义非常重要\n* 确保 `old_str_start_line_number_1` 和 `old_str_end_line_number_1` 不与其他 `old_str_start_line_number_2` 和 `old_str_end_line_number_2` 条目重叠\n* `new_str_1` 参数应包含用于替换 `old_str_1` 的已编辑行。可以是空字符串以删除内容\n* 要在一次工具调用中进行多次替换，请添加多组替换参数。例如，为第一次替换添加 `old_str_1`、`new_str_1`、`old_str_start_line_number_1` 和 `old_str_end_line_number_1` 属性，为第二次替换添加 `old_str_2`、`new_str_2`、`old_str_start_line_number_2`、`old_str_end_line_number_2` 等。\n\n使用 `insert` 命令的注意事项：\n* 为第一次插入指定 `insert_line_1` 和 `new_str_1` 属性，为第二次插入指定 `insert_line_2` 和 `new_str_2`，依此类推\n* `insert_line_1` 参数指定在其后插入新字符串的行号\n* `insert_line_1` 参数是基于 1 的行号\n* 要在文件的最开始插入，使用 `insert_line_1: 0`\n* 要在一次工具调用中进行多次插入，请添加多组插入参数。例如，为第一次插入添加 `insert_line_1` 和 `new_str_1` 属性，为第二次插入添加 `insert_line_2` 和 `new_str_2` 等。\n\n重要提示：\n* 这是您唯一应该用于编辑文件的工具。\n* 如果失败，请尽力修复输入并重试。\n* 不要回退到删除整个文件并从头开始重新创建它。\n* 不要使用 sed 或任何其他命令行工具来编辑文件。\n* 尝试在一次工具调用中尽可能多地进行编辑\n* 在编辑文件之前使用 view 工具读取文件。",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "command": {
+            "type": "string",
+            "enum": ["str_replace", "insert"],
+            "description": "要运行的命令。允许的选项有：'str_replace'、'insert'。"
+          },
+          "path": {
+            "type": "string",
+            "description": "相对于工作空间根目录的文件完整路径，例如 'services/api_proxy/file.py' 或 'services/api_proxy'。"
+          },
+          "instruction_reminder": {
+            "type": "string",
+            "description": "提醒将编辑限制在最多 150 行。应该是这个确切的字符串：'ALWAYS BREAK DOWN EDITS INTO SMALLER CHUNKS OF AT MOST 150 LINES EACH.'"
+          },
+          "old_str_1": {
+            "type": "string",
+            "description": "`str_replace` 命令的必需参数，包含 `path` 中要替换的字符串。"
+          },
+          "new_str_1": {
+            "type": "string",
+            "description": "`str_replace` 命令的必需参数，包含新字符串。可以是空字符串以删除内容。`insert` 命令的必需参数，包含要插入的字符串。"
+          },
+          "old_str_start_line_number_1": {
+            "type": "integer",
+            "description": "文件中 `old_str_1` 第一行的行号。用于消除文件中 `old_str_1` 多次出现的歧义。"
+          },
+          "old_str_end_line_number_1": {
+            "type": "integer",
+            "description": "文件中 `old_str_1` 最后一行的行号。用于消除文件中 `old_str_1` 多次出现的歧义。"
+          },
+          "insert_line_1": {
+            "type": "integer",
+            "description": "`insert` 命令的必需参数。在其后插入新字符串的行号。此行号相对于当前工具调用中应用任何插入之前的文件状态。"
+          }
+        },
+        "required": ["command", "path", "instruction_reminder"]
+      }
+    },
+    {
+      "name": "open-browser",
+      "description": "在默认浏览器中打开 URL。\n\n1. 该工具接收一个 URL 并在默认浏览器中打开它。\n2. 该工具不返回任何内容。它旨在让用户进行视觉检查并与页面交互。您将无法访问它。\n3. 您不应该在对话历史中已经调用过的 URL 上使用 `open-browser`，因为该页面已经在用户的浏览器中打开，用户可以自己查看和刷新它。每次调用 `open-browser` 时，它都会将用户跳转到浏览器窗口，这对用户非常烦人。",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "url": {
+            "type": "string",
+            "description": "要在浏览器中打开的 URL。"
+          }
+        },
+        "required": ["url"]
+      }
+    },
+    {
+      "name": "diagnostics",
+      "description": "从 IDE 获取问题（错误、警告等）。您必须提供要获取问题的文件路径。",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "paths": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "从 IDE 获取问题所需的文件路径列表。"
+          }
+        },
+        "required": ["paths"]
+      }
+    },
+    {
+      "name": "read-terminal",
+      "description": "从活动或最近使用的 VSCode 终端读取输出。\n\n默认情况下，它读取终端中可见的所有文本，而不仅仅是最近命令的输出。\n\n如果您只想读取终端中选定的文本，请在工具输入中设置 `only_selected=true`。\n只有在您知道用户已选择您想要读取的文本时才这样做。\n\n请注意，这与 list-processes 和 read-process 工具无关，后者与使用 \"launch-process\" 工具启动的进程交互。",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "only_selected": {
+            "type": "boolean",
+            "description": "是否只读取终端中选定的文本。"
+          }
+        },
+        "required": []
+      }
+    },
+    {
+      "name": "git-commit-retrieval",
+      "description": "这是 Augment 的具有 git 提交历史感知能力的上下文引擎。它：\n1. 接收您正在寻找的代码的自然语言描述；\n2. 使用 git 提交历史作为检索的唯一上下文；\n3. 除此之外，功能类似于标准的 codebase-retrieval 工具。",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "information_request": {
+            "type": "string",
+            "description": "您需要的信息的描述。"
+          }
+        },
+        "required": ["information_request"]
+      }
+    },
+    {
+      "name": "launch-process",
+      "description": "使用 shell 命令启动新进程。进程可以是等待的 (`wait=true`) 或非等待的 (`wait=false`)。\n\n如果 `wait=true`，则在交互式终端中启动进程，并等待进程完成最多 `max_wait_seconds` 秒。如果进程在此期间结束，工具调用将返回。如果超时，进程将继续在后台运行，但工具调用将返回。然后，您可以使用其他进程工具与进程交互。\n\n注意：一次只能运行一个等待进程。如果您在另一个进程运行时尝试使用 `wait=true` 启动进程，工具将返回错误。\n\n如果 `wait=false`，则在单独的终端中启动后台进程。这会立即返回，而进程在后台继续运行。\n\n注意事项：\n- 当命令预期很短，或在进程完成之前无法继续执行任务时，使用 `wait=true` 进程。对于预期在后台运行的进程，例如启动需要与之交互的服务器，或在继续任务之前不需要完成的长时间运行的进程，使用 `wait=false`。\n- 如果此工具在进程仍在运行时返回，您可以使用其他可用工具继续与进程交互。您可以等待进程、从中读取、向其写入、终止它等。\n- 您可以使用此工具与用户的本地版本控制系统交互。不要为此目的使用检索工具。\n- 如果有更具体的工具可以执行该功能，请使用该工具而不是此工具。\n\n操作系统是 win32。shell 是 'bash'。",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "command": {
+            "type": "string",
+            "description": "要执行的 shell 命令。"
+          },
+          "wait": {
+            "type": "boolean",
+            "description": "是否等待命令完成。"
+          },
+          "max_wait_seconds": {
+            "type": "number",
+            "description": "等待命令完成的秒数。仅在 wait=true 时相关。10 分钟可能是一个好的默认值：如果需要，从那里增加。"
+          },
+          "cwd": {
+            "type": "string",
+            "description": "必需参数。命令的工作目录的绝对路径。"
+          }
+        },
+        "required": ["command", "wait", "max_wait_seconds", "cwd"]
+      }
+    },
+    {
+      "name": "kill-process",
+      "description": "通过终端 ID 终止进程。",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "terminal_id": {
+            "type": "integer",
+            "description": "要终止的终端 ID。"
+          }
+        },
+        "required": ["terminal_id"]
+      }
+    },
+    {
+      "name": "read-process",
+      "description": "从终端读取输出。\n\n如果 `wait=true` 且进程尚未完成，则在返回其输出之前等待终端完成最多 `max_wait_seconds` 秒。\n\n如果 `wait=false` 或进程已经完成，则立即返回当前输出。",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "terminal_id": {
+            "type": "integer",
+            "description": "要读取的终端 ID。"
+          },
+          "wait": {
+            "type": "boolean",
+            "description": "是否等待命令完成。"
+          },
+          "max_wait_seconds": {
+            "type": "number",
+            "description": "等待命令完成的秒数。仅在 wait=true 时相关。1 分钟可能是一个好的默认值：如果需要，从那里增加。"
+          }
+        },
+        "required": ["terminal_id", "wait", "max_wait_seconds"]
+      }
+    },
+    {
+      "name": "write-process",
+      "description": "向终端写入输入。",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "terminal_id": {
+            "type": "integer",
+            "description": "要写入的终端 ID。"
+          },
+          "input_text": {
+            "type": "string",
+            "description": "要写入进程的 stdin 的文本。"
+          }
+        },
+        "required": ["terminal_id", "input_text"]
+      }
+    },
+    {
+      "name": "list-processes",
+      "description": "列出使用 launch-process 工具创建的所有已知终端及其状态。",
+      "parameters": {
+        "type": "object",
+        "properties": {},
+        "required": []
+      }
+    },
+    {
+      "name": "web-search",
+      "description": "在网络上搜索信息。以 markdown 格式返回结果。\n每个结果包括 URL、标题以及页面片段（如果可用）。\n\n此工具使用 Google 的自定义搜索 API 来查找相关网页。",
+      "parameters": {
+        "type": "object",
+        "title": "WebSearchInput",
+        "description": "网络搜索工具的输入模式。",
+        "properties": {
+          "query": {
+            "title": "Query",
+            "description": "要发送的搜索查询。",
+            "type": "string"
+          },
+          "num_results": {
+            "title": "Num Results",
+            "description": "要返回的结果数",
+            "default": 5,
+            "minimum": 1,
+            "maximum": 10,
+            "type": "integer"
+          }
+        },
+        "required": ["query"]
+      }
+    },
+    {
+      "name": "web-fetch",
+      "description": "从网页获取数据并将其转换为 Markdown。\n\n1. 该工具接收一个 URL 并以 Markdown 格式返回页面内容；\n2. 如果返回的不是有效的 Markdown，则意味着该工具无法成功解析此页面。",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "url": {
+            "type": "string",
+            "description": "要获取的 URL。"
+          }
+        },
+        "required": ["url"]
+      }
+    },
+    {
+      "name": "codebase-retrieval",
+      "description": "这是 Augment 的上下文引擎，世界上最好的代码库上下文引擎。它：\n1. 接收您正在寻找的代码的自然语言描述；\n2. 使用专有的检索/嵌入模型套件，可从整个代码库中产生最高质量的相关代码片段召回；\n3. 维护代码库的实时索引，因此结果始终是最新的，反映代码库的当前状态；\n4. 可以跨不同的编程语言进行检索；\n5. 仅反映磁盘上代码库的当前状态，并且没有版本控制或代码历史的信息。",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "information_request": {
+            "type": "string",
+            "description": "您需要的信息的描述。"
+          }
+        },
+        "required": ["information_request"]
+      }
+    },
+    {
+      "name": "remove-files",
+      "description": "删除文件。仅使用此工具删除用户工作空间中的文件。这是以用户可以撤消更改的方式删除文件的唯一安全工具。不要使用 shell 或 launch-process 工具来删除文件。",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "file_paths": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "要删除的文件的路径。"
+          }
+        },
+        "required": ["file_paths"]
+      }
+    },
+    {
+      "name": "save-file",
+      "description": "保存新文件。使用此工具编写带有附加内容的新文件。首先生成 `instructions_reminder` 以提醒自己将文件内容限制在最多 300 行。它不能修改现有文件。不要通过完全覆盖现有文件来使用此工具编辑现有文件。请使用 str-replace-editor 工具来编辑现有文件。",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "instructions_reminder": {
+            "type": "string",
+            "description": "应该是这个确切的字符串：'LIMIT THE FILE CONTENT TO AT MOST 300 LINES. IF MORE CONTENT NEEDS TO BE ADDED USE THE str-replace-editor TOOL TO EDIT THE FILE AFTER IT HAS BEEN CREATED.'"
+          },
+          "path": {
+            "type": "string",
+            "description": "要保存的文件的路径。"
+          },
+          "file_content": {
+            "type": "string",
+            "description": "文件的内容。"
+          },
+          "add_last_line_newline": {
+            "type": "boolean",
+            "description": "是否在文件末尾添加换行符（默认值：true）。"
+          }
+        },
+        "required": ["instructions_reminder", "path", "file_content"]
+      }
+    },
+    {
+      "name": "view_tasklist",
+      "description": "查看对话的当前任务列表。",
+      "parameters": {
+        "type": "object",
+        "properties": {},
+        "required": []
+      }
+    },
+    {
+      "name": "reorganize_tasklist",
+      "description": "重新组织当前对话的任务列表结构。仅用于重大重组，如重新排序任务、更改层次结构。对于单个任务更新，请使用 update_tasks 工具。",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "markdown": {
+            "type": "string",
+            "description": "要更新的任务列表的 markdown 表示。应采用 view_tasklist 工具指定的格式。新任务应具有 'NEW_UUID' 的 UUID。必须包含一个具有适当层次结构的根任务，使用破折号缩进。"
+          }
+        },
+        "required": ["markdown"]
+      }
+    },
+    {
+      "name": "update_tasks",
+      "description": "更新一个或多个任务的属性（状态、名称、描述）。可以在一次调用中更新单个任务或多个任务。在复杂的工作序列中使用此工具来规划、跟踪进度和管理工作。",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "tasks": {
+            "type": "array",
+            "description": "要更新的任务数组。每个任务应具有 task_id 和要更新的属性。",
+            "items": {
+              "type": "object",
+              "properties": {
+                "task_id": {
+                  "type": "string",
+                  "description": "要更新的任务的 UUID。"
+                },
+                "state": {
+                  "type": "string",
+                  "enum": ["NOT_STARTED", "IN_PROGRESS", "CANCELLED", "COMPLETE"],
+                  "description": "新任务状态。NOT_STARTED 表示 [ ]，IN_PROGRESS 表示 [/]，CANCELLED 表示 [-]，COMPLETE 表示 [x]。"
+                },
+                "name": {
+                  "type": "string",
+                  "description": "新任务名称。"
+                },
+                "description": {
+                  "type": "string",
+                  "description": "新任务描述。"
+                }
+              },
+              "required": ["task_id"]
+            }
+          }
+        },
+        "required": ["tasks"]
+      }
+    },
+    {
+      "name": "add_tasks",
+      "description": "向任务列表添加一个或多个新任务。可以在一次调用中添加单个任务或多个任务。任务可以作为子任务添加或在特定任务之后添加。在规划复杂的工作序列时使用此工具。",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "tasks": {
+            "type": "array",
+            "description": "要创建的任务数组。每个任务应具有名称和描述。",
+            "items": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "description": "新任务的名称。"
+                },
+                "description": {
+                  "type": "string",
+                  "description": "新任务的描述。"
+                },
+                "state": {
+                  "type": "string",
+                  "enum": ["NOT_STARTED", "IN_PROGRESS", "CANCELLED", "COMPLETE"],
+                  "description": "任务的初始状态。默认为 NOT_STARTED。"
+                },
+                "parent_task_id": {
+                  "type": "string",
+                  "description": "如果这应该是子任务，则为父任务的 UUID。"
+                },
+                "after_task_id": {
+                  "type": "string",
+                  "description": "应在其后插入此任务的任务的 UUID。"
+                }
+              },
+              "required": ["name", "description"]
+            }
+          }
+        },
+        "required": ["tasks"]
+      }
+    },
+    {
+      "name": "remember",
+      "description": "当用户要求您：\n- 记住某事\n- 创建记忆\n时调用此工具\n\n仅对长期有用的信息使用此工具。\n不要将此工具用于临时信息。",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "memory": {
+            "type": "string",
+            "description": "要记住的简洁（1 句话）记忆。"
+          }
+        },
+        "required": ["memory"]
+      }
+    },
+    {
+      "name": "render-mermaid",
+      "description": "从提供的定义渲染 Mermaid 图表。此工具接收 Mermaid 图表代码并将其渲染为具有平移/缩放控件和复制功能的交互式图表。",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "diagram_definition": {
+            "type": "string",
+            "description": "要渲染的 Mermaid 图表定义代码"
+          },
+          "title": {
+            "type": "string",
+            "default": "Mermaid Diagram",
+            "description": "图表的可选标题"
+          }
+        },
+        "required": ["diagram_definition"]
+      }
+    },
+    {
+      "name": "view-range-untruncated",
+      "description": "从未截断的内容中查看特定行范围",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "reference_id": {
+            "type": "string",
+            "description": "截断内容的引用 ID（在截断页脚中找到）"
+          },
+          "start_line": {
+            "type": "integer",
+            "description": "起始行号（基于 1，包含）"
+          },
+          "end_line": {
+            "type": "integer",
+            "description": "结束行号（基于 1，包含）"
+          }
+        },
+        "required": ["reference_id", "start_line", "end_line"]
+      }
+    },
+    {
+      "name": "search-untruncated",
+      "description": "在未截断的内容中搜索术语",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "reference_id": {
+            "type": "string",
+            "description": "截断内容的引用 ID（在截断页脚中找到）"
+          },
+          "search_term": {
+            "type": "string",
+            "description": "要在内容中搜索的术语"
+          },
+          "context_lines": {
+            "type": "integer",
+            "description": "在匹配前后包含的上下文行数（默认值：2）"
+          }
+        },
+        "required": ["reference_id", "search_term"]
+      }
+    },
+    {
+      "name": "view",
+      "description": "用于查看文件和目录以及使用正则表达式查询在文件中搜索的自定义工具\n* `path` 是相对于工作空间根目录的文件或目录路径\n* 对于文件：显示将 `cat -n` 应用于文件的结果\n* 对于目录：列出最多 2 层深度的文件和子目录\n* 如果输出很长，它将被截断并标记为 `<response clipped>`\n\n正则表达式搜索（仅适用于文件）：\n* 使用 `search_query_regex` 使用正则表达式在文件中搜索模式\n* 使用 `case_sensitive` 参数控制区分大小写（默认值：false）\n* 使用正则表达式搜索时，仅显示匹配的行及其上下文\n* 使用 `context_lines_before` 和 `context_lines_after` 控制显示多少行上下文（默认值：5）\n* 匹配之间的非匹配部分被替换为 `...`\n* 如果还指定了 `view_range`，则搜索仅限于该范围\n\n对 `search_query_regex` 使用以下正则表达式语法：\n\n# 正则表达式语法参考\n\n仅支持 JavaScript 和 Rust 中常见的核心正则表达式功能。\n\n## 支持的正则表达式语法\n\n* **转义** - 使用反斜杠转义元字符：`\\.` `\\+` `\\?` `\\*` `\\|` `\\(` `\\)` `\\[`。\n* **点** `.` - 匹配除换行符之外的任何字符（`\\n`、`\\r`、`\\u2028`、`\\u2029`）。\n* **字符类** - `[abc]`，范围如 `[a-z]`，以及否定 `[^…]`。使用明确的 ASCII 范围；避免使用 `\\d` 等简写。\n* **交替** - `foo|bar` 选择最左边成功的分支。\n* **量词** - `*`、`+`、`?`、`{n}`、`{n,}`、`{n,m}`（贪婪）。在任何这些后面添加 `?` 以获得惰性版本。\n* **锚点** - `^`（行首），`$`（行尾）。\n* **特殊字符** - 使用 `\\t` 表示制表符\n\n---\n\n## 不要使用（不支持）\n\n* 换行符 `\\n`。仅支持单行模式。\n* 前瞻/后顾 `(?= … )`、`(?<= … )`。\n* 反向引用 `\\1`、`\\k<name>`。\n* 组 `(?<name> … )`、`(?P<name> … )`。\n* 简写类 `\\d`、`\\s`、`\\w`、`\\b`，Unicode 属性转义 `\\p{…}`。\n* 模式内的标志 `(?i)`、`(?m)` 等。\n* 递归、条件、原子组、占有量词\n* Unicode 转义如 `\\u{1F60A}` 或 `\\u1F60A`。\n\n\n使用该工具的注意事项：\n* 在文件中查找特定符号时，强烈建议使用 `search_query_regex` 而不是 `view_range`。\n* 使用 `view_range` 参数指定要查看的行范围，例如 [501, 1000] 将显示从 501 到 1000 的行\n* 索引是基于 1 的且包含性的\n* 设置 `[start_line, -1]` 显示从 `start_line` 到文件末尾的所有行\n* `view_range` 和 `search_query_regex` 参数仅在查看文件时适用，不适用于目录",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "path": {
+            "type": "string",
+            "description": "相对于工作空间根目录的文件或目录的完整路径，例如 'services/api_proxy/file.py' 或 'services/api_proxy'。"
+          },
+          "type": {
+            "type": "string",
+            "enum": ["file", "directory"],
+            "description": "要查看的路径类型。允许的选项有：'file'、'directory'。"
+          },
+          "view_range": {
+            "type": "array",
+            "items": {
+              "type": "integer"
+            },
+            "description": "当 `path` 指向文件时的可选参数。如果未给出，则显示完整文件。如果提供，文件将显示在指示的行号范围内，例如 [501, 1000] 将显示从 501 到 1000 的行。索引是基于 1 的且包含性的。设置 `[start_line, -1]` 显示从 `start_line` 到文件末尾的所有行。"
+          },
+          "search_query_regex": {
+            "type": "string",
+            "description": "仅适用于文件的可选参数。要搜索的正则表达式模式。仅使用 JavaScript 和 Rust 常见的核心正则表达式语法。请参阅工具描述中的正则表达式语法指南。指定后，仅显示与模式匹配的行（加上上下文行）。非匹配部分将替换为 '...'。"
+          },
+          "case_sensitive": {
+            "type": "boolean",
+            "default": false,
+            "description": "正则表达式搜索是否应区分大小写。仅在指定 search_query_regex 时使用。默认值：false（不区分大小写）。"
+          },
+          "context_lines_before": {
+            "type": "integer",
+            "default": 5,
+            "description": "每个正则表达式匹配之前显示的行数。仅在指定 search_query_regex 时使用。默认值：5。"
+          },
+          "context_lines_after": {
+            "type": "integer",
+            "default": 5,
+            "description": "每个正则表达式匹配之后显示的行数。仅在指定 search_query_regex 时使用。默认值：5。"
+          }
+        },
+        "required": ["path", "type"]
+      }
+    }
+  ]
 }
