@@ -1,6 +1,6 @@
 MIT License
 
-Copyright (c) 2024 AI工具系统提示词和模型中文翻译项目
+Copyright (c) 2026 AI工具系统提示词和模型中文翻译项目
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
