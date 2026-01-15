@@ -2,7 +2,7 @@
 
 <div align="center">
 
-> **Latest Update:** 2026-01-15
+> **Latest Update:** 2026-01-16
   
 ![版本](https://img.shields.io/badge/版本-1.0.0-blue)
 ![许可](https://img.shields.io/badge/许可-MIT-green)
@@ -20,13 +20,15 @@
 
 本项目收录了超过 35+ 主流 AI 编程工具的系统提示词和模型设计文档，包括但不限于：
 
-- **代码编辑器集成工具**: Cursor, VSCode Agent, Windsurf, Xcode, Augment Code
+- **代码编辑器集成工具**: Cursor, VSCode Agent, Windsurf, Xcode, Augment Code, Trae (ByteDance)
 - **AI 编程助手**: Devin AI, Replit, v0, Bolt, Cline, RooCode, Claude Code
+- **主流大模型提示词**: ChatGPT (OpenAI), Grok (xAI), Claude (Anthropic), Gemini (Google)
+- **国内厂商工具**: 豆包/Trae (字节跳动), Qoder (阿里), CodeBuddy (腾讯), Z.ai (智谱)
 - **专业开发平台**: Lovable, Same.dev, Manus Agent, Leap.new, Amp
-- **新兴 AI 工具**: Kiro, Emergent, Traycer AI, Poke, Qoder, dia, Junie
-- **企业级工具**: NotionAI, Perplexity, Google Gemini, Doubao, Anthropic
-- **开发辅助工具**: CodeBuddy, Comet Assistant, Cluely, Orchids.app, Trae, Warp.dev, Z.ai Code
-- **开源项目**: Bolt, Cline, RooCode, Lumo, Gemini CLI 等
+- **新兴 AI 工具**: Kiro, Emergent, Traycer AI, Poke, dia, Junie
+- **企业级工具**: NotionAI, Perplexity
+- **开发辅助工具**: Comet Assistant, Cluely, Orchids.app, Warp.dev
+- **开源项目**: Bolt, Cline, RooCode, Lumo, Gemini CLI, Codex CLI
  
 
 ## 📂 目录结构
@@ -34,9 +36,9 @@
 ```
 .
 ├── Cursor Prompts/               # Cursor 编辑器的提示词与工具
-├── Devin AI/                     # Devin AI 的系统提示词
 ├── VSCode Agent/                 # VSCode Agent 多模型支持文档
 ├── Windsurf/                     # Windsurf 提示词与工具
+├── Devin AI/                     # Devin AI 的系统提示词
 ├── Replit/                       # Replit 的提示词和工具配置
 ├── v0 Prompts and Tools/         # v0 的提示词和工具定义
 ├── Lovable/                      # Lovable AI 助手完整文档
@@ -47,12 +49,18 @@
 │   ├── Cline/                    # Cline 助手提示词
 │   ├── RooCode/                  # RooCode 提示词
 │   ├── Lumo/                     # Lumo 提示词
-│   └── Gemini CLI/               # Google Gemini CLI 系统提示词
-├── Google/                       # Google AI 工具集合
-│   ├── Gemini/                   # Gemini AI Studio
-│   └── Antigravity/              # Antigravity 快速模式
-├── Anthropic/                    # Anthropic Claude 相关提示词
-├── Claude Code/                  # Claude Code 编程助手
+│   ├── Gemini CLI/               # Google Gemini CLI 系统提示词
+│   └── Codex CLI/                # OpenAI Codex CLI 提示词
+├── Google/                       # Google AI 工具集合 (Gemini, Antigravity)
+├── Anthropic/                    # Anthropic Claude 全系 (含 Claude Code)
+├── ChatGPT/                      # OpenAI ChatGPT 模型提示词
+├── Grok/                         # xAI Grok 个性化与角色提示词
+├── 字节跳动（ByteDance）/        # 字节系工具
+│   ├── Trae.ai/                  # Trae 智能IDE
+│   └── 豆包（dola、doubao）/     # 豆包编程助手
+├── 腾讯 CodeBuddy Prompts/       # 腾讯 CodeBuddy 助手
+├── 阿里 Qoder/                   # 阿里 Qoder 编程助手
+├── 智谱清言（Z.ai）/             # 智谱 Z.ai 代码助手
 ├── Xcode/                        # Xcode AI 功能提示词
 ├── Augment Code/                 # Augment Code AI 编程工具
 ├── Amp/                          # Amp AI 开发平台
@@ -61,17 +69,12 @@
 ├── Traycer AI/                   # Traycer AI 计划与阶段模式
 ├── Leap.new/                     # Leap.new 提示词与工具
 ├── Poke/                         # Poke Agent 多阶段提示词
-├── Qoder/                        # Qoder Quest 设计与动作
-├── Trae/                         # Trae Builder 提示词与工具
 ├── Orchids.app/                  # Orchids 决策与系统提示词
 ├── dia/                          # dia AI 提示词
 ├── Warp.dev/                     # Warp 终端 AI 提示词
-├── Z.ai Code/                    # Z.ai 代码助手提示词
-├── Doubao(dola)/                 # 豆包 AI 提示词
 ├── Junie/                        # Junie AI 提示词
 ├── NotionAi/                     # Notion AI 提示词与工具
 ├── Perplexity/                   # Perplexity AI 提示词
-├── CodeBuddy Prompts/            # CodeBuddy Chat 与 Craft 提示词
 ├── Comet Assistant/              # Comet 助手系统提示词
 ├── Cluely/                       # Cluely 企业版与默认提示词
 ├── DISCLAIMER.md                 # 免责声明
