@@ -1,5 +1,9 @@
-# Orchids.app Decision-making prompt 系统提示词 @update:https://github.com/CreatorEdition/system-prompts-and-models-of-ai-tools-chinese/
+# Orchids.app Decision-making prompt 系统提示
 
+> 此文件包含 "Orchids.app" - "Decision-making prompt" 的系统提示词
+> 更新地址：[https://github.com/CreatorEdition/system-prompts-and-models-of-ai-tools-chinese]
+
+---
 知识截止：2024-06
 
 

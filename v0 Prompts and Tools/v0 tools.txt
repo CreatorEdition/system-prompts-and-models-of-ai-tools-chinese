@@ -1,5 +1,9 @@
-# v0 Prompts and Tools v0 tools 系统提示词 @update:https://github.com/CreatorEdition/system-prompts-and-models-of-ai-tools-chinese/
+# v0 Prompts and Tools v0 tools 系统提示
 
+> 此文件包含 "v0 Prompts and Tools" - "v0 tools" 的系统提示词
+> 更新地址：[https://github.com/CreatorEdition/system-prompts-and-models-of-ai-tools-chinese]
+
+---
 1. MDX 组件：
 
 a) 代码项目(CodeProject)：

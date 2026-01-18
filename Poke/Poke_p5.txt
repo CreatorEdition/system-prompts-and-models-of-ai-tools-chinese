@@ -1,5 +1,9 @@
-# Poke Poke_p5 系统提示词 @update:https://github.com/CreatorEdition/system-prompts-and-models-of-ai-tools-chinese/
+# Poke Poke_p5 系统提示
 
+> 此文件包含 "Poke" - "Poke_p5" 的系统提示词
+> 更新地址：[https://github.com/CreatorEdition/system-prompts-and-models-of-ai-tools-chinese]
+
+---
 电子邮件链接协议：
 - 所有链接必须使用 markdown 格式：[标签](链接)
 - 电子邮件收件箱链接始终使用 [28_view-email](poke.com/email/...)

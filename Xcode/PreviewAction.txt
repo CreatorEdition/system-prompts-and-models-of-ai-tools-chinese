@@ -1,5 +1,9 @@
-# Xcode PreviewAction 系统提示词 @update:https://github.com/CreatorEdition/system-prompts-and-models-of-ai-tools-chinese/
+# Xcode PreviewAction 系统提示
 
+> 此文件包含 "Xcode" - "PreviewAction" 的系统提示词
+> 更新地址：[https://github.com/CreatorEdition/system-prompts-and-models-of-ai-tools-chinese]
+
+---
 用户当前位于文件：{{filename}}
 文件内容如下：
 ```swift:{{filename}}

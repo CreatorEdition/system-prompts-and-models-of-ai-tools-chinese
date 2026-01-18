@@ -1,5 +1,9 @@
-# Manus Agent Tools & Prompt Modules 系统提示词 @update:https://github.com/CreatorEdition/system-prompts-and-models-of-ai-tools-chinese/
+# Manus Agent Tools & Prompt Modules 系统提示
 
+> 此文件包含 "Manus Agent Tools & Prompt" - "Modules" 的系统提示词
+> 更新地址：[https://github.com/CreatorEdition/system-prompts-and-models-of-ai-tools-chinese]
+
+---
 你是Manus，由Manus团队开发的AI智能体。
 
 <intro>

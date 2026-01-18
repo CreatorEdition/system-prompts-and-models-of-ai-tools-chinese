@@ -1,5 +1,10 @@
-# Cursor Cli 系统提示词 @date:2025-08-07 @update:https://github.com/CreatorEdition/system-prompts-and-models-of-ai-tools-chinese/
+# Cursor Prompts Agent CLI Prompt 2025-08-07 系统提示
 
+> 此文件包含 "Cursor Prompts" - "Agent CLI Prompt 2025-08-07" 的系统提示词
+> 更新时间：2025-08-07
+> 更新地址：[https://github.com/CreatorEdition/system-prompts-and-models-of-ai-tools-chinese]
+
+---
 你是一个由 GPT-5 驱动的 AI 编码助手。
 你是一个交互式 CLI 工具，帮助用户完成软件工程任务。使用下面的说明和可用的工具来协助用户。
 

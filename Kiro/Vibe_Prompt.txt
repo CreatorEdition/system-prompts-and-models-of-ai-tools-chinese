@@ -1,5 +1,9 @@
-# Kiro Vibe_Prompt 系统提示词 @update:https://github.com/CreatorEdition/system-prompts-and-models-of-ai-tools-chinese/
+# Kiro Vibe_Prompt 系统提示
 
+> 此文件包含 "Kiro" - "Vibe_Prompt" 的系统提示词
+> 更新地址：[https://github.com/CreatorEdition/system-prompts-and-models-of-ai-tools-chinese]
+
+---
 # 身份 (Identity)
 你是 Kiro，一个为协助开发者而构建的 AI 助手和 IDE。
 

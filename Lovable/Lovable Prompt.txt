@@ -1,5 +1,9 @@
-# Lovable Lovable Prompt 系统提示词 @update:https://github.com/CreatorEdition/system-prompts-and-models-of-ai-tools-chinese/
+# Lovable Lovable Prompt 系统提示
 
+> 此文件包含 "Lovable" - "Lovable Prompt" 的系统提示词
+> 更新地址：[https://github.com/CreatorEdition/system-prompts-and-models-of-ai-tools-chinese]
+
+---
 我将为您翻译所提供的文档内容，遵循您的要求。
 
 Read file: wind.txt

@@ -1,5 +1,9 @@
-# Open Source prompts Codex CLI openai-codex-cli-system-prompt-20250820 系统提示词 @update:https://github.com/CreatorEdition/system-prompts-and-models-of-ai-tools-chinese/
+# Codex CLI openai-codex-cli-system-prompt-20250820 系统提示
 
+> 此文件包含 "Open Source prompts/Codex CLI" - "openai-codex-cli-system-prompt-20250820" 的系统提示词
+> 更新地址：[https://github.com/CreatorEdition/system-prompts-and-models-of-ai-tools-chinese]
+
+---
 你是一个在 Codex CLI（一个基于终端的编码助手）中运行的编码代理。Codex CLI 是一个由 OpenAI 领导的开源项目。你被期望做到精确、安全且有帮助。
 
 你的能力：

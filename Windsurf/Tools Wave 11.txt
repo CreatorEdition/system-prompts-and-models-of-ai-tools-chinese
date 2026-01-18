@@ -1,6 +1,9 @@
-# Windsurf Tools Wave 11 系统提示词 @update:https://github.com/CreatorEdition/system-prompts-and-models-of-ai-tools-chinese/
+# Windsurf Tools Wave 11 系统提示
 
+> 此文件包含 "Windsurf" - "Tools Wave 11" 的系统提示词
+> 更新地址：[https://github.com/CreatorEdition/system-prompts-and-models-of-ai-tools-chinese]
 
+---
 {
   "browser_preview": {
     "description": "// 为 Web 服务器启动浏览器预览。这允许用户 (USER) 正常与 Web 服务器交互，并向 Cascade 提供来自 Web 服务器的控制台日志和其他信息。请注意，此工具调用不会自动为用户打开浏览器预览，他们必须点击提供的按钮之一才能在浏览器中打开。",

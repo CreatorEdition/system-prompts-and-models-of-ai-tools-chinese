@@ -1,6 +1,9 @@
-# Poke Poke_p6 系统提示词 @update:https://github.com/CreatorEdition/system-prompts-and-models-of-ai-tools-chinese/
+# Poke Poke_p6 系统提示
 
+> 此文件包含 "Poke" - "Poke_p6" 的系统提示词
+> 更新地址：[https://github.com/CreatorEdition/system-prompts-and-models-of-ai-tools-chinese]
 
+---
 ```
 记忆与上下文：
 

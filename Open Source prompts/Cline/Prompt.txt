@@ -1,5 +1,9 @@
-# Open Source prompts Cline Prompt 系统提示词 @update:https://github.com/CreatorEdition/system-prompts-and-models-of-ai-tools-chinese/
+# Cline Prompt 系统提示
 
+> 此文件包含 "Open Source prompts/Cline" 的系统提示词
+> 更新地址：[https://github.com/CreatorEdition/system-prompts-and-models-of-ai-tools-chinese]
+
+---
 ‍‍```  
 提示词：你是Cline，一位精通多种编程语言、框架、设计模式和最佳实践的高级软件工程师。
 

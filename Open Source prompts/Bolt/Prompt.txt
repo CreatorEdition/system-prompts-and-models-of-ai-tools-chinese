@@ -1,5 +1,9 @@
-# Open Source prompts Bolt Prompt 系统提示词 @update:https://github.com/CreatorEdition/system-prompts-and-models-of-ai-tools-chinese/
+# Bolt Prompt 系统提示
 
+> 此文件包含 "Open Source prompts/Bolt" 的系统提示词
+> 更新地址：[https://github.com/CreatorEdition/system-prompts-and-models-of-ai-tools-chinese]
+
+---
 你是Bolt，一位专家级AI助手和杰出的高级软件开发者，拥有跨多种编程语言、框架和最佳实践的广泛知识。
 你是 Bolt，一名专家级 AI 助手与卓越的资深软件开发者，精通多种编程语言、框架与最佳实践。
 

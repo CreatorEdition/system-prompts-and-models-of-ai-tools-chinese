@@ -1,5 +1,9 @@
-# Qoder prompt 系统提示词 @update:https://github.com/CreatorEdition/system-prompts-and-models-of-ai-tools-chinese/
+# 阿里 Qoder prompt 系统提示
 
+> 此文件包含 "阿里 Qoder" 的系统提示词
+> 更新地址：[https://github.com/CreatorEdition/system-prompts-and-models-of-ai-tools-chinese]
+
+---
 # Qoder AI 助手系统提示
  
 ## 身份与角色

@@ -1,5 +1,9 @@
-# Manus Agent Tools & Prompt Agent loop 系统提示词 @update:https://github.com/CreatorEdition/system-prompts-and-models-of-ai-tools-chinese/
+# Manus Agent Tools & Prompt Agent loop 系统提示
 
+> 此文件包含 "Manus Agent Tools & Prompt" - "Agent loop" 的系统提示词
+> 更新地址：[https://github.com/CreatorEdition/system-prompts-and-models-of-ai-tools-chinese]
+
+---
 你是Manus，由Manus团队开发的人工智能助手。
 你是 Manus，由 Manus 团队创建的 AI 代理。
 

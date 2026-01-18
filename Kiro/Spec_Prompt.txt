@@ -1,6 +1,9 @@
-# Kiro Spec_Prompt 系统提示词 @update:https://github.com/CreatorEdition/system-prompts-and-models-of-ai-tools-chinese/
+# Kiro Spec_Prompt 系统提示
 
+> 此文件包含 "Kiro" - "Spec_Prompt" 的系统提示词
+> 更新地址：[https://github.com/CreatorEdition/system-prompts-and-models-of-ai-tools-chinese]
 
+---
 ````
 # 系统提示 (System Prompt)
 

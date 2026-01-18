@@ -1,4 +1,10 @@
-# Anthropic 公司 Claude Code 2.0.0 系统提示词 @date:2025-09-29 @update:https://github.com/CreatorEdition/system-prompts-and-models-of-ai-tools-chinese/
+# Anthropic Claude Code 2.0 系统提示
+
+> 此文件包含 "Anthropic" - "Claude Code 2.0" 的系统提示词
+> 更新时间：2025-09-29
+> 更新地址：[https://github.com/CreatorEdition/system-prompts-and-models-of-ai-tools-chinese]
+
+---
 # Claude Code 版本 2.0.0
 
 发布日期：2025-09-29

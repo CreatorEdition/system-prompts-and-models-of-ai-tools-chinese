@@ -1,4 +1,8 @@
-# Doubao(dola) 帮我写作 系统提示词 @update:https://github.com/CreatorEdition/system-prompts-and-models-of-ai-tools-chinese/
+# 豆包（dola、doubao） 帮我写作 系统提示
 
+> 此文件包含 "字节跳动（ByteDance）/豆包（dola、doubao）" - "帮我写作" 的系统提示词
+> 更新地址：[https://github.com/CreatorEdition/system-prompts-and-models-of-ai-tools-chinese]
+
+---
 这是一个写作需求，请你先创建文档编辑器，然后完成以下用户指令：
 用户发送的内容
