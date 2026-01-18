@@ -2,7 +2,7 @@
 
 <div align="center">
 
-> **Latest Update:** 2026-01-16
+> **Latest Update:** 2026-01-19
   
 ![版本](https://img.shields.io/badge/版本-1.0.0-blue)
 ![许可](https://img.shields.io/badge/许可-MIT-green)
@@ -77,6 +77,7 @@
 ├── Perplexity/                   # Perplexity AI 提示词
 ├── Comet Assistant/              # Comet 助手系统提示词
 ├── Cluely/                       # Cluely 企业版与默认提示词
+├── add_headers.py                # 批量添加标准头部的工具脚本
 ├── DISCLAIMER.md                 # 免责声明
 └── LICENSE.md                    # MIT 许可证
 ```
@@ -100,7 +101,18 @@
 4. 推送到分支 (`git push origin feature/amazing-translation`)
 5. 开启一个Pull Request
 
-> **💡 提示：** 提交新文件时，建议在文件开头添加标准头部信息（包含描述、日期 @date:YYYY-MM-DD 和更新链接），以保持规范统一。
+> **💡 提示：** 提交新文件时，请使用标准头部格式以保持规范统一：
+>
+> ```markdown
+> # 产品名 文件名 系统提示
+>
+> > 此文件包含 "产品名" - "文件名" 的系统提示词
+> > 更新时间：YYYY-MM-DD（如文件中含有日期）
+> > 更新地址：[https://github.com/CreatorEdition/system-prompts-and-models-of-ai-tools-chinese]
+>
+> ---
+> ```
+>
 
 
 
