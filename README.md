@@ -158,3 +158,7 @@
 ## 📜 许可
 
 本项目采用MIT许可证 - 详见LICENSE文件
+
+## Star History
+
+[![Star History Chart](https://api.star-history.com/svg?repos=CreatorEdition/system-prompts-and-models-of-ai-tools-chinese&type=date&legend=top-left)](https://www.star-history.com/#CreatorEdition/system-prompts-and-models-of-ai-tools-chinese&type=date&legend=top-left)
