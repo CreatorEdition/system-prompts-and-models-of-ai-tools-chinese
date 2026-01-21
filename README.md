@@ -2,7 +2,7 @@
 
 <div align="center">
 
-> **Latest Update:** 2026-01-20
+> **Latest Update:** 2026-01-21
   
 ![版本](https://img.shields.io/badge/版本-1.0.0-blue)
 ![许可](https://img.shields.io/badge/许可-MIT-green)
@@ -159,6 +159,14 @@
 
 本项目采用MIT许可证 - 详见LICENSE文件
 
+
+<div align="center">
+
+**如果这个项目对您有帮助，请考虑为其点亮一颗 Star ⭐！**
+
 ## Star History
 
 [![Star History Chart](https://api.star-history.com/svg?repos=CreatorEdition/system-prompts-and-models-of-ai-tools-chinese&type=date&legend=top-left)](https://www.star-history.com/#CreatorEdition/system-prompts-and-models-of-ai-tools-chinese&type=date&legend=top-left)
+
+[⬆ 返回顶部](#ai中文编程提示词项目)
+</div>
