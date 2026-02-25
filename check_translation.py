@@ -6,7 +6,7 @@ from datetime import datetime, timedelta
 
 def get_git_changes():
     # Use -c core.quotepath=false to get correct UTF-8 paths
-    result = subprocess.run(["git", "-c", "core.quotepath=false", "status", "--porcelain"], 
+    result = subprocess.run(["git", "-c", "core.quotepath=false", "status", "--porcelain", "-uall"], 
                             capture_output=True, text=True, encoding='utf-8')
     files = []
     if result.stdout:
