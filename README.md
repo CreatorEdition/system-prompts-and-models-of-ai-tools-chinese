@@ -1,9 +1,9 @@
-# AI中文编程提示词项目
+# AI 编程提示词中文项目
 
 <div align="center">
 
-> **Latest Update:** 2026-03-01
-  
+> **最近更新：** 2026-03-01
+
 ![版本](https://img.shields.io/badge/版本-1.0.0-blue)
 ![许可](https://img.shields.io/badge/许可-MIT-green)
 ![贡献](https://img.shields.io/badge/欢迎-贡献-brightgreen)
@@ -12,51 +12,52 @@
 
 ## 📖 项目简介
 
-本项目是对[system-prompts-and-models-of-ai-tools](https://github.com/x1xhlol/system-prompts-and-models-of-ai-tools)的中文翻译及扩充版本，旨在为中文开发者和AI爱好者提供各种流行AI编程工具的系统提示词和模型设计文档。通过这些资料，您可以深入了解各类AI助手的工作原理，以及如何更有效地与它们交互。
+本项目是对 [system-prompts-and-models-of-ai-tools](https://github.com/x1xhlol/system-prompts-and-models-of-ai-tools) 的中文翻译与扩展整理，旨在为中文开发者与 AI 爱好者提供常见 AI 编程工具的系统提示词、工具定义及相关模型说明文档。
 
-> **声明：** 本项目仅供学习研究使用。项目中的所有提示词和模型文档仅用于帮助开发者理解AI工具的工作原理。详细的免责声明请查看[DISCLAIMER.md](./DISCLAIMER.md)文件。
+通过这些资料，你可以更深入地了解不同 AI 助手的行为方式、能力边界与交互逻辑，并将其用于学习、研究、对比分析和实践参考。
 
-## 🚀 项目内容
+> **声明：** 本项目仅供学习与研究使用。仓库中的提示词和模型文档仅用于帮助开发者理解相关 AI 工具的工作机制。详细说明请参阅 [DISCLAIMER.md](./DISCLAIMER.md)。
 
-本项目收录了超过 35+ 主流 AI 编程工具的系统提示词和模型设计文档，包括但不限于：
+## 🚀 收录内容
 
-- **代码编辑器集成工具**: Cursor, VSCode Agent, Windsurf, Xcode, Augment Code, Trae (ByteDance)
-- **AI 编程助手**: Devin AI, Replit, v0, Bolt, Cline, RooCode, Claude Code
-- **主流大模型提示词**: ChatGPT (OpenAI), Grok (xAI), Claude (Anthropic), Gemini (Google)
-- **国内厂商工具**: 豆包/Trae (字节跳动), Qoder (阿里), CodeBuddy (腾讯), Z.ai (智谱)
-- **专业开发平台**: Lovable, Same.dev, Manus Agent, Leap.new, Amp
-- **新兴 AI 工具**: Kiro, Emergent, Traycer AI, Poke, dia, Junie
-- **企业级工具**: NotionAI, Perplexity
-- **开发辅助工具**: Comet Assistant, Cluely, Orchids.app, Warp.dev
-- **开源项目**: Bolt, Cline, RooCode, Lumo, Gemini CLI, Codex CLI
- 
+本项目当前收录了 35+ 主流及新兴 AI 编程工具的系统提示词和模型设计资料，包括但不限于：
+
+- **代码编辑器与 IDE 集成工具**：Cursor、VSCode Agent、Windsurf、Xcode、Augment Code、Trae
+- **AI 编程助手与代理**：Devin AI、Replit、v0、Bolt、Cline、RooCode、Claude Code
+- **主流大模型系统提示词**：ChatGPT（OpenAI）、Grok（xAI）、Claude（Anthropic）、Gemini（Google）
+- **国内厂商相关工具**：豆包 / Trae（字节跳动）、Qoder（阿里）、CodeBuddy（腾讯）、Z.ai（智谱）
+- **专业开发与生成平台**：Lovable、Same.dev、Manus Agent、Leap.new、Amp
+- **新兴 AI 工具**：Kiro、Emergent、Traycer AI、Poke、dia、Junie
+- **企业与效率工具**：Notion AI、Perplexity
+- **开发辅助工具**：Comet Assistant、Cluely、Orchids.app、Warp.dev
+- **开源项目与公开提示词**：Bolt、Cline、RooCode、Lumo、Gemini CLI、Codex CLI
 
 ## 📂 目录结构
 
-```
+```text
 .
-├── Cursor Prompts/               # Cursor 编辑器的提示词与工具
+├── Cursor Prompts/               # Cursor 编辑器提示词与工具
 ├── VSCode Agent/                 # VSCode Agent 多模型支持文档
 ├── Windsurf/                     # Windsurf 提示词与工具
-├── Devin AI/                     # Devin AI 的系统提示词
-├── Replit/                       # Replit 的提示词和工具配置
-├── v0 Prompts and Tools/         # v0 的提示词和工具定义
-├── Lovable/                      # Lovable AI 助手完整文档
-├── Same.dev/                     # Same.dev 平台的提示词
-├── Manus Agent Tools & Prompt/   # Manus Agent 的工具和提示词
+├── Devin AI/                     # Devin AI 系统提示词
+├── Replit/                       # Replit 提示词与工具配置
+├── v0 Prompts and Tools/         # v0 提示词与工具定义
+├── Lovable/                      # Lovable AI 助手相关文档
+├── Same.dev/                     # Same.dev 平台提示词
+├── Manus Agent Tools & Prompt/   # Manus Agent 工具与提示词
 ├── Open Source prompts/          # 开源 AI 工具提示词集合
 │   ├── Bolt/                     # Bolt AI 提示词
 │   ├── Cline/                    # Cline 助手提示词
 │   ├── RooCode/                  # RooCode 提示词
 │   ├── Lumo/                     # Lumo 提示词
-│   ├── Gemini CLI/               # Google Gemini CLI 系统提示词
-│   └── Codex CLI/                # OpenAI Codex CLI 提示词
-├── Google/                       # Google AI 工具集合 (Gemini, Antigravity)
-├── Anthropic/                    # Anthropic Claude 全系 (含 Claude Code)
+│   ├── Gemini CLI/               # Gemini CLI 系统提示词
+│   └── Codex CLI/                # Codex CLI 系统提示词
+├── Google/                       # Google AI 工具集合（Gemini、Antigravity）
+├── Anthropic/                    # Anthropic Claude 系列（含 Claude Code）
 ├── ChatGPT/                      # OpenAI ChatGPT 模型提示词
 ├── Grok/                         # xAI Grok 个性化与角色提示词
-├── 字节跳动（ByteDance）/        # 字节系工具
-│   ├── Trae.ai/                  # Trae 智能IDE
+├── 字节跳动（ByteDance）/        # 字节系相关工具
+│   ├── Trae.ai/                  # Trae 智能 IDE
 │   └── 豆包（dola、doubao）/     # 豆包编程助手
 ├── 腾讯 CodeBuddy Prompts/       # 腾讯 CodeBuddy 助手
 ├── 阿里 Qoder/                   # 阿里 Qoder 编程助手
@@ -64,7 +65,7 @@
 ├── Xcode/                        # Xcode AI 功能提示词
 ├── Augment Code/                 # Augment Code AI 编程工具
 ├── Amp/                          # Amp AI 开发平台
-├── Kiro/                         # Kiro AI (Vibe/Spec/Mode)
+├── Kiro/                         # Kiro AI（Vibe / Spec / Mode）
 ├── Emergent/                     # Emergent AI 提示词与工具
 ├── Traycer AI/                   # Traycer AI 计划与阶段模式
 ├── Leap.new/                     # Leap.new 提示词与工具
@@ -75,186 +76,172 @@
 ├── Junie/                        # Junie AI 提示词
 ├── NotionAi/                     # Notion AI 提示词与工具
 ├── Perplexity/                   # Perplexity AI 提示词
-├── Comet Assistant/              # Comet 助手系统提示词
+├── Comet Assistant/              # Comet Assistant 系统提示词
 ├── Cluely/                       # Cluely 企业版与默认提示词
 ├── add_headers.py                # 批量添加标准头部的工具脚本
 ├── DISCLAIMER.md                 # 免责声明
 └── LICENSE.md                    # MIT 许可证
-```
+````
 
-## 🔍 使用方法
+## 🔍 这个项目能帮你做什么
 
-这些提示词和模型设计文档可以帮助您：
+这些提示词和模型文档可以帮助你：
 
-1. **了解AI编程工具的内部工作机制**
-2. **优化您与AI编程工具的交互方式**
-3. **为开发类似工具提供参考**
-4. **学习AI代理设计的最佳实践**
+1. 了解 AI 编程工具的内部工作方式
+2. 优化你与 AI 工具的交互方式
+3. 为开发类似产品提供参考
+4. 学习 AI Agent / Copilot 的设计思路
+5. 对比不同工具在提示词设计上的差异
 
-## 🤝 贡献
+## 💡 使用场景
 
-欢迎贡献更多AI工具的中文翻译或改进现有翻译！请遵循以下步骤：
+### 🎯 面向开发者
 
-1. Fork本仓库
-2. 创建您的特性分支 (`git checkout -b feature/amazing-translation`)
-3. 提交您的更改 (`git commit -m '添加对XX工具的翻译'`)
-4. 推送到分支 (`git push origin feature/amazing-translation`)
-5. 开启一个Pull Request
+* **代码审查辅助**：参考 Claude Code、Cursor 等工具的提示词设计方式
+* **Bug 排查与修复**：研究工具如何组织上下文、拆解问题与调用工具
+* **重构与优化**：观察不同 AI 助手如何处理代码结构调整
+* **文档生成**：借鉴系统提示词中对解释、总结与输出格式的约束方式
 
-> **💡 提示：** 提交新文件时，请使用标准头部格式以保持规范统一：
->
-> ```markdown
-> # 产品名 文件名 系统提示
->
-> > 此文件包含 "产品名" - "文件名" 的系统提示词
-> > 更新时间：YYYY-MM-DD（如文件中含有日期）
-> > 更新地址：[https://github.com/CreatorEdition/system-prompts-and-models-of-ai-tools-chinese]
->
-> ---
-> ```
->
+### 📝 面向内容创作者
 
+* **写作辅助**：参考 Perplexity、Comet 等提示词中的信息组织方法
+* **内容改写与翻译**：分析不同系统提示对语言风格与任务边界的约束
+* **多语言内容适配**：为中文场景做本地化表达和结构优化
 
+### 🎨 面向设计师与无代码创作者
 
-## 📅 后续计划
+* **快速原型搭建**：参考 Lovable、v0、Replit 等工具的提示词结构
+* **界面与交互建议**：观察 AI 助手如何生成设计建议与组件描述
+* **组件生成与页面规划**：理解工具如何把自然语言需求转成前端产物
 
-本仓库将持续更新并增加以下内容：
+### 🔬 面向研究者与分析人员
 
-- **中文编程Rules** - 为中文开发者提供更适合的编程规则和指南
-- **更多AI工具提示词** - 持续追踪并翻译最新AI工具的系统提示词
-- **提示词优化建议** - 针对中文用户的提示词使用技巧和优化方法
-- **实践案例分享** - 收集在实际开发过程中使用这些提示词的成功案例
+* **提示词研究**：对比不同产品的系统提示设计取向
+* **能力边界分析**：研究工具在规划、执行、拒答和安全策略上的差异
+* **报告与综述写作**：基于这些材料整理横向对比报告和趋势观察
 
-我致力于建立一个完整的中文AI工具资源库，帮助更多开发者充分利用AI辅助编程的潜力。
+### 🏢 面向团队与组织
+
+* **知识沉淀**：统一整理常用提示词与工具资料
+* **新人培训**：帮助团队成员快速理解不同 AI 工具的特点
+* **流程标准化**：为团队内部的 AI 使用规范提供参考样例
 
 ## ✨ 项目特色
 
-- 📚 **全面覆盖**: 收录 35+ 主流和新兴 AI 编程工具
-- 🔄 **持续更新**: 跟踪最新版本的提示词变化
-- 🌏 **中文友好**: 为中文开发者提供本地化文档
-- 🛠️ **实用性强**: 包含工具配置和实际应用案例
-- 🎯 **结构清晰**: 按工具类型和功能分类整理
+* 📚 **覆盖较全**：收录 35+ 主流与新兴 AI 工具资料
+* 🔄 **持续更新**：持续跟踪新的提示词版本与工具变化
+* 🌏 **中文友好**：面向中文开发者做本地化整理
+* 🛠️ **实用导向**：兼顾学习价值与实际参考价值
+* 🎯 **结构清晰**：按工具类型和用途分类整理
+
+## 🤝 如何贡献
+
+欢迎一起补充更多 AI 工具的中文翻译，或改进现有内容。
+
+### 1. 新增提示词或文档
+
+1. Fork 本仓库
+2. 为对应工具创建目录（如目录尚不存在）
+3. 按现有结构添加文件，例如：
+
+```text
+Tool Name/
+├── Prompt.txt          # 主系统提示词
+├── Tools.json          # 工具/函数定义（如适用）
+└── [Version].txt       # 特定版本提示词
+```
+
+4. 提交 Pull Request，并简要说明新增内容来源与适用范围
+
+### 2. 更新现有内容
+
+* 核对更新内容的准确性
+* 在提交信息中写明版本或日期
+* 示例：`update: Claude Code prompt - 2026-01-18`
+
+### 3. 反馈问题
+
+* 先检查是否已有同类 Issue
+* 尽量提供具体文件路径、问题描述和对应截图/上下文
+* 如涉及翻译问题，建议同时附上原文与建议译法
+
+## ✅ 贡献建议
+
+提交内容时，建议尽量满足以下几点：
+
+* **准确性**：确认提示词版本、来源和内容无误
+* **一致性**：保持目录结构、标题格式和头部说明统一
+* **可读性**：避免生硬直译，优先自然、准确的中文表达
+* **可追溯性**：尽量注明原始来源或更新依据
+* **完整性**：新增文件时补齐说明、日期和必要上下文
+
+> **💡 提示：** 提交新文件时，建议使用统一头部格式：
+
+```markdown
+# 产品名 文件名 系统提示
+
+> 此文件包含“产品名 - 文件名”的系统提示词
+> 更新时间：YYYY-MM-DD（如文件中含有日期）
+> 更新地址：[https://github.com/CreatorEdition/system-prompts-and-models-of-ai-tools-chinese]
+
+---
+```
+
+## 📋 Pull Request 建议模板
+
+提交 PR 时，可以附上以下信息：
+
+* **类型**：新增 / 更新 / 修复 / 文档
+* **工具/分类**：对应的 AI 工具名称或目录
+* **变更说明**：本次修改的主要内容
+* **校验方式**：你如何确认内容准确
+* **关联问题**：相关 Issue 或讨论链接
+
+## 📅 后续计划
+
+本仓库将持续更新并逐步增加以下内容：
+
+* **中文编程 Rules**：更适合中文开发者的规则与实践建议
+* **更多 AI 工具提示词**：持续跟进新的系统提示词与工具定义
+* **提示词优化建议**：总结面向中文用户的使用技巧
+* **实践案例分享**：收集真实开发场景中的应用示例
+
+希望逐步将这个仓库建设成一个更完整的中文 AI 工具资料库，帮助更多开发者高效使用 AI 辅助编程工具。
 
 ## 🔗 相关链接
 
 ### 主流工具官网
-- [原始英文项目](https://github.com/x1xhlol/system-prompts-and-models-of-ai-tools)
-- [Cursor](https://cursor.sh/) | [Windsurf](https://codeium.com/windsurf) | [VSCode](https://code.visualstudio.com/)
-- [Devin AI](https://www.cognition.ai/) | [Replit](https://replit.com/) | [v0](https://v0.dev/)
-- [Lovable](https://lovable.dev/) | [Bolt](https://bolt.new/) | [Cline](https://github.com/cline/cline)
-- [Anthropic Claude](https://www.anthropic.com/) | [Augment Code](https://augmentcode.com/)
+
+* [原始英文项目](https://github.com/x1xhlol/system-prompts-and-models-of-ai-tools)
+* [Cursor](https://cursor.sh/) | [Windsurf](https://codeium.com/windsurf) | [VS Code](https://code.visualstudio.com/)
+* [Devin AI](https://www.cognition.ai/) | [Replit](https://replit.com/) | [v0](https://v0.dev/)
+* [Lovable](https://lovable.dev/) | [Bolt](https://bolt.new/) | [Cline](https://github.com/cline/cline)
+* [Anthropic Claude](https://www.anthropic.com/) | [Augment Code](https://augmentcode.com/)
 
 ### 新兴工具
-- [Warp](https://www.warp.dev/) | [Leap.new](https://leap.new/) | [Same.dev](https://same.dev/)
-- [Perplexity](https://www.perplexity.ai/) | [NotionAI](https://www.notion.so/product/ai)
-- [Amp](https://withamp.com/) | [Kiro](https://kiro.ai/) | [Z.ai](https://z.ai/)
+
+* [Warp](https://www.warp.dev/) | [Leap.new](https://leap.new/) | [Same.dev](https://same.dev/)
+* [Perplexity](https://www.perplexity.ai/) | [Notion AI](https://www.notion.so/product/ai)
+* [Amp](https://withamp.com/) | [Kiro](https://kiro.ai/) | [Z.ai](https://z.ai/)
 
 ---
 
 <div align="left">
-  <sub>如有任何问题或建议，欢迎提交Issue</sub>
+  <sub>如有任何问题或建议，欢迎提交 Issue。</sub>
 </div>
 
-## 📜 许可
+## 📜 许可证
 
-本项目采用MIT许可证 - 详见LICENSE文件
-
+本项目采用 MIT 许可证，详见 [LICENSE.md](./LICENSE.md)。
 
 <div align="center">
 
-**如果这个项目对您有帮助，请考虑为其点亮一颗 Star ⭐！**
+**如果这个项目对你有帮助，欢迎点亮一颗 Star ⭐**
 
 ## Star History
 
-[![Star History Chart](https://api.star-history.com/svg?repos=CreatorEdition/system-prompts-and-models-of-ai-tools-chinese&type=date&legend=top-left)](https://www.star-history.com/#CreatorEdition/system-prompts-and-models-of-ai-tools-chinese&type=date&legend=top-left)
+[![Star History Chart](https://api.star-history.com/svg?repos=CreatorEdition/system-prompts-and-models-of-ai-tools-chinese\&type=date\&legend=top-left)](https://www.star-history.com/#CreatorEdition/system-prompts-and-models-of-ai-tools-chinese&type=date&legend=top-left)
 
-[⬆ 返回顶部](#ai中文编程提示词项目)
+[⬆ 返回顶部](#ai-编程提示词中文项目)
+
 </div>
-
-
-
----
-
-## 💡 Use Cases
-
-### 🎯 For Developers
-- **Enhanced Code Review**: Use Claude Code or Cursor prompts to review code with context-aware suggestions
-- **Automated Documentation**: Generate comprehensive docs using specialized prompts
-- **Bug Fixing Assistant**: Leverage AI to identify and suggest fixes for complex bugs
-- **Refactoring Support**: Get intelligent suggestions for code optimization
-
-### 📝 For Content Creators
-- **Writing Assistant**: Use Perplexity or Comet prompts for research and content generation
-- **Search Engine Optimization**:
-- **Multi-language Support**: Translate and adapt content across languages
-
-### 🎨 For Designers & No-Code Builders
-- **Rapid Prototyping**: Use Lovable, v0, or Replit prompts to build MVPs quickly
-- **UI/UX Suggestions**: Get design recommendations from AI assistants
-- **Component Generation**: Create reusable components with specialized prompts
-
-### 🔬 For Researchers & Analysts
-- **Data Analysis**: Use prompts to process and interpret complex datasets
-- **Literature Review**: Automate research paper summarization
-- **Report Generation**: Create comprehensive reports with AI assistance
-
-### 🏢 For Teams & Organizations
-- **Knowledge Base**: Centralize prompts for consistent AI interactions
-- **Onboarding**: Train new team members with proven prompt patterns
-- **Standardization**: Maintain quality across AI-assisted workflows
-
----
-
-## 🤝 Contributing
-
-We welcome contributions from the community! This repository represents an incredible resource that empowers thousands of developers, creators, and teams worldwide. Your contributions help make AI more accessible and productive for everyone.
-
-### 📌 How to Contribute
-
-#### 1️⃣ Adding New Prompts
-- Fork this repository
-- Create a new directory for your tool if it doesn't exist
-- Add your prompt file following the structure:
-  ```
-  Tool Name/
-  ├── Prompt.txt          # Main system prompt
-  ├── Tools.json          # Available tools/functions (if applicable)
-  └── [Version].txt       # Version-specific prompts
-  ```
-
-  - Submit a pull request with a clear description
-
-#### 2️⃣ Updating Existing Prompts
-- Verify the accuracy of your update
-- Include the date and version in your commit message
-- Example: `update: Claude Code prompt - 01/18/2026`
-
-#### 3️⃣ Reporting Issues
-- Check if the issue already exists
-- Provide detailed information about the prompt or tool
-- Include steps to reproduce (if applicable)
-
-### ✅ Contribution Guidelines
-- **Accuracy**: Ensure prompts are current and verified
-- **Attribution**: Credit original sources when applicable
-- **Format**: Follow the existing directory and file structure
-- **Description**: Include clear documentation for new prompts
-- **Testing**: Test prompts before submitting when possible
-
-### 📋 Pull Request Template
-When submitting a PR, please include:
-- **Type**: [New Prompt / Update / Fix / Documentation]
-- **Tool/Category**: Name of the AI tool or category
-- **Description**: Brief explanation of changes
-- **Testing**: How you verified the changes
-- **Related Issues**: Link any related issues
-
-### 💬 Community
-- Open an issue for discussions or questions
-- Share your use cases and experiences
-- Help others by reviewing pull requests
-- Star ⭐ the repository if you find it useful!
-
----
-
-**Thank you for helping build the most comprehensive AI prompts repository! Your contributions make a real difference in how people work with AI. 🚀**
