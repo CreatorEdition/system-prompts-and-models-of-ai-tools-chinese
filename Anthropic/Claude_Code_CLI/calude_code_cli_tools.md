@@ -118,19 +118,19 @@ Write 工具提供原子化文件写入能力，并强制执行安全检查：
 - 要求使用绝对路径（不支持相对路径）
 - 原子写入：文件要么完整写入，要么保持不变
 
-**Safety Mechanisms:**
+**安全机制：**
 
-Built-in protection against accidental overwrites:
-- **Read-before-write enforcement:** System will fail the operation if an existing file hasn't been read in the current session
-- **Session tracking:** Maintains record of files read to validate write operations
-- **Best practices enforcement:** Prefers Edit tool for existing files, Write only for new files
+内建的防误覆盖保护包括：
+- **先读后写约束：** 如果当前会话中尚未读取某个已存在文件，系统会直接让写入失败
+- **会话跟踪：** 维护当前会话中已读取文件的记录，用于校验写入是否合法
+- **最佳实践约束：** 对已有文件优先使用 Edit 工具，Write 只应用于新文件
 
-**Design Philosophy:**
+**设计理念：**
 
-- Prefer Edit tool for modifications to existing files
-- Use Write only when creating genuinely new files
-- Avoid creating documentation files (*.md, README) unless explicitly requested
-- No emoji insertion unless explicitly requested by user
+- 修改已有文件时优先使用 Edit 工具
+- 仅在真正创建新文件时使用 Write
+- 除非用户明确要求，否则避免主动创建文档文件（如 `*.md`、`README`）
+- 除非用户明确要求，否则不要插入 emoji
 
 **参数结构：**
 
@@ -151,55 +151,55 @@ interface WriteTool {
   "properties": {
     "file_path": {
       "type": "string",
-      "description": "The absolute path to the file to write (must be absolute, not relative)"
+      "description": "要写入文件的绝对路径（必须为绝对路径，不能是相对路径）"
     },
     "content": {
       "type": "string",
-      "description": "The content to write to the file"
+      "description": "要写入文件的内容"
     }
   }
 }
 ```
 
-**Enforcement Rules:**
-- Read-before-write: Enforced by system for existing files
-- Path validation: Must be absolute path
-- Session state: Tracks read files in current conversation
+**强制规则：**
+- 先读后写：系统会对已有文件强制执行
+- 路径校验：必须是绝对路径
+- 会话状态：跟踪当前对话中已经读取过的文件
 
 ---
 
 ### Edit Tool
 
-**Purpose:** Perform precise, surgical string replacements in files with exact matching.
+**用途：** 在文件中执行精确、外科手术式的字符串替换，要求完全匹配。
 
 **技术实现：**
 
-The Edit tool implements exact string matching and replacement:
-- Operates on exact string matches (not regex or patterns)
-- Requires prior read operation in current session
-- Preserves file encoding and line endings
-- Atomic operation (file either fully updated or unchanged)
+Edit 工具通过精确字符串匹配来执行替换：
+- 基于精确字符串匹配工作（不是正则，也不是模糊模式）
+- 要求在当前会话中先读取过对应文件
+- 保留文件编码和换行符
+- 原子操作（文件要么完整更新，要么完全不变）
 
-**String Matching Algorithm:**
+**字符串匹配机制：**
 
-The tool uses exact string matching with the following behavior:
-- **Uniqueness requirement:** `old_string` must have exactly one match in file (unless `replace_all=true`)
-- **Whitespace sensitivity:** Preserves exact indentation (tabs/spaces) from source
-- **Line number prefix handling:** Content after line number prefix (`spaces + line_number + tab`) is the actual file content
-- **Failure mode:** Operation fails if `old_string` is not unique (prevents ambiguous edits)
+该工具使用精确字符串匹配，并具有以下行为：
+- **唯一性要求：** `old_string` 在文件中必须恰好匹配一次（除非设置 `replace_all=true`）
+- **空白敏感：** 会严格保留源文件中的缩进（Tab / 空格）
+- **行号前缀处理：** 真正的文件内容是行号前缀（`空格 + 行号 + 制表符`）之后的部分
+- **失败条件：** 如果 `old_string` 不唯一，操作会失败（以避免歧义编辑）
 
-**Replace Modes:**
+**替换模式：**
 
-1. **Single replacement (default):** Replaces one unique occurrence
-   - Fails if `old_string` appears multiple times or zero times
-   - Use case: Surgical edits to specific code locations
+1. **单次替换（默认）：** 替换一个唯一匹配项
+   - 如果 `old_string` 出现多次或一次也不出现，则操作失败
+   - 使用场景：对特定代码位置做精细修改
 
-2. **Replace all (`replace_all=true`):** Replaces all occurrences
-   - Useful for variable renaming across file
-   - No uniqueness requirement
-   - Use case: Refactoring, batch replacements
+2. **全部替换（`replace_all=true`）：** 替换所有匹配项
+   - 适用于整个文件内的变量重命名
+   - 不要求唯一匹配
+   - 使用场景：重构、批量替换
 
-**Safety Mechanisms:**
+**安全机制：**
 
 - **Read-before-edit enforcement:** System validates file was read at least once in conversation
 - **Content validation:** `new_string` must differ from `old_string`
