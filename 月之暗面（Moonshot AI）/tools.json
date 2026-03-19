@@ -1,0 +1,173 @@
+{
+    "namespace": "default",
+    "tools": [
+        {
+            "name": "web_search",
+            "description": "网页搜索：通用型网页搜索工具。返回最相关的结果及对应摘要片段。",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "queries": {
+                        "type": "array",
+                        "description": "搜索查询数组（最多 5 条）。会在同一步内并行执行。应覆盖不同角度，避免内容重叠或近似重复的查询。",
+                        "items": {
+                            "type": "string"
+                        },
+                        "maxItems": 5,
+                        "minItems": 1
+                    }
+                },
+                "required": [
+                    "queries"
+                ]
+            }
+        },
+        {
+            "name": "web_open_url",
+            "description": "打开 URL：`web_open_url` 工具会打开指定 URL 并展示其内容，便于在用户提供精确链接时直接访问和分析网页。",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "urls": {
+                        "type": "array",
+                        "description": "需要抓取的 URL 列表。",
+                        "items": {
+                            "type": "string"
+                        }
+                    }
+                },
+                "required": [
+                    "urls"
+                ]
+            }
+        },
+        {
+            "name": "search_image_by_text",
+            "description": "按文本搜索图片：根据文本查询搜索图片，返回匹配图片的标题、说明和 URL。",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "queries": {
+                        "type": "array",
+                        "description": "直接使用这些查询词进行搜索。所有查询将并行执行。",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    "download_dir": {
+                        "type": "string",
+                        "description": "保存图片的目录，建议使用绝对路径"
+                    },
+                    "need_download": {
+                        "type": "boolean",
+                        "description": "是否下载图片"
+                    },
+                    "total_count": {
+                        "type": "integer",
+                        "description": "要搜索的图片数量"
+                    }
+                },
+                "required": [
+                    "queries"
+                ]
+            }
+        },
+        {
+            "name": "get_data_source",
+            "description": "从指定数据源 API 获取数据。使用相应 API 拉取结构化数据。",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "api_name": {
+                        "type": "string",
+                        "description": "要调用的 API 名称"
+                    },
+                    "data_source_name": {
+                        "type": "string",
+                        "enum": [
+                            "yahoo_finance",
+                            "arxiv",
+                            "world_bank_open_data",
+                            "stock_finance_data",
+                            "google_scholar"
+                        ],
+                        "description": "数据源名称。必填参数。"
+                    },
+                    "params": {
+                        "type": "object",
+                        "description": "API 调用所需参数"
+                    }
+                },
+                "required": [
+                    "api_name",
+                    "data_source_name"
+                ]
+            }
+        },
+        {
+            "name": "memory_space_edits",
+            "description": "管理存储在 memory_space 中的内容。可新增、删除或替换跨会话持久保存的记忆。",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "operate": {
+                        "type": "string",
+                        "enum": [
+                            "add",
+                            "remove",
+                            "replace"
+                        ],
+                        "description": "要执行的编辑操作：add | remove | replace。"
+                    },
+                    "content": {
+                        "type": "string",
+                        "description": "记忆内容。在 operate=add|replace 时必填。必须是一条完整的陈述句。"
+                    },
+                    "id": {
+                        "type": "string",
+                        "description": "目标记忆的 id。在 operate=remove|replace 时必填。"
+                    }
+                },
+                "required": [
+                    "operate"
+                ],
+                "oneOf": [
+                    {
+                        "properties": {
+                            "operate": {
+                                "const": "add"
+                            }
+                        },
+                        "required": [
+                            "operate",
+                            "content"
+                        ]
+                    },
+                    {
+                        "properties": {
+                            "operate": {
+                                "const": "remove"
+                            }
+                        },
+                        "required": [
+                            "operate",
+                            "id"
+                        ]
+                    },
+                    {
+                        "properties": {
+                            "operate": {
+                                "const": "replace"
+                            }
+                        },
+                        "required": [
+                            "operate",
+                            "content",
+                            "id"
+                        ]
+                    }
+                ]
+            }
+        }
+    ]
+}
