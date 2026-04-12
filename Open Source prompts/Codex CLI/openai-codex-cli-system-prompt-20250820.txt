@@ -299,8 +299,8 @@ _** Delete File: <path> - 移除一个现有文件。后面没有内容。
 - （加号）表示插入的文本，
 
 * （减号）表示移除的文本，或
-  （空格）表示上下文。
-  在一个被截断的 hunk 的末尾，你可以发出 \*\*\* End of File。
+  （空格）表示上下文。
+  在一个被截断的 hunk 的末尾，你可以发出 \*\*\* End of File。
 
 Patch := Begin { FileOp } End
 Begin := "**_ Begin Patch" NEWLINE

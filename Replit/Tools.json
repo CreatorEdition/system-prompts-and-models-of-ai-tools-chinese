@@ -199,7 +199,7 @@
     },
     {
       "name": "execute_sql_tool",
-      "description": "此工具允许你执行 SQL 查询、修复数据库错误并访问数据库模式。\n\n## 使用规则：\n1. 始终优先使用此工具来修复数据库错误，而不是通过编写像 db.drop_table(table_name) 这样的代码来修复\n2. 提供清晰、格式良好且语法正确的 SQL 查询\n3. 专注于数据库交互、数据操作和查询优化\n\n## 何时使用：\n1. 修复和排除与数据库相关的问题\n2. 探索数据库模式和关系\n3. 更新或修改数据库中的数据\n4. 运行临时的、一次性的 SQL 代码\n\n## 何时不使用：\n1. 对于非 SQL 数据库操作（NoSQL、基于文件的数据库）\n2. 对于数据库迁移。请改用像 Drizzle 或 flask-migrate 这样的迁移工具\n\n## 用法示例：\n\n### 示例 1：查看数据库信息\nsql_query: SELECT * FROM customers WHERE region = 'North';\n\n### 示例 2：运行临时 SQL 查询\nsql_query:  EXPLAIN ANALYZE SELECT orders.*, customers.name\n            FROM orders\n            JOIN customers ON orders.customer_id = customers.id;\n\n### 示例 3：向数据库插入数据\nsql_query:  INSERT INTO products (name, price, category)\n            VALUES ('New Product', 29.99, 'Electronics');",
+      "description": "此工具允许你执行 SQL 查询、修复数据库错误并访问数据库模式。\n\n## 使用规则：\n1. 始终优先使用此工具来修复数据库错误，而不是通过编写像 db.drop_table(table_name) 这样的代码来修复\n2. 提供清晰、格式良好且语法正确的 SQL 查询\n3. 专注于数据库交互、数据操作和查询优化\n\n## 何时使用：\n1. 修复和排除与数据库相关的问题\n2. 探索数据库模式和关系\n3. 更新或修改数据库中的数据\n4. 运行临时的、一次性的 SQL 代码\n\n## 何时不使用：\n1. 对于非 SQL 数据库操作（NoSQL、基于文件的数据库）\n2. 对于数据库迁移。请改用像 Drizzle 或 flask-migrate 这样的迁移工具\n\n## 用法示例：\n\n### 示例 1：查看数据库信息\nsql_query: SELECT * FROM customers WHERE region = 'North';\n\n### 示例 2：运行临时 SQL 查询\nsql_query:  EXPLAIN ANALYZE SELECT orders.*, customers.name\n            FROM orders\n            JOIN customers ON orders.customer_id = customers.id;\n\n### 示例 3：向数据库插入数据\nsql_query:  INSERT INTO products (name, price, category)\n            VALUES ('New Product', 29.99, 'Electronics');",
       "parameters": {
         "properties": {
           "sql_query": {
@@ -213,7 +213,7 @@
     },
     {
       "name": "suggest_deploy",
-      "description": "当你认为项目已处于可部署状态时调用此函数。\n这将向用户建议他们可以部署他们的项目。\n这是一个终端操作 - 一旦调用，你的任务就完成了，并且\n你不应采取任何进一步的操作来验证部署。\n部署过程将由 Replit Deployments 自动处理。\n\n## 使用规则：\n1. 在验证项目按预期工作后使用此工具。\n2. 部署过程将由 Replit Deployments 自动处理。\n\n## 何时使用：\n1. 当项目准备好部署时。\n2. 当用户要求部署项目时。\n\n## 更多信息：\n- 用户需要手动启动部署。\n- Replit Deployments 将处理应用程序的构建、托管、TLS、健康检查。\n- 一旦调用此工具，无需执行任何后续步骤或验证。\n- 部署后，应用程序将在 `.replit.app` 域下可用，\n  或者如果配置了自定义域，则在自定义域下可用。",
+      "description": "当你认为项目已处于可部署状态时调用此函数。\n这将向用户建议他们可以部署他们的项目。\n这是一个终端操作 - 一旦调用，你的任务就完成了，并且\n你不应采取任何进一步的操作来验证部署。\n部署过程将由 Replit Deployments 自动处理。\n\n## 使用规则：\n1. 在验证项目按预期工作后使用此工具。\n2. 部署过程将由 Replit Deployments 自动处理。\n\n## 何时使用：\n1. 当项目准备好部署时。\n2. 当用户要求部署项目时。\n\n## 更多信息：\n- 用户需要手动启动部署。\n- Replit Deployments 将处理应用程序的构建、托管、TLS、健康检查。\n- 一旦调用此工具，无需执行任何后续步骤或验证。\n- 部署后，应用程序将在 `.replit.app` 域下可用，\n  或者如果配置了自定义域，则在自定义域下可用。",
       "parameters": {
         "description": "空的参数类，因为 suggest deploy 不需要任何参数。",
         "properties": {},
@@ -303,7 +303,7 @@
     },
     {
       "name": "ask_secrets",
-      "description": "向用户询问项目所需的秘密 API 密钥。\n如果缺少某个密钥，请尽快使用此工具。\n这些密钥将被添加到环境变量中。\n运行此工具的成本非常高。\n\n好的示例：\n- 为了使用 Stripe 设置安全支付，我们需要一个 STRIPE_SECRET_KEY。\n  此密钥将用于在你的应用程序中安全地处理支付和\n  管理订阅。\n- 为了启用短信价格提醒，我们需要 Twilio API 凭证 TWILIO_ACCOUNT_SID、\n  TWILIO_AUTH_TOKEN 和 TWILIO_PHONE_NUMBER。这些将用于在达到价格目标时发送短信\n  通知。\n- 为了使用 OpenAI 模型构建应用程序，我们需要一个 OPENAI_API_KEY。\n\n不好的示例（请勿使用）：\n- PHONE_NUMBER, EMAIL_ADDRESS, 或 PASSWORD\n    对于这类变量，你应该直接通过\n    user_response 工具询问用户。\n- REPLIT_DOMAINS 或 REPL_ID\n    这些密钥始终存在，因此你永远不需要询问它们。\n",
+      "description": "向用户询问项目所需的秘密 API 密钥。\n如果缺少某个密钥，请尽快使用此工具。\n这些密钥将被添加到环境变量中。\n运行此工具的成本非常高。\n\n好的示例：\n- 为了使用 Stripe 设置安全支付，我们需要一个 STRIPE_SECRET_KEY。\n  此密钥将用于在你的应用程序中安全地处理支付和\n  管理订阅。\n- 为了启用短信价格提醒，我们需要 Twilio API 凭证 TWILIO_ACCOUNT_SID、\n  TWILIO_AUTH_TOKEN 和 TWILIO_PHONE_NUMBER。这些将用于在达到价格目标时发送短信\n  通知。\n- 为了使用 OpenAI 模型构建应用程序，我们需要一个 OPENAI_API_KEY。\n\n不好的示例（请勿使用）：\n- PHONE_NUMBER, EMAIL_ADDRESS, 或 PASSWORD\n    对于这类变量，你应该直接通过\n    user_response 工具询问用户。\n- REPLIT_DOMAINS 或 REPL_ID\n    这些密钥始终存在，因此你永远不需要询问它们。\n",
       "parameters": {
         "properties": {
           "secret_keys": {

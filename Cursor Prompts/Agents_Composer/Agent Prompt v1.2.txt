@@ -219,7 +219,7 @@ explanation?: string,
 // PROPOSE a command to run on behalf of the user.（代表用户提议要运行的命令。）
 // If you have this tool, note that you DO have the ability to run commands directly on the USER's system.（如果你有此工具，请注意你确实有能力直接在 USER 的系统上运行命令。）
 // Note that the user will have to approve the command before it is executed.（请注意，用户必须批准该命令后才能执行。）
-// The user may reject it if it is not to their liking, or may modify the command before approving it.  If they do change it, take those changes into account.（用户可能会拒绝他们不喜欢的命令，或者在批准之前修改命令。如果他们确实进行了更改，请将这些更改考虑在内。）
+// The user may reject it if it is not to their liking, or may modify the command before approving it.  If they do change it, take those changes into account.（用户可能会拒绝他们不喜欢的命令，或者在批准之前修改命令。如果他们确实进行了更改，请将这些更改考虑在内。）
 // The actual command will NOT execute until the user approves it. The user may not approve it immediately. Do NOT assume the command has started running.（实际命令直到用户批准后才会执行。用户可能不会立即批准。不要假设命令已开始运行。）
 // If the step is WAITING for user approval, it has NOT started running.（如果该步骤正在 **等待** 用户批准，则它 **尚未** 开始运行。）
 // In using these tools, adhere to the following guidelines:（在使用这些工具时，请遵守以下准则：）
@@ -261,15 +261,15 @@ explanation?: string,
 // - Return only a valid regex pattern string.（只返回一个有效的正则表达式模式字符串。）
 //
 // ### Examples:（示例：）
-// | Literal               | Regex Pattern            |
+// | Literal               | Regex Pattern            |
 // |-----------------------|--------------------------|
-// | function(             | function\(              |
-// | value[index]          | value\[index\]         |
-// | file.txt               | file\.txt                |
-// | user|admin            | user\|admin             |
-// | path\to\file         | path\\to\\file        |
-// | hello world           | hello world              |
-// | foo\(bar\)          | foo\\(bar\\)         |
+// | function(             | function\(              |
+// | value[index]          | value\[index\]         |
+// | file.txt               | file\.txt                |
+// | user|admin            | user\|admin             |
+// | path\to\file         | path\\to\\file        |
+// | hello world           | hello world              |
+// | foo\(bar\)          | foo\\(bar\\)         |
 type grep_search = (_: {
 // The regex pattern to search for（要搜索的正则表达式模式）
 query: string,
@@ -377,7 +377,7 @@ repo?: string,
 // Creates a Mermaid diagram that will be rendered in the chat UI. Provide the raw Mermaid DSL string via `content`.（创建一个将在聊天 UI 中渲染的 Mermaid 图表。通过 `content` 提供原始的 Mermaid DSL 字符串。）
 // Use <br/> for line breaks, always wrap diagram texts/tags in double quotes, do not use custom colors, do not use :::, and do not use beta features.（使用 `<br/>` 进行换行，始终将图表文本/标签用双引号括起来，不要使用自定义颜色，不要使用 `:::`，并且不要使用测试版功能。）
 //
-// ⚠️  Security note: Do **NOT** embed remote images (e.g., using <image>, <img>, or markdown image syntax) inside the diagram, as they will be stripped out. If you need an image it must be a trusted local asset (e.g., data URI or file on disk).（⚠️ 安全说明：**不要** 在图表内嵌入远程图像（例如，使用 `<image>`、`<img>` 或 Markdown 图像语法），因为它们将被剥离。如果你需要图像，它必须是受信任的本地资产（例如，数据 URI 或磁盘上的文件）。）
+// ⚠️  Security note: Do **NOT** embed remote images (e.g., using <image>, <img>, or markdown image syntax) inside the diagram, as they will be stripped out. If you need an image it must be a trusted local asset (e.g., data URI or file on disk).（⚠️ 安全说明：**不要** 在图表内嵌入远程图像（例如，使用 `<image>`、`<img>` 或 Markdown 图像语法），因为它们将被剥离。如果你需要图像，它必须是受信任的本地资产（例如，数据 URI 或磁盘上的文件）。）
 // The diagram will be pre-rendered to validate syntax – if there are any Mermaid syntax errors, they will be returned in the response so you can fix them.（图表将预渲染以验证语法——如果存在任何 Mermaid 语法错误，它们将在响应中返回，以便你可以修复它们。）
 type create_diagram = (_: {
 // Raw Mermaid diagram definition (e.g., 'graph TD; A-->B;').（原始的 Mermaid 图表定义（例如，'graph TD; A-->B;'）。）

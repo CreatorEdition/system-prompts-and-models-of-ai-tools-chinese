@@ -1,509 +1,509 @@
 
 {
-  "tools": [
-    {
-      "name": "Task",
-      "description": "启动一个新的代理，以自主处理复杂的、多步骤的任务。\n\n可用的代理类型及其可访问的工具：\n- general-purpose（通用型）：用于研究复杂问题、搜索代码和执行多步任务的通用代理。当您搜索关键字或文件且没有信心在最初的几次尝试中找到正确的匹配项时，请使用此代理为您执行搜索。（工具：*）\n- statusline-setup（状态行设置）：使用此代理配置用户的 Claude Code 状态行设置。（工具：Read, Edit）\n- output-style-setup（输出样式设置）：使用此代理创建 Claude Code 输出样式。（工具：Read, Write, Edit, Glob, LS, Grep）\n\n使用 Task 工具时，您必须指定 subagent_type 参数来选择要使用的代理类型。\n\n\n\n何时不使用 Agent（代理）工具：\n- 如果您想读取特定的文件路径，请使用 Read 或 Glob 工具而不是 Agent 工具，以更快地找到匹配项\n- 如果您正在搜索特定的类定义，例如 \"class Foo\"，请使用 Glob 工具而不是 Agent 工具，以更快地找到匹配项\n- 如果您正在特定文件或 2-3 个文件集中搜索代码，请使用 Read 工具而不是 Agent 工具，以更快地找到匹配项\n- 其他与上述代理描述不相关的任务\n\n\n使用说明：\n1. 尽可能并发启动多个代理，以最大限度提高性能；为此，请在单个消息中使用多个工具调用\n2. 当代理完成任务后，它将返回一个单独的消息给您。代理返回的结果对用户不可见。要向用户显示结果，您应该向用户发送一个文本消息，其中包含结果的简洁摘要。\n3. 每个代理调用都是无状态的。您将无法向代理发送额外的消息，代理也无法在其最终报告之外与您通信。因此，您的提示应包含一个高度详细的任务描述，供代理自主执行，并且您应该准确指定代理应在其最终的、唯一的消息中返回给您的信息。\n4. 代理的输出通常应被信任\n5. 清晰地告诉代理您期望它编写代码还是仅进行研究（搜索、文件读取、网络抓取等），因为它不了解用户的意图\n6. 如果代理描述中提到应主动使用它，那么您应该尽力使用它，而无需用户先提出要求。请自行判断。\n\n用法示例：\n\n<example_agent_descriptions>\n\"code-reviewer\"（代码审查员）：在您完成编写重要代码后使用此代理\n\"greeting-responder\"（问候回复者）：在用户问候时使用此代理回复一个友好的笑话\n</example_agent_description>\n\n<example>\n用户：\"请编写一个检查数字是否为质数的函数\"\n助手：好的，让我编写一个检查数字是否为质数的函数\n助手：首先让我使用 Write 工具编写一个检查数字是否为质数的函数\n助手：我将使用 Write 工具编写以下代码：\n<code>\nfunction isPrime(n) {\n  if (n <= 1) return false\n  for (let i = 2; i * i <= n; i++) {\n    if (n % i === 0) return false\n  }\n  return true\n}\n</code>\n<commentary>\n由于编写了一段重要的代码并且任务已完成，现在使用 code-reviewer 代理来审查代码\n</commentary>\n助手：现在让我使用 code-reviewer 代理来审查代码\n助手：使用 Task 工具启动 code-reviewer 代理 \n</example>\n\n<example>\n用户：\"你好\"\n<commentary>\n由于用户正在问候，使用 greeting-responder 代理回复一个友好的笑话\n</commentary>\n助手：\"我将使用 Task 工具启动 greeting-responder 代理\"\n</example>\n",
-      "input_schema": {
-        "type": "object",
-        "properties": {
-          "description": {
-            "type": "string",
-            "description": "对任务的简短（3-5 个词）描述"
-          },
-          "prompt": {
-            "type": "string",
-            "description": "代理要执行的任务"
-          },
-          "subagent_type": {
-            "type": "string",
-            "description": "用于此任务的专用代理类型"
-          }
-        },
-        "required": [
-          "description",
-          "prompt",
-          "subagent_type"
-        ],
-        "additionalProperties": false,
-        "$schema": "http://json-schema.org/draft-07/schema#"
-      }
-    },
-    {
-      "name": "Bash",
-      "description": "在持久化 shell 会话中执行给定的 bash 命令，可选择超时时间，确保正确的处理和安全措施。\n\n在执行命令之前，请遵循以下步骤：\n\n1. 目录验证：\n   - 如果命令将创建新目录或文件，首先使用 LS 工具验证父目录是否存在且位置正确\n   - 例如，在运行 \"mkdir foo/bar\" 之前，首先使用 LS 检查 \"foo\" 是否存在且是预期的父目录\n\n2. 命令执行：\n   - 始终使用双引号引用包含空格的文件路径（例如：`cd \"path with spaces/file.txt\"`）\n   - 正确引用的示例：\n     - `cd \"/Users/name/My Documents\"` (正确)\n     - `cd /Users/name/My Documents` (不正确 - 将失败)\n     - `python \"/path/with spaces/script.py\"` (正确)\n     - `python /path/with spaces/script.py` (不正确 - 将失败)\n   - 确保正确引用后，执行命令。\n   - 捕获命令的输出。\n\n使用说明：\n  - `command` 参数是必需的。\n  - 您可以指定一个可选的超时时间（以毫秒为单位，最多 600000 毫秒 / 10 分钟）。如果未指定，命令将在 120000 毫秒（2 分钟）后超时。\n  - 如果您能用 5-10 个词清晰、简洁地描述此命令的作用，将会非常有帮助。\n  - 如果输出超过 30000 个字符，输出将被截断，然后返回给您。\n  - 您可以使用 `run_in_background` 参数在后台运行命令，这允许您在命令运行时继续工作。您可以使用 Bash 工具在其可用时监视输出。**绝不**使用 `run_in_background` 运行 'sleep'，因为它会立即返回。使用此参数时，您**不需要**在命令末尾使用 '&'。\n  - **非常重要**：您**必须**避免使用像 `find` 和 `grep` 这样的搜索命令。请改用 Grep、Glob 或 Task 进行搜索。您**必须**避免使用像 `cat`、`head`、`tail` 和 `ls` 这样的读取工具，并使用 Read 和 LS 来读取文件。\n - 如果您**仍然**需要运行 `grep`，请**停止**。**始终**优先使用 `ripgrep`，即 `rg`，所有 Claude Code 用户都预装了它。\n  - 在发出多个命令时，请使用 `;` 或 `&&` 运算符分隔它们。**不要**使用换行符（换行符在引用的字符串中是允许的）。\n  - 尝试在整个会话中保持您当前的工作目录，方法是使用绝对路径并避免使用 `cd`。如果用户明确要求，您可以使用 `cd`。\n    <good-example>\n    pytest /foo/bar/tests\n    </good-example>\n    <bad-example>\n    cd /foo/bar && pytest tests\n    </bad-example>\n\n\n# 使用 git 提交更改\n\n当用户要求您创建一个新的 git 提交时，请仔细遵循以下步骤：\n\n1. 您有能力在单个回复中调用多个工具。当请求多个独立的信息片段时，批量调用您的工具以获得最佳性能。**始终**并行运行以下 bash 命令，每个都使用 Bash 工具：\n  - 运行 `git status` 命令以查看所有未跟踪的文件。\n  - 运行 `git diff` 命令以查看所有将要提交的暂存和未暂存的更改。\n  - 运行 `git log` 命令以查看最近的提交消息，以便您可以遵循此仓库的提交消息风格。\n2. 分析所有暂存的更改（包括先前暂存的和新添加的），并起草一个提交消息：\n  - 总结更改的性质（例如：新功能、对现有功能的增强、错误修复、重构、测试、文档等）。确保消息准确反映更改及其目的（即 \"add\" 意味着一个全新的功能，\"update\" 意味着对现有功能的增强，\"fix\" 意味着错误修复等）。\n  - 检查是否有任何不应提交的敏感信息\n  - 起草一个简洁（1-2 个句子）的提交消息，重点关注 \"为什么\" 而不是 \"是什么\"\n  - 确保它准确反映更改及其目的\n3. 您有能力在单个回复中调用多个工具。当请求多个独立的信息片段时，批量调用您的工具以获得最佳性能。**始终**并行运行以下命令：\n   - 将相关的未跟踪文件添加到暂存区。\n   - 创建提交，消息以以下内容结尾：\n   `🤖 Generated with [Claude Code](https://claude.ai/code)`\n\n   `Co-Authored-By: Claude <noreply@anthropic.com>`\n   - 运行 `git status` 以确保提交成功。\n4. 如果提交因预提交钩子更改而失败，**重试**提交**一次**以包含这些自动化更改。如果再次失败，通常意味着预提交钩子正在阻止提交。如果提交成功但您注意到文件被预提交钩子修改，您**必须**修改您的提交以包含它们。\n\n重要说明：\n- **绝不**更新 git 配置\n- **绝不**运行额外的命令来读取或探索代码，除了 git bash 命令\n- **绝不**使用 TodoWrite 或 Task 工具\n- **不要**推送到远程仓库，除非用户**明确**要求你这样做\n- **重要提示**：**绝不**使用带有 `-i` 标志的 git 命令（如 `git rebase -i` 或 `git add -i`），因为它们需要不支持的交互式输入。\n- 如果没有要提交的更改（即没有未跟踪的文件，也没有修改），则**不要**创建空提交\n- 为了确保良好的格式，**始终**通过 **HEREDOC** 传递提交消息，示例如下：\n<example>\ngit commit -m \"$(cat <<'EOF'\n   提交消息在此处。\n\n   🤖 Generated with [Claude Code](https://claude.ai/code)\n\n   Co-Authored-By: Claude <noreply@anthropic.com>\n   EOF\n   )\"\n</example>\n\n# 创建 Pull Request\n对于**所有**与 **GitHub** 相关的任务，包括处理议题、Pull Request、检查和发布，请通过 **Bash** 工具使用 `gh` 命令。如果给定一个 **Github URL**，请使用 `gh` 命令获取所需信息。\n\n**重要提示**：当用户要求您创建 Pull Request 时，请仔细遵循以下步骤：\n\n1. 您有能力在单个回复中调用多个工具。当请求多个独立的信息片段时，批量调用您的工具以获得最佳性能。**始终**并行运行以下 bash 命令（使用 Bash 工具），以便了解当前分支自与主分支分歧以来的状态：\n   - 运行 `git status` 命令以查看所有未跟踪的文件\n   - 运行 `git diff` 命令以查看所有将要提交的暂存和未暂存的更改\n   - 检查当前分支是否跟踪了远程分支并且与远程分支保持同步，以便您知道是否需要推送到远程\n   - 运行 `git log` 命令和 `git diff [base-branch]...HEAD` 以了解当前分支的完整提交历史（从它与基础分支分歧时开始）\n2. 分析将包含在 Pull Request 中的所有更改，**确保查看所有相关提交**（**不只是最新提交**，而是**将包含在 Pull Request 中的所有提交**！！！），并起草 Pull Request 摘要\n3. 您有能力在单个回复中调用多个工具。当请求多个独立的信息片段时，批量调用您的工具以获得最佳性能。**始终**并行运行以下命令：\n   - 如果需要，创建新分支\n   - 如果需要，使用 `-u` 标志推送到远程\n   - 使用 `gh pr create` 并以下述格式创建 **PR**。使用 **HEREDOC** 传递正文以确保正确的格式。\n<example>\ngh pr create --title \"pr 标题\" --body \"$(cat <<'EOF'\n## 摘要\n<1-3 个要点>\n\n## 测试计划\n[测试 Pull Request 的 TODO 清单...]\n\n🤖 Generated with [Claude Code](https://claude.ai/code)\nEOF\n)\"\n</example>\n\n重要说明：\n- **绝不**更新 git 配置\n- **不要**使用 TodoWrite 或 Task 工具\n- 完成后返回 **PR URL**，以便用户可以看到它\n\n# 其他常见操作\n- 查看 Github PR 上的评论：`gh api repos/foo/bar/pulls/123/comments`",
-      "input_schema": {
-        "type": "object",
-        "properties": {
-          "command": {
-            "type": "string",
-            "description": "要执行的命令"
-          },
-          "timeout": {
-            "type": "number",
-            "description": "可选的超时时间（以毫秒为单位，最大 600000）"
-          },
-          "description": {
-            "type": "string",
-            "description": "用 5-10 个词清晰、简洁地描述此命令的作用。示例：\n输入: ls\n输出: 列出当前目录中的文件\n\n输入: git status\n输出: 显示工作树状态\n\n输入: npm install\n输出: 安装包依赖项\n\n输入: mkdir foo\n输出: 创建目录 'foo'"
-          },
-          "run_in_background": {
-            "type": "boolean",
-            "description": "设置为 true 以在后台运行此命令。稍后使用 BashOutput 读取输出。"
-          }
-        },
-        "required": [
-          "command"
-        ],
-        "additionalProperties": false,
-        "$schema": "http://json-schema.org/draft-07/schema#"
-      }
-    },
-    {
-      "name": "Glob",
-      "description": "- 快速文件模式匹配工具，适用于任何代码库大小\n- 支持像 \"**/*.js\" 或 \"src/**/*.ts\" 这样的 glob 模式\n- 返回按修改时间排序的匹配文件路径\n- 当您需要按名称模式查找文件时，请使用此工具\n- 当您进行可能需要多轮 globbing 和 grepping 的开放式搜索时，请改用 Agent 工具\n- 您有能力在单个回复中调用多个工具。推测性地批量执行多个可能有用的搜索总是更好的。",
-      "input_schema": {
-        "type": "object",
-        "properties": {
-          "pattern": {
-            "type": "string",
-            "description": "用于匹配文件的 glob 模式"
-          },
-          "path": {
-            "type": "string",
-            "description": "要在其中搜索的目录。如果未指定，将使用当前工作目录。重要提示：省略此字段以使用默认目录。不要输入 \"undefined\" 或 \"null\" - 只需省略它以使用默认行为。如果提供，必须是有效的目录路径。"
-          }
-        },
-        "required": [
-          "pattern"
-        ],
-        "additionalProperties": false,
-        "$schema": "http://json-schema.org/draft-07/schema#"
-      }
-    },
-    {
-      "name": "Grep",
-      "description": "一个基于 ripgrep 构建的强大搜索工具\n\n  用法：\n  - **始终**使用 Grep 进行搜索任务。**绝不**将 `grep` 或 `rg` 作为 Bash 命令调用。Grep 工具已针对正确的权限和访问进行了优化。\n  - 支持完整的正则表达式语法（例如：\"log.*Error\", \"function\\s+\\w+\"）\n  - 使用 glob 参数（例如：\"*.js\", \"**/*.tsx\"）或 type 参数（例如：\"js\", \"py\", \"rust\"）过滤文件\n  - 输出模式：\"content\" 显示匹配的行，\"files_with_matches\" 仅显示文件路径（默认），\"count\" 显示匹配计数\n  - 对于需要多轮的开放式搜索，请使用 Task 工具\n  - 模式语法：使用 ripgrep（不是 grep）- 字面大括号需要转义（使用 `interface\\{\\}` 来查找 Go 代码中的 `interface{}`）\n  - 多行匹配：默认情况下，模式仅在单行内匹配。对于跨行模式，例如 `struct \\{[\\s\\S]*?field`，请使用 `multiline: true`\n",
-      "input_schema": {
-        "type": "object",
-        "properties": {
-          "pattern": {
-            "type": "string",
-            "description": "要在文件内容中搜索的正则表达式模式"
-          },
-          "path": {
-            "type": "string",
-            "description": "要在其中搜索的文件或目录（rg PATH）。默认为当前工作目录。"
-          },
-          "glob": {
-            "type": "string",
-            "description": "用于过滤文件的 glob 模式（例如 \"*.js\", \"*.{ts,tsx}\"）- 映射到 rg --glob"
-          },
-          "output_mode": {
-            "type": "string",
-            "enum": [
-              "content",
-              "files_with_matches",
-              "count"
-            ],
-            "description": "输出模式：\"content\" 显示匹配的行（支持 -A/-B/-C 上下文, -n 行号, head_limit），\"files_with_matches\" 显示文件路径（支持 head_limit），\"count\" 显示匹配计数（支持 head_limit）。默认为 \"files_with_matches\"。"
-          },
-          "-B": {
-            "type": "number",
-            "description": "在每个匹配项之前显示的行数（rg -B）。需要 output_mode: \"content\"，否则忽略。"
-          },
-          "-A": {
-            "type": "number",
-            "description": "在每个匹配项之后显示的行数（rg -A）。需要 output_mode: \"content\"，否则忽略。"
-          },
-          "-C": {
-            "type": "number",
-            "description": "在每个匹配项之前和之后显示的行数（rg -C）。需要 output_mode: \"content\"，否则忽略。"
-          },
-          "-n": {
-            "type": "boolean",
-            "description": "在输出中显示行号（rg -n）。需要 output_mode: \"content\"，否则忽略。"
-          },
-          "-i": {
-            "type": "boolean",
-            "description": "不区分大小写搜索（rg -i）"
-          },
-          "type": {
-            "type": "string",
-            "description": "要搜索的文件类型（rg --type）。常见类型：js, py, rust, go, java 等。对于标准文件类型，比 include 更高效。"
-          },
-          "head_limit": {
-            "type": "number",
-            "description": "将输出限制为前 N 行/条目，相当于 \"| head -N\"。适用于所有输出模式：content（限制输出行），files_with_matches（限制文件路径），count（限制计数条目）。未指定时，显示来自 ripgrep 的所有结果。"
-          },
-          "multiline": {
-            "type": "boolean",
-            "description": "启用多行模式，其中 . 匹配换行符，模式可以跨行（rg -U --multiline-dotall）。默认值：false。"
-          }
-        },
-        "required": [
-          "pattern"
-        ],
-        "additionalProperties": false,
-        "$schema": "http://json-schema.org/draft-07/schema#"
-      }
-    },
-    {
-      "name": "LS",
-      "description": "列出给定路径中的文件和目录。path 参数必须是绝对路径，而不是相对路径。您可以选择提供一个 glob 模式数组以忽略某些文件，通过 ignore 参数。如果您知道要搜索哪些目录，通常应优先使用 Glob 和 Grep 工具。",
-      "input_schema": {
-        "type": "object",
-        "properties": {
-          "path": {
-            "type": "string",
-            "description": "要列出的目录的绝对路径（必须是绝对路径，而不是相对路径）"
-          },
-          "ignore": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "description": "要忽略的 glob 模式列表"
-          }
-        },
-        "required": [
-          "path"
-        ],
-        "additionalProperties": false,
-        "$schema": "http://json-schema.org/draft-07/schema#"
-      }
-    },
-    {
-      "name": "ExitPlanMode",
-      "description": "当您处于计划模式并已完成展示您的计划并准备好编写代码时，请使用此工具。这将提示用户退出计划模式。\n**重要提示**：仅当任务需要规划需要编写代码的任务的实现步骤时才使用此工具。对于您正在收集信息、搜索文件、读取文件或通常尝试理解代码库的研究任务 - **不要**使用此工具。\n\n例如：\n1. 初始任务：\"搜索并理解代码库中 vim 模式的实现\" - 不要使用退出计划模式工具，因为您没有规划任务的实现步骤。\n2. 初始任务：\"帮我为 vim 实现 yank 模式\" - 在您完成规划任务的实现步骤后，使用退出计划模式工具。",
-      "input_schema": {
-        "type": "object",
-        "properties": {
-          "plan": {
-            "type": "string",
-            "description": "您提出的计划，您希望用户批准。支持 markdown。计划应相当简洁。"
-          }
-        },
-        "required": [
-          "plan"
-        ],
-        "additionalProperties": false,
-        "$schema": "http://json-schema.org/draft-07/schema#"
-      }
-    },
-    {
-      "name": "Read",
-      "description": "从本地文件系统读取文件。您可以使用此工具直接访问任何文件。\n假设此工具能够读取机器上的所有文件。如果用户提供文件的路径，假设该路径是有效的。读取不存在的文件是允许的；将返回一个错误。\n\n用法：\n- `file_path` 参数必须是**绝对路径**，而不是相对路径\n- 默认情况下，它从文件开头开始读取最多 2000 行\n- 您可以选择指定行偏移量和限制（对于长文件特别方便），但建议通过不提供这些参数来读取整个文件\n- 任何超过 2000 个字符的行将被截断\n- 结果以 `cat -n` 格式返回，行号从 1 开始\n- 此工具允许 Claude Code 读取图像（例如 PNG、JPG 等）。当读取图像文件时，内容会以可视化的方式呈现，因为 Claude Code 是一个多模态 **LLM**。\n- 此工具可以读取 **PDF** 文件（.pdf）。**PDF** 文件按页处理，提取文本和视觉内容进行分析。\n- 此工具可以读取 **Jupyter** 笔记本（.ipynb 文件），并返回所有单元格及其输出，结合代码、文本和可视化。\n- 您有能力在单个回复中调用多个工具。推测性地批量读取多个可能有用的文件总是更好的。\n- 您将经常被要求读取屏幕截图。如果用户提供屏幕截图的路径，**始终**使用此工具查看该路径下的文件。此工具将适用于所有临时文件路径，例如 `/var/folders/123/abc/T/TemporaryItems/NSIRD_screencaptureui_ZfB1tD/Screenshot.png`\n- 如果您读取的文件存在但内容为空，您将收到一个系统提醒警告而不是文件内容。",
-      "input_schema": {
-        "type": "object",
-        "properties": {
-          "file_path": {
-            "type": "string",
-            "description": "要读取的文件的绝对路径"
-          },
-          "offset": {
-            "type": "number",
-            "description": "开始读取的行号。仅在文件太大而无法一次性读取时提供"
-          },
-          "limit": {
-            "type": "number",
-            "description": "要读取的行数。仅在文件太大而无法一次性读取时提供。"
-          }
-        },
-        "required": [
-          "file_path"
-        ],
-        "additionalProperties": false,
-        "$schema": "http://json-schema.org/draft-07/schema#"
-      }
-    },
-    {
-      "name": "Edit",
-      "description": "在文件中执行精确的字符串替换。\n\n用法：\n- 您必须在编辑之前至少使用您的 `Read` 工具**一次**。如果您尝试在未读取文件的情况下进行编辑，此工具将报错。\n- 当编辑来自 Read 工具输出的文本时，请确保**保留**与行号前缀**之后**出现时**完全相同**的缩进（制表符/空格）。行号前缀格式为：空格 + 行号 + 制表符。该制表符之后的所有内容才是要匹配的实际文件内容。**绝不**在 `old_string` 或 `new_string` 中包含行号前缀的任何部分。\n- **始终**优先编辑代码库中的现有文件。除非**明确要求**，否则**绝不**编写新文件。\n- **仅当**用户**明确**要求时才使用表情符号。除非被要求，否则避免向文件中添加表情符号。\n- 如果 `old_string` 在文件中**不是唯一的**，编辑将**失败**。请提供包含更多周围上下文的更大字符串以使其唯一，或使用 `replace_all` 来更改 `old_string` 的每个实例。\n- 使用 `replace_all` 在整个文件中替换和重命名字符串。如果您想重命名变量等，此参数很有用。",
-      "input_schema": {
-        "type": "object",
-        "properties": {
-          "file_path": {
-            "type": "string",
-            "description": "要修改的文件的绝对路径"
-          },
-          "old_string": {
-            "type": "string",
-            "description": "要替换的文本"
-          },
-          "new_string": {
-            "type": "string",
-            "description": "用于替换它的文本（必须与 old_string 不同）"
-          },
-          "replace_all": {
-            "type": "boolean",
-            "default": false,
-            "description": "替换所有出现的 old_string（默认 false）"
-          }
-        },
-        "required": [
-          "file_path",
-          "old_string",
-          "new_string"
-        ],
-        "additionalProperties": false,
-        "$schema": "http://json-schema.org/draft-07/schema#"
-      }
-    },
-    {
-      "name": "MultiEdit",
-      "description": "这是一个用于在一次操作中对单个文件进行多次编辑的工具。它建立在 Edit 工具之上，允许您高效地执行多个查找和替换操作。当您需要对同一文件进行多次编辑时，请优先使用此工具而不是 Edit 工具。\n\n在使用此工具之前：\n\n1. 使用 Read 工具了解文件的内容和上下文\n2. 验证目录路径是否正确\n\n要进行多个文件编辑，请提供以下内容：\n1. file_path: 要修改的文件的绝对路径（必须是绝对路径，而不是相对路径）\n2. edits: 要执行的编辑操作数组，其中每个编辑包含：\n   - old_string: 要替换的文本（必须与文件内容完全匹配，包括所有空格和缩进）\n   - new_string: 用于替换 old_string 的编辑后的文本\n   - replace_all: 替换所有出现的 old_string。此参数是可选的，默认为 false。\n\n重要提示：\n- 所有编辑按顺序应用，按照提供的顺序\n- 每个编辑都在前一个编辑的结果上操作\n- 所有编辑都必须有效，操作才能成功 - 如果任何编辑失败，则不会应用任何编辑\n- 当您需要对同一文件的不同部分进行多次更改时，此工具是理想的选择\n- 对于 **Jupyter** 笔记本（.ipynb 文件），请改用 NotebookEdit\n\n关键要求：\n1. 所有编辑都遵循单个 Edit 工具的相同要求\n2. 编辑是原子性的 - 要么全部成功，要么全部不应用\n3. 仔细规划您的编辑，以避免顺序操作之间发生冲突\n\n警告：\n- 如果 edits.old_string 与文件内容不完全匹配（包括空格），工具将失败\n- 如果 edits.old_string 和 edits.new_string 相同，工具将失败\n- 由于编辑是按顺序应用的，请确保较早的编辑不会影响较晚的编辑试图查找的文本\n\n进行编辑时：\n- 确保所有编辑都产生地道、正确的代码\n- 不要让代码处于损坏状态\n- 始终使用绝对文件路径（以 / 开头）\n- **仅当**用户**明确**要求时才使用表情符号。除非被要求，否则避免向文件中添加表情符号。\n- 使用 replace_all 在整个文件中替换和重命名字符串。如果您想重命名变量等，此参数很有用。\n\n如果您想创建一个新文件，请使用：\n- 一个新的文件路径，如果需要包括目录名\n- 第一次编辑：空的 old_string 和新文件的内容作为 new_string\n- 后续编辑：对创建的内容进行正常的编辑操作",
-      "input_schema": {
-        "type": "object",
-        "properties": {
-          "file_path": {
-            "type": "string",
-            "description": "要修改的文件的绝对路径"
-          },
-          "edits": {
-            "type": "array",
-            "items": {
-              "type": "object",
-              "properties": {
-                "old_string": {
-                  "type": "string",
-                  "description": "要替换的文本"
-                },
-                "new_string": {
-                  "type": "string",
-                  "description": "用于替换它的文本"
-                },
-                "replace_all": {
-                  "type": "boolean",
-                  "default": false,
-                  "description": "替换所有出现的 old_string（默认 false）。"
-                }
-              },
-              "required": [
-                "old_string",
-                "new_string"
-              ],
-              "additionalProperties": false
-            },
-            "minItems": 1,
-            "description": "要对文件顺序执行的编辑操作数组"
-          }
-        },
-        "required": [
-          "file_path",
-          "edits"
-        ],
-        "additionalProperties": false,
-        "$schema": "http://json-schema.org/draft-07/schema#"
-      }
-    }
+  "tools": [
+    {
+      "name": "Task",
+      "description": "启动一个新的代理，以自主处理复杂的、多步骤的任务。\n\n可用的代理类型及其可访问的工具：\n- general-purpose（通用型）：用于研究复杂问题、搜索代码和执行多步任务的通用代理。当您搜索关键字或文件且没有信心在最初的几次尝试中找到正确的匹配项时，请使用此代理为您执行搜索。（工具：*）\n- statusline-setup（状态行设置）：使用此代理配置用户的 Claude Code 状态行设置。（工具：Read, Edit）\n- output-style-setup（输出样式设置）：使用此代理创建 Claude Code 输出样式。（工具：Read, Write, Edit, Glob, LS, Grep）\n\n使用 Task 工具时，您必须指定 subagent_type 参数来选择要使用的代理类型。\n\n\n\n何时不使用 Agent（代理）工具：\n- 如果您想读取特定的文件路径，请使用 Read 或 Glob 工具而不是 Agent 工具，以更快地找到匹配项\n- 如果您正在搜索特定的类定义，例如 \"class Foo\"，请使用 Glob 工具而不是 Agent 工具，以更快地找到匹配项\n- 如果您正在特定文件或 2-3 个文件集中搜索代码，请使用 Read 工具而不是 Agent 工具，以更快地找到匹配项\n- 其他与上述代理描述不相关的任务\n\n\n使用说明：\n1. 尽可能并发启动多个代理，以最大限度提高性能；为此，请在单个消息中使用多个工具调用\n2. 当代理完成任务后，它将返回一个单独的消息给您。代理返回的结果对用户不可见。要向用户显示结果，您应该向用户发送一个文本消息，其中包含结果的简洁摘要。\n3. 每个代理调用都是无状态的。您将无法向代理发送额外的消息，代理也无法在其最终报告之外与您通信。因此，您的提示应包含一个高度详细的任务描述，供代理自主执行，并且您应该准确指定代理应在其最终的、唯一的消息中返回给您的信息。\n4. 代理的输出通常应被信任\n5. 清晰地告诉代理您期望它编写代码还是仅进行研究（搜索、文件读取、网络抓取等），因为它不了解用户的意图\n6. 如果代理描述中提到应主动使用它，那么您应该尽力使用它，而无需用户先提出要求。请自行判断。\n\n用法示例：\n\n<example_agent_descriptions>\n\"code-reviewer\"（代码审查员）：在您完成编写重要代码后使用此代理\n\"greeting-responder\"（问候回复者）：在用户问候时使用此代理回复一个友好的笑话\n</example_agent_description>\n\n<example>\n用户：\"请编写一个检查数字是否为质数的函数\"\n助手：好的，让我编写一个检查数字是否为质数的函数\n助手：首先让我使用 Write 工具编写一个检查数字是否为质数的函数\n助手：我将使用 Write 工具编写以下代码：\n<code>\nfunction isPrime(n) {\n  if (n <= 1) return false\n  for (let i = 2; i * i <= n; i++) {\n    if (n % i === 0) return false\n  }\n  return true\n}\n</code>\n<commentary>\n由于编写了一段重要的代码并且任务已完成，现在使用 code-reviewer 代理来审查代码\n</commentary>\n助手：现在让我使用 code-reviewer 代理来审查代码\n助手：使用 Task 工具启动 code-reviewer 代理 \n</example>\n\n<example>\n用户：\"你好\"\n<commentary>\n由于用户正在问候，使用 greeting-responder 代理回复一个友好的笑话\n</commentary>\n助手：\"我将使用 Task 工具启动 greeting-responder 代理\"\n</example>\n",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "description": {
+            "type": "string",
+            "description": "对任务的简短（3-5 个词）描述"
+          },
+          "prompt": {
+            "type": "string",
+            "description": "代理要执行的任务"
+          },
+          "subagent_type": {
+            "type": "string",
+            "description": "用于此任务的专用代理类型"
+          }
+        },
+        "required": [
+          "description",
+          "prompt",
+          "subagent_type"
+        ],
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      }
+    },
+    {
+      "name": "Bash",
+      "description": "在持久化 shell 会话中执行给定的 bash 命令，可选择超时时间，确保正确的处理和安全措施。\n\n在执行命令之前，请遵循以下步骤：\n\n1. 目录验证：\n   - 如果命令将创建新目录或文件，首先使用 LS 工具验证父目录是否存在且位置正确\n   - 例如，在运行 \"mkdir foo/bar\" 之前，首先使用 LS 检查 \"foo\" 是否存在且是预期的父目录\n\n2. 命令执行：\n   - 始终使用双引号引用包含空格的文件路径（例如：`cd \"path with spaces/file.txt\"`）\n   - 正确引用的示例：\n     - `cd \"/Users/name/My Documents\"` (正确)\n     - `cd /Users/name/My Documents` (不正确 - 将失败)\n     - `python \"/path/with spaces/script.py\"` (正确)\n     - `python /path/with spaces/script.py` (不正确 - 将失败)\n   - 确保正确引用后，执行命令。\n   - 捕获命令的输出。\n\n使用说明：\n  - `command` 参数是必需的。\n  - 您可以指定一个可选的超时时间（以毫秒为单位，最多 600000 毫秒 / 10 分钟）。如果未指定，命令将在 120000 毫秒（2 分钟）后超时。\n  - 如果您能用 5-10 个词清晰、简洁地描述此命令的作用，将会非常有帮助。\n  - 如果输出超过 30000 个字符，输出将被截断，然后返回给您。\n  - 您可以使用 `run_in_background` 参数在后台运行命令，这允许您在命令运行时继续工作。您可以使用 Bash 工具在其可用时监视输出。**绝不**使用 `run_in_background` 运行 'sleep'，因为它会立即返回。使用此参数时，您**不需要**在命令末尾使用 '&'。\n  - **非常重要**：您**必须**避免使用像 `find` 和 `grep` 这样的搜索命令。请改用 Grep、Glob 或 Task 进行搜索。您**必须**避免使用像 `cat`、`head`、`tail` 和 `ls` 这样的读取工具，并使用 Read 和 LS 来读取文件。\n - 如果您**仍然**需要运行 `grep`，请**停止**。**始终**优先使用 `ripgrep`，即 `rg`，所有 Claude Code 用户都预装了它。\n  - 在发出多个命令时，请使用 `;` 或 `&&` 运算符分隔它们。**不要**使用换行符（换行符在引用的字符串中是允许的）。\n  - 尝试在整个会话中保持您当前的工作目录，方法是使用绝对路径并避免使用 `cd`。如果用户明确要求，您可以使用 `cd`。\n    <good-example>\n    pytest /foo/bar/tests\n    </good-example>\n    <bad-example>\n    cd /foo/bar && pytest tests\n    </bad-example>\n\n\n# 使用 git 提交更改\n\n当用户要求您创建一个新的 git 提交时，请仔细遵循以下步骤：\n\n1. 您有能力在单个回复中调用多个工具。当请求多个独立的信息片段时，批量调用您的工具以获得最佳性能。**始终**并行运行以下 bash 命令，每个都使用 Bash 工具：\n  - 运行 `git status` 命令以查看所有未跟踪的文件。\n  - 运行 `git diff` 命令以查看所有将要提交的暂存和未暂存的更改。\n  - 运行 `git log` 命令以查看最近的提交消息，以便您可以遵循此仓库的提交消息风格。\n2. 分析所有暂存的更改（包括先前暂存的和新添加的），并起草一个提交消息：\n  - 总结更改的性质（例如：新功能、对现有功能的增强、错误修复、重构、测试、文档等）。确保消息准确反映更改及其目的（即 \"add\" 意味着一个全新的功能，\"update\" 意味着对现有功能的增强，\"fix\" 意味着错误修复等）。\n  - 检查是否有任何不应提交的敏感信息\n  - 起草一个简洁（1-2 个句子）的提交消息，重点关注 \"为什么\" 而不是 \"是什么\"\n  - 确保它准确反映更改及其目的\n3. 您有能力在单个回复中调用多个工具。当请求多个独立的信息片段时，批量调用您的工具以获得最佳性能。**始终**并行运行以下命令：\n   - 将相关的未跟踪文件添加到暂存区。\n   - 创建提交，消息以以下内容结尾：\n   `🤖 Generated with [Claude Code](https://claude.ai/code)`\n\n   `Co-Authored-By: Claude <noreply@anthropic.com>`\n   - 运行 `git status` 以确保提交成功。\n4. 如果提交因预提交钩子更改而失败，**重试**提交**一次**以包含这些自动化更改。如果再次失败，通常意味着预提交钩子正在阻止提交。如果提交成功但您注意到文件被预提交钩子修改，您**必须**修改您的提交以包含它们。\n\n重要说明：\n- **绝不**更新 git 配置\n- **绝不**运行额外的命令来读取或探索代码，除了 git bash 命令\n- **绝不**使用 TodoWrite 或 Task 工具\n- **不要**推送到远程仓库，除非用户**明确**要求你这样做\n- **重要提示**：**绝不**使用带有 `-i` 标志的 git 命令（如 `git rebase -i` 或 `git add -i`），因为它们需要不支持的交互式输入。\n- 如果没有要提交的更改（即没有未跟踪的文件，也没有修改），则**不要**创建空提交\n- 为了确保良好的格式，**始终**通过 **HEREDOC** 传递提交消息，示例如下：\n<example>\ngit commit -m \"$(cat <<'EOF'\n   提交消息在此处。\n\n   🤖 Generated with [Claude Code](https://claude.ai/code)\n\n   Co-Authored-By: Claude <noreply@anthropic.com>\n   EOF\n   )\"\n</example>\n\n# 创建 Pull Request\n对于**所有**与 **GitHub** 相关的任务，包括处理议题、Pull Request、检查和发布，请通过 **Bash** 工具使用 `gh` 命令。如果给定一个 **Github URL**，请使用 `gh` 命令获取所需信息。\n\n**重要提示**：当用户要求您创建 Pull Request 时，请仔细遵循以下步骤：\n\n1. 您有能力在单个回复中调用多个工具。当请求多个独立的信息片段时，批量调用您的工具以获得最佳性能。**始终**并行运行以下 bash 命令（使用 Bash 工具），以便了解当前分支自与主分支分歧以来的状态：\n   - 运行 `git status` 命令以查看所有未跟踪的文件\n   - 运行 `git diff` 命令以查看所有将要提交的暂存和未暂存的更改\n   - 检查当前分支是否跟踪了远程分支并且与远程分支保持同步，以便您知道是否需要推送到远程\n   - 运行 `git log` 命令和 `git diff [base-branch]...HEAD` 以了解当前分支的完整提交历史（从它与基础分支分歧时开始）\n2. 分析将包含在 Pull Request 中的所有更改，**确保查看所有相关提交**（**不只是最新提交**，而是**将包含在 Pull Request 中的所有提交**！！！），并起草 Pull Request 摘要\n3. 您有能力在单个回复中调用多个工具。当请求多个独立的信息片段时，批量调用您的工具以获得最佳性能。**始终**并行运行以下命令：\n   - 如果需要，创建新分支\n   - 如果需要，使用 `-u` 标志推送到远程\n   - 使用 `gh pr create` 并以下述格式创建 **PR**。使用 **HEREDOC** 传递正文以确保正确的格式。\n<example>\ngh pr create --title \"pr 标题\" --body \"$(cat <<'EOF'\n## 摘要\n<1-3 个要点>\n\n## 测试计划\n[测试 Pull Request 的 TODO 清单...]\n\n🤖 Generated with [Claude Code](https://claude.ai/code)\nEOF\n)\"\n</example>\n\n重要说明：\n- **绝不**更新 git 配置\n- **不要**使用 TodoWrite 或 Task 工具\n- 完成后返回 **PR URL**，以便用户可以看到它\n\n# 其他常见操作\n- 查看 Github PR 上的评论：`gh api repos/foo/bar/pulls/123/comments`",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "command": {
+            "type": "string",
+            "description": "要执行的命令"
+          },
+          "timeout": {
+            "type": "number",
+            "description": "可选的超时时间（以毫秒为单位，最大 600000）"
+          },
+          "description": {
+            "type": "string",
+            "description": "用 5-10 个词清晰、简洁地描述此命令的作用。示例：\n输入: ls\n输出: 列出当前目录中的文件\n\n输入: git status\n输出: 显示工作树状态\n\n输入: npm install\n输出: 安装包依赖项\n\n输入: mkdir foo\n输出: 创建目录 'foo'"
+          },
+          "run_in_background": {
+            "type": "boolean",
+            "description": "设置为 true 以在后台运行此命令。稍后使用 BashOutput 读取输出。"
+          }
+        },
+        "required": [
+          "command"
+        ],
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      }
+    },
+    {
+      "name": "Glob",
+      "description": "- 快速文件模式匹配工具，适用于任何代码库大小\n- 支持像 \"**/*.js\" 或 \"src/**/*.ts\" 这样的 glob 模式\n- 返回按修改时间排序的匹配文件路径\n- 当您需要按名称模式查找文件时，请使用此工具\n- 当您进行可能需要多轮 globbing 和 grepping 的开放式搜索时，请改用 Agent 工具\n- 您有能力在单个回复中调用多个工具。推测性地批量执行多个可能有用的搜索总是更好的。",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "pattern": {
+            "type": "string",
+            "description": "用于匹配文件的 glob 模式"
+          },
+          "path": {
+            "type": "string",
+            "description": "要在其中搜索的目录。如果未指定，将使用当前工作目录。重要提示：省略此字段以使用默认目录。不要输入 \"undefined\" 或 \"null\" - 只需省略它以使用默认行为。如果提供，必须是有效的目录路径。"
+          }
+        },
+        "required": [
+          "pattern"
+        ],
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      }
+    },
+    {
+      "name": "Grep",
+      "description": "一个基于 ripgrep 构建的强大搜索工具\n\n  用法：\n  - **始终**使用 Grep 进行搜索任务。**绝不**将 `grep` 或 `rg` 作为 Bash 命令调用。Grep 工具已针对正确的权限和访问进行了优化。\n  - 支持完整的正则表达式语法（例如：\"log.*Error\", \"function\\s+\\w+\"）\n  - 使用 glob 参数（例如：\"*.js\", \"**/*.tsx\"）或 type 参数（例如：\"js\", \"py\", \"rust\"）过滤文件\n  - 输出模式：\"content\" 显示匹配的行，\"files_with_matches\" 仅显示文件路径（默认），\"count\" 显示匹配计数\n  - 对于需要多轮的开放式搜索，请使用 Task 工具\n  - 模式语法：使用 ripgrep（不是 grep）- 字面大括号需要转义（使用 `interface\\{\\}` 来查找 Go 代码中的 `interface{}`）\n  - 多行匹配：默认情况下，模式仅在单行内匹配。对于跨行模式，例如 `struct \\{[\\s\\S]*?field`，请使用 `multiline: true`\n",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "pattern": {
+            "type": "string",
+            "description": "要在文件内容中搜索的正则表达式模式"
+          },
+          "path": {
+            "type": "string",
+            "description": "要在其中搜索的文件或目录（rg PATH）。默认为当前工作目录。"
+          },
+          "glob": {
+            "type": "string",
+            "description": "用于过滤文件的 glob 模式（例如 \"*.js\", \"*.{ts,tsx}\"）- 映射到 rg --glob"
+          },
+          "output_mode": {
+            "type": "string",
+            "enum": [
+              "content",
+              "files_with_matches",
+              "count"
+            ],
+            "description": "输出模式：\"content\" 显示匹配的行（支持 -A/-B/-C 上下文, -n 行号, head_limit），\"files_with_matches\" 显示文件路径（支持 head_limit），\"count\" 显示匹配计数（支持 head_limit）。默认为 \"files_with_matches\"。"
+          },
+          "-B": {
+            "type": "number",
+            "description": "在每个匹配项之前显示的行数（rg -B）。需要 output_mode: \"content\"，否则忽略。"
+          },
+          "-A": {
+            "type": "number",
+            "description": "在每个匹配项之后显示的行数（rg -A）。需要 output_mode: \"content\"，否则忽略。"
+          },
+          "-C": {
+            "type": "number",
+            "description": "在每个匹配项之前和之后显示的行数（rg -C）。需要 output_mode: \"content\"，否则忽略。"
+          },
+          "-n": {
+            "type": "boolean",
+            "description": "在输出中显示行号（rg -n）。需要 output_mode: \"content\"，否则忽略。"
+          },
+          "-i": {
+            "type": "boolean",
+            "description": "不区分大小写搜索（rg -i）"
+          },
+          "type": {
+            "type": "string",
+            "description": "要搜索的文件类型（rg --type）。常见类型：js, py, rust, go, java 等。对于标准文件类型，比 include 更高效。"
+          },
+          "head_limit": {
+            "type": "number",
+            "description": "将输出限制为前 N 行/条目，相当于 \"| head -N\"。适用于所有输出模式：content（限制输出行），files_with_matches（限制文件路径），count（限制计数条目）。未指定时，显示来自 ripgrep 的所有结果。"
+          },
+          "multiline": {
+            "type": "boolean",
+            "description": "启用多行模式，其中 . 匹配换行符，模式可以跨行（rg -U --multiline-dotall）。默认值：false。"
+          }
+        },
+        "required": [
+          "pattern"
+        ],
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      }
+    },
+    {
+      "name": "LS",
+      "description": "列出给定路径中的文件和目录。path 参数必须是绝对路径，而不是相对路径。您可以选择提供一个 glob 模式数组以忽略某些文件，通过 ignore 参数。如果您知道要搜索哪些目录，通常应优先使用 Glob 和 Grep 工具。",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "path": {
+            "type": "string",
+            "description": "要列出的目录的绝对路径（必须是绝对路径，而不是相对路径）"
+          },
+          "ignore": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "要忽略的 glob 模式列表"
+          }
+        },
+        "required": [
+          "path"
+        ],
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      }
+    },
+    {
+      "name": "ExitPlanMode",
+      "description": "当您处于计划模式并已完成展示您的计划并准备好编写代码时，请使用此工具。这将提示用户退出计划模式。\n**重要提示**：仅当任务需要规划需要编写代码的任务的实现步骤时才使用此工具。对于您正在收集信息、搜索文件、读取文件或通常尝试理解代码库的研究任务 - **不要**使用此工具。\n\n例如：\n1. 初始任务：\"搜索并理解代码库中 vim 模式的实现\" - 不要使用退出计划模式工具，因为您没有规划任务的实现步骤。\n2. 初始任务：\"帮我为 vim 实现 yank 模式\" - 在您完成规划任务的实现步骤后，使用退出计划模式工具。",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "plan": {
+            "type": "string",
+            "description": "您提出的计划，您希望用户批准。支持 markdown。计划应相当简洁。"
+          }
+        },
+        "required": [
+          "plan"
+        ],
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      }
+    },
+    {
+      "name": "Read",
+      "description": "从本地文件系统读取文件。您可以使用此工具直接访问任何文件。\n假设此工具能够读取机器上的所有文件。如果用户提供文件的路径，假设该路径是有效的。读取不存在的文件是允许的；将返回一个错误。\n\n用法：\n- `file_path` 参数必须是**绝对路径**，而不是相对路径\n- 默认情况下，它从文件开头开始读取最多 2000 行\n- 您可以选择指定行偏移量和限制（对于长文件特别方便），但建议通过不提供这些参数来读取整个文件\n- 任何超过 2000 个字符的行将被截断\n- 结果以 `cat -n` 格式返回，行号从 1 开始\n- 此工具允许 Claude Code 读取图像（例如 PNG、JPG 等）。当读取图像文件时，内容会以可视化的方式呈现，因为 Claude Code 是一个多模态 **LLM**。\n- 此工具可以读取 **PDF** 文件（.pdf）。**PDF** 文件按页处理，提取文本和视觉内容进行分析。\n- 此工具可以读取 **Jupyter** 笔记本（.ipynb 文件），并返回所有单元格及其输出，结合代码、文本和可视化。\n- 您有能力在单个回复中调用多个工具。推测性地批量读取多个可能有用的文件总是更好的。\n- 您将经常被要求读取屏幕截图。如果用户提供屏幕截图的路径，**始终**使用此工具查看该路径下的文件。此工具将适用于所有临时文件路径，例如 `/var/folders/123/abc/T/TemporaryItems/NSIRD_screencaptureui_ZfB1tD/Screenshot.png`\n- 如果您读取的文件存在但内容为空，您将收到一个系统提醒警告而不是文件内容。",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "file_path": {
+            "type": "string",
+            "description": "要读取的文件的绝对路径"
+          },
+          "offset": {
+            "type": "number",
+            "description": "开始读取的行号。仅在文件太大而无法一次性读取时提供"
+          },
+          "limit": {
+            "type": "number",
+            "description": "要读取的行数。仅在文件太大而无法一次性读取时提供。"
+          }
+        },
+        "required": [
+          "file_path"
+        ],
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      }
+    },
+    {
+      "name": "Edit",
+      "description": "在文件中执行精确的字符串替换。\n\n用法：\n- 您必须在编辑之前至少使用您的 `Read` 工具**一次**。如果您尝试在未读取文件的情况下进行编辑，此工具将报错。\n- 当编辑来自 Read 工具输出的文本时，请确保**保留**与行号前缀**之后**出现时**完全相同**的缩进（制表符/空格）。行号前缀格式为：空格 + 行号 + 制表符。该制表符之后的所有内容才是要匹配的实际文件内容。**绝不**在 `old_string` 或 `new_string` 中包含行号前缀的任何部分。\n- **始终**优先编辑代码库中的现有文件。除非**明确要求**，否则**绝不**编写新文件。\n- **仅当**用户**明确**要求时才使用表情符号。除非被要求，否则避免向文件中添加表情符号。\n- 如果 `old_string` 在文件中**不是唯一的**，编辑将**失败**。请提供包含更多周围上下文的更大字符串以使其唯一，或使用 `replace_all` 来更改 `old_string` 的每个实例。\n- 使用 `replace_all` 在整个文件中替换和重命名字符串。如果您想重命名变量等，此参数很有用。",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "file_path": {
+            "type": "string",
+            "description": "要修改的文件的绝对路径"
+          },
+          "old_string": {
+            "type": "string",
+            "description": "要替换的文本"
+          },
+          "new_string": {
+            "type": "string",
+            "description": "用于替换它的文本（必须与 old_string 不同）"
+          },
+          "replace_all": {
+            "type": "boolean",
+            "default": false,
+            "description": "替换所有出现的 old_string（默认 false）"
+          }
+        },
+        "required": [
+          "file_path",
+          "old_string",
+          "new_string"
+        ],
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      }
+    },
+    {
+      "name": "MultiEdit",
+      "description": "这是一个用于在一次操作中对单个文件进行多次编辑的工具。它建立在 Edit 工具之上，允许您高效地执行多个查找和替换操作。当您需要对同一文件进行多次编辑时，请优先使用此工具而不是 Edit 工具。\n\n在使用此工具之前：\n\n1. 使用 Read 工具了解文件的内容和上下文\n2. 验证目录路径是否正确\n\n要进行多个文件编辑，请提供以下内容：\n1. file_path: 要修改的文件的绝对路径（必须是绝对路径，而不是相对路径）\n2. edits: 要执行的编辑操作数组，其中每个编辑包含：\n   - old_string: 要替换的文本（必须与文件内容完全匹配，包括所有空格和缩进）\n   - new_string: 用于替换 old_string 的编辑后的文本\n   - replace_all: 替换所有出现的 old_string。此参数是可选的，默认为 false。\n\n重要提示：\n- 所有编辑按顺序应用，按照提供的顺序\n- 每个编辑都在前一个编辑的结果上操作\n- 所有编辑都必须有效，操作才能成功 - 如果任何编辑失败，则不会应用任何编辑\n- 当您需要对同一文件的不同部分进行多次更改时，此工具是理想的选择\n- 对于 **Jupyter** 笔记本（.ipynb 文件），请改用 NotebookEdit\n\n关键要求：\n1. 所有编辑都遵循单个 Edit 工具的相同要求\n2. 编辑是原子性的 - 要么全部成功，要么全部不应用\n3. 仔细规划您的编辑，以避免顺序操作之间发生冲突\n\n警告：\n- 如果 edits.old_string 与文件内容不完全匹配（包括空格），工具将失败\n- 如果 edits.old_string 和 edits.new_string 相同，工具将失败\n- 由于编辑是按顺序应用的，请确保较早的编辑不会影响较晚的编辑试图查找的文本\n\n进行编辑时：\n- 确保所有编辑都产生地道、正确的代码\n- 不要让代码处于损坏状态\n- 始终使用绝对文件路径（以 / 开头）\n- **仅当**用户**明确**要求时才使用表情符号。除非被要求，否则避免向文件中添加表情符号。\n- 使用 replace_all 在整个文件中替换和重命名字符串。如果您想重命名变量等，此参数很有用。\n\n如果您想创建一个新文件，请使用：\n- 一个新的文件路径，如果需要包括目录名\n- 第一次编辑：空的 old_string 和新文件的内容作为 new_string\n- 后续编辑：对创建的内容进行正常的编辑操作",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "file_path": {
+            "type": "string",
+            "description": "要修改的文件的绝对路径"
+          },
+          "edits": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "old_string": {
+                  "type": "string",
+                  "description": "要替换的文本"
+                },
+                "new_string": {
+                  "type": "string",
+                  "description": "用于替换它的文本"
+                },
+                "replace_all": {
+                  "type": "boolean",
+                  "default": false,
+                  "description": "替换所有出现的 old_string（默认 false）。"
+                }
+              },
+              "required": [
+                "old_string",
+                "new_string"
+              ],
+              "additionalProperties": false
+            },
+            "minItems": 1,
+            "description": "要对文件顺序执行的编辑操作数组"
+          }
+        },
+        "required": [
+          "file_path",
+          "edits"
+        ],
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      }
+    }
 {
-      "name": "Write",
-      "description": "将文件写入本地文件系统。\n\n用法：\n- 如果提供的路径上已存在文件，此工具将覆盖现有文件。\n- 如果这是一个现有文件，您**必须**先使用 Read 工具读取文件的内容。如果您未先读取文件，此工具将失败。\n- **始终**优先编辑代码库中的现有文件。除非**明确要求**，否则**绝不**编写新文件。\n- **绝不**主动创建文档文件（*.md）或 README 文件。**仅当**用户明确要求时才创建文档文件。\n- **仅当**用户**明确**要求时才使用表情符号。除非被要求，否则避免将表情符号写入文件。",
-      "input_schema": {
-        "type": "object",
-        "properties": {
-          "file_path": {
-            "type": "string",
-            "description": "要写入的文件的绝对路径（必须是绝对路径，而不是相对路径）"
-          },
-          "content": {
-            "type": "string",
-            "description": "要写入文件中的内容"
-          }
-        },
-        "required": [
-          "file_path",
-          "content"
-        ],
-        "additionalProperties": false,
-        "$schema": "http://json-schema.org/draft-07/schema#"
-      }
-    },
-    {
-      "name": "NotebookEdit",
-      "description": "使用新源完全替换 Jupyter 笔记本（.ipynb 文件）中特定单元格的内容。Jupyter 笔记本是结合了代码、文本和可视化效果的交互式文档，常用于数据分析和科学计算。`notebook_path` 参数必须是绝对路径，而不是相对路径。`cell_number` 是 0 索引的。使用 `edit_mode=insert` 在 `cell_number` 指定的索引处添加一个新单元格。使用 `edit_mode=delete` 删除 `cell_number` 指定索引处的单元格。",
-      "input_schema": {
-        "type": "object",
-        "properties": {
-          "notebook_path": {
-            "type": "string",
-            "description": "要编辑的 Jupyter 笔记本文件的绝对路径（必须是绝对路径，而不是相对路径）"
-          },
-          "cell_id": {
-            "type": "string",
-            "description": "要编辑的单元格的 ID。插入新单元格时，新单元格将插入到具有此 ID 的单元格之后，如果未指定则插入到开头。"
-          },
-          "new_source": {
-            "type": "string",
-            "description": "单元格的新源代码"
-          },
-          "cell_type": {
-            "type": "string",
-            "enum": [
-              "code",
-              "markdown"
-            ],
-            "description": "单元格的类型（代码或 markdown）。如果未指定，则默认为当前单元格类型。如果使用 `edit_mode=insert`，则此为必需项。"
-          },
-          "edit_mode": {
-            "type": "string",
-            "enum": [
-              "replace",
-              "insert",
-              "delete"
-            ],
-            "description": "要进行的编辑类型（替换、插入、删除）。默认为替换。"
-          }
-        },
-        "required": [
-          "notebook_path",
-          "new_source"
-        ],
-        "additionalProperties": false,
-        "$schema": "http://json-schema.org/draft-07/schema#"
-      }
-    },
-    {
-      "name": "WebFetch",
-      "description": "\n- 从指定的 URL 获取内容并使用 AI 模型进行处理\n- 接受 URL 和 prompt 作为输入\n- 获取 URL 内容，将 HTML 转换为 markdown\n- 使用一个小型、快速的模型处理带有 prompt 的内容\n- 返回模型关于该内容的回复\n- 当您需要检索和分析网络内容时，请使用此工具\n\n使用说明：\n  - **重要提示**：如果提供了 **MCP** 提供的网页抓取工具，请优先使用该工具而不是此工具，因为它可能限制更少。所有 **MCP** 提供的工具都以 \"mcp__\" 开头。\n  - URL 必须是格式正确的有效 URL\n  - HTTP URL 将自动升级到 HTTPS\n  - prompt 应描述您想要从页面中提取的信息\n  - 此工具是只读的，不会修改任何文件\n  - 如果内容非常大，结果可能会被总结\n  - 包含一个 15 分钟的自清理缓存，以便在重复访问同一 URL 时获得更快的响应\n  - 当 URL 重定向到不同的主机时，工具将通知您并以特殊格式提供重定向 URL。然后您应该使用重定向 URL 发出新的 WebFetch 请求来获取内容。\n",
-      "input_schema": {
-        "type": "object",
-        "properties": {
-          "url": {
-            "type": "string",
-            "format": "uri",
-            "description": "要从中获取内容的 URL"
-          },
-          "prompt": {
-            "type": "string",
-            "description": "对获取到的内容运行的 prompt"
-          }
-        },
-        "required": [
-          "url",
-          "prompt"
-        ],
-        "additionalProperties": false,
-        "$schema": "http://json-schema.org/draft-07/schema#"
-      }
-    },
-    {
-      "name": "TodoWrite",
-      "description": "使用此工具创建和管理您的当前编码会话的结构化任务列表。这有助于您跟踪进度、组织复杂任务并向用户展示全面性。\n它还有助于用户了解任务的进度和他们的请求的总体进度。\n\n## 何时使用此工具\n在以下场景中主动使用此工具：\n\n1. 复杂的多步骤任务 - 当一个任务需要 3 个或更多不同的步骤或操作时\n2. 非平凡和复杂的任务 - 需要仔细规划或多次操作的任务\n3. 用户明确要求待办事项列表 - 当用户直接要求您使用待办事项列表时\n4. 用户提供多个任务 - 当用户提供一个待办事项列表（编号或逗号分隔）时\n5. 收到新指令后 - 立即将用户要求捕获为待办事项\n6. 当您开始处理任务时 - 在开始工作**之前**将其标记为 `in_progress`。理想情况下，您应该一次只有一个待办事项处于 `in_progress` 状态\n7. 完成任务后 - 将其标记为 `completed` 并添加在实施过程中发现的任何新的后续任务\n\n## 何时不使用此工具\n\n在以下情况下跳过使用此工具：\n1. 只有一个单一、简单的任务\n2. 任务是微不足道的，跟踪它不会提供组织上的益处\n3. 任务可以在不到 3 个微不足道的步骤中完成\n4. 任务纯粹是会话性或信息性的\n\n**注意**：如果只有一个微不足道的任务要做，您不应该使用此工具。在这种情况下，您最好直接完成任务。\n\n## 何时使用待办事项列表的示例\n\n<example>\n用户：我想在应用程序设置中添加一个深色模式切换开关。确保完成后运行测试和构建！\n助手：我很乐意帮助您在应用程序设置中添加深色模式切换开关。让我创建一个待办事项列表来跟踪此实施过程。\n*创建包含以下项目的待办事项列表：*\n1. 在“设置”页面创建深色模式切换组件\n2. 添加深色模式状态管理（上下文/存储）\n3. 为深色主题实现 CSS-in-JS 样式\n4. 更新现有组件以支持主题切换\n5. 运行测试和构建过程，解决发生的任何失败或错误\n*开始处理第一个任务*\n\n<reasoning>\n助手使用待办事项列表的原因是：\n1. 添加深色模式是一个多步骤功能，需要 **UI**、状态管理和样式更改\n2. 用户明确要求事后运行测试和构建\n3. 助手通过添加“确保测试和构建成功”作为最终任务，推断出测试和构建需要通过\n</reasoning>\n</example>\n\n<example>\n用户：帮我在我的整个项目中将函数 `getCwd` 重命名为 `getCurrentWorkingDirectory`\n助手：让我先搜索您的代码库，找到所有出现的 'getCwd'。\n*使用 grep 或搜索工具定位代码库中所有 'getCwd' 的实例*\n助手：我发现在 8 个不同的文件中有 15 个 'getCwd' 的实例。让我创建一个待办事项列表来跟踪这些更改。\n*创建包含每个需要更新的文件的特定项目的待办事项列表*\n\n<reasoning>\n助手使用待办事项列表的原因是：\n1. 首先，助手搜索以了解任务的范围\n2. 在不同文件中找到多个出现后，它确定这是一个需要多个步骤的复杂任务\n3. 待办事项列表有助于确保系统地跟踪和更新每个实例\n4. 这种方法可以防止遗漏任何出现并保持代码一致性\n</reasoning>\n</example>\n\n\n<example>\n用户：我需要为我的电子商务网站实现这些功能：用户注册、产品目录、购物车和结账流程。\n助手：我很乐意帮助您实现这些功能。首先，让我们将所有功能添加到待办事项列表中。\n*创建一个待办事项列表，根据项目架构将每个功能分解为特定的任务*\n助手：我们从用户注册开始。这将涉及创建数据库模型、**API** 端点和与您现有身份验证系统集成的**前端**表单。\n\n<reasoning>\n助手使用待办事项列表的原因是：\n1. 用户提供了以逗号分隔列表形式提供的多个复杂功能要实现\n2. 待办事项列表有助于将这些大型功能组织成可管理的任务\n3. 这种方法允许跟踪整个实施过程中的进度\n</reasoning>\n</example>\n\n<example>\n用户：你能帮我优化我的 React 应用程序吗？它渲染得很慢，并且存在性能问题。</user>\n助手：我很乐意帮助您优化您的 **React** 应用程序。首先，让我检查您的代码库，以确定潜在的性能瓶颈。\n*审查组件结构、渲染模式、状态管理和数据获取*\n助手：在分析您的代码库后，我发现了一些性能问题。让我创建一个待办事项列表来跟踪我们的优化工作。\n*创建待办事项列表，包含以下项目：1) 对 **ProductList** 中开销大的计算实施记忆化，2) 为 **Dashboard** 中的长列表添加虚拟化，3) 优化 **Gallery** 组件中的图像加载，4) 修复 **ShoppingCart** 中的状态更新循环，5) 审查捆绑包大小并实施代码拆分*\n我们从对 **ProductList** 组件中开销大的计算实施记忆化开始吧。</assistant>\n\n<reasoning>\n助手使用待办事项列表的原因是：\n1. 首先，助手检查代码库以确定特定的性能问题\n2. 基于此分析，它确定了多个优化机会\n3. 性能优化是一个需要多个步骤的非平凡任务\n4. 待办事项列表有助于有条不紊地跟踪不同组件的改进\n5. 这种系统方法可确保解决所有性能瓶颈\n</reasoning>\n</example>\n\n## 何时不使用待办事项列表的示例\n\n<example>\n用户：如何在 Python 中打印 'Hello World'？\n助手：在 Python 中，您可以使用这段简单的代码打印 \"Hello World\"：\n\npython\nprint(\"Hello World\")\n\n执行时，这会将文本 \"Hello World\" 输出到控制台。\n</assistant>\n\n<reasoning>\n助手没有使用待办事项列表，因为这是一个可以一步完成的单一、微不足道的任务。对于如此简单的请求，无需跟踪多个任务或步骤。\n</reasoning>\n</example>\n\n<example>\n用户：`git status` 命令有什么作用？\n助手：`git status` 命令显示您的工作目录和暂存区的当前状态。它显示哪些更改已暂存、哪些未暂存以及哪些文件未被 **Git** 跟踪。这是在进行提交之前了解仓库当前状态的基本命令。\n\n<reasoning>\n助手没有使用待办事项列表，因为这是一个信息请求，没有实际的编码任务需要完成。用户只是要求解释，而不是要求助手执行多个步骤或任务。\n</reasoning>\n</example>\n\n<example>\n用户：您能给 `calculateTotal` 函数添加一个注释来解释它的作用吗？\n助手：当然，让我给 `calculateTotal` 函数添加一个注释来解释它的作用。\n*使用 Edit 工具向 `calculateTotal` 函数添加注释*\n\n<reasoning>\n助手没有使用待办事项列表，因为这是一个局限于代码中一个位置的单一、简单的任务。添加注释不需要跟踪多个步骤或系统的组织。\n</reasoning>\n</example>\n\n<example>\n用户：帮我运行 `npm install` 并告诉我发生了什么。\n助手：我将为您运行 `npm install` 命令。\n\n*执行：npm install*\n\n命令成功完成。这是输出：\n[npm install 命令的输出]\n\n所有依赖项已根据您的 `package.json` 文件安装。\n\n<reasoning>\n助手没有使用待办事项列表，因为这是一个具有即时结果的单一命令执行。没有多个步骤需要跟踪或组织，因此待办事项列表对于这个简单的任务是不必要的。\n</reasoning>\n</example>\n\n## 任务状态和管理\n\n1. **任务状态**：使用这些状态来跟踪进度：\n   - `pending`：任务尚未开始\n   - `in_progress`：正在处理中（一次限制为**一个**任务）\n   - `completed`：任务成功完成\n\n2. **任务管理**：\n   - 在您工作时实时更新任务状态\n   - 完成后**立即**标记任务完成（不要批量完成）\n   - 任何时候只有一个任务处于 `in_progress` 状态\n   - 在开始新任务之前完成当前任务\n   - 将不再相关的任务从列表中完全删除\n\n3. **任务完成要求**：\n   - **只有**当您**完全**完成任务时，才将其标记为 `completed`\n   - 如果您遇到错误、阻碍或无法完成，请将任务保持为 `in_progress`\n   - 当受阻时，创建一个描述需要解决的问题的新任务\n   - 绝不将任务标记为 `completed`，如果出现以下情况：\n     - 测试失败\n     - 实施不完整\n     - 您遇到了未解决的错误\n     - 您找不到必要的文件或依赖项\n\n4. **任务分解**：\n   - 创建具体、可操作的项目\n   - 将复杂任务分解为更小、更易于管理的步骤\n   - 使用清晰、描述性的任务名称\n\n如有疑问，请使用此工具。主动进行任务管理表明您很细心，并确保您成功完成所有要求。\n",
-      "input_schema": {
-        "type": "object",
-        "properties": {
-          "todos": {
-            "type": "array",
-            "items": {
-              "type": "object",
-              "properties": {
-                "content": {
-                  "type": "string",
-                  "minLength": 1
-                },
-                "status": {
-                  "type": "string",
-                  "enum": [
-                    "pending",
-                    "in_progress",
-                    "completed"
-                  ]
-                },
-                "id": {
-                  "type": "string"
-                }
-              },
-              "required": [
-                "content",
-                "status",
-                "id"
-              ],
-              "additionalProperties": false
-            },
-            "description": "更新后的待办事项列表"
-          }
-        },
-        "required": [
-          "todos"
-        ],
-        "additionalProperties": false,
-        "$schema": "http://json-schema.org/draft-07/schema#"
-      }
-    },
-    {
-      "name": "WebSearch",
-      "description": "\n- 允许 Claude 搜索网页并使用结果来生成回复\n- 提供当前事件和最新数据的最新信息\n- 返回格式化为搜索结果块的搜索结果信息\n- 当您需要访问超出 Claude 知识截止日期的信息时，请使用此工具\n- 搜索会在单个 **API** 调用中自动执行\n\n使用说明：\n  - 支持域过滤以包含或阻止特定的网站\n  - 网页搜索仅在美国可用\n  - 在 `<env>` 中考虑 \"Today's date\"（今天的日期）。例如，如果 `<env>` 显示 \"Today's date: 2025-07-01\"，并且用户想要最新的文档，请不要在搜索查询中使用 2024。请使用 2025。\n",
-      "input_schema": {
-        "type": "object",
-        "properties": {
-          "query": {
-            "type": "string",
-            "minLength": 2,
-            "description": "要使用的搜索查询"
-          },
-          "allowed_domains": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "description": "只包含来自这些域的搜索结果"
-          },
-          "blocked_domains": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "description": "绝不包含来自这些域的搜索结果"
-          }
-        },
-        "required": [
-          "query"
-        ],
-        "additionalProperties": false,
-        "$schema": "http://json-schema.org/draft-07/schema#"
-      }
-    },
-    {
-      "name": "BashOutput",
-      "description": "\n- 从正在运行或已完成的后台 bash shell 中检索输出\n- 接受一个用于标识 shell 的 `shell_id` 参数\n- 始终只返回自上次检查以来的新输出\n- 返回 `stdout` 和 `stderr` 输出以及 shell 状态\n- 支持可选的正则表达式过滤，以仅显示与模式匹配的行\n- 当您需要监控或检查长时间运行的 shell 的输出时，请使用此工具\n- 可以使用 `/bashes` 命令找到 shell **ID**\n",
-      "input_schema": {
-        "type": "object",
-        "properties": {
-          "bash_id": {
-            "type": "string",
-            "description": "要从中检索输出的后台 shell 的 **ID**"
-          },
-          "filter": {
-            "type": "string",
-            "description": "用于过滤输出行的可选正则表达式。只有与此正则表达式匹配的行才会包含在结果中。任何不匹配的行将不再可读。"
-          }
-        },
-        "required": [
-          "bash_id"
-        ],
-        "additionalProperties": false,
-        "$schema": "http://json-schema.org/draft-07/schema#"
-      }
-    },
-    {
-      "name": "KillBash",
-      "description": "\n- 根据 **ID** 终止正在运行的后台 bash shell\n- 接受一个用于标识要终止的 shell 的 `shell_id` 参数\n- 返回成功或失败状态\n- 当您需要终止长时间运行的 shell 时，请使用此工具\n- 可以使用 `/bashes` 命令找到 shell **ID**\n",
-      "input_schema": {
-        "type": "object",
-        "properties": {
-          "shell_id": {
-            "type": "string",
-            "description": "要终止的后台 shell 的 **ID**"
-          }
-        },
-        "required": [
-          "shell_id"
-        ],
-        "additionalProperties": false,
-        "$schema": "http://json-schema.org/draft-07/schema#"
-      }
-    }
+      "name": "Write",
+      "description": "将文件写入本地文件系统。\n\n用法：\n- 如果提供的路径上已存在文件，此工具将覆盖现有文件。\n- 如果这是一个现有文件，您**必须**先使用 Read 工具读取文件的内容。如果您未先读取文件，此工具将失败。\n- **始终**优先编辑代码库中的现有文件。除非**明确要求**，否则**绝不**编写新文件。\n- **绝不**主动创建文档文件（*.md）或 README 文件。**仅当**用户明确要求时才创建文档文件。\n- **仅当**用户**明确**要求时才使用表情符号。除非被要求，否则避免将表情符号写入文件。",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "file_path": {
+            "type": "string",
+            "description": "要写入的文件的绝对路径（必须是绝对路径，而不是相对路径）"
+          },
+          "content": {
+            "type": "string",
+            "description": "要写入文件中的内容"
+          }
+        },
+        "required": [
+          "file_path",
+          "content"
+        ],
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      }
+    },
+    {
+      "name": "NotebookEdit",
+      "description": "使用新源完全替换 Jupyter 笔记本（.ipynb 文件）中特定单元格的内容。Jupyter 笔记本是结合了代码、文本和可视化效果的交互式文档，常用于数据分析和科学计算。`notebook_path` 参数必须是绝对路径，而不是相对路径。`cell_number` 是 0 索引的。使用 `edit_mode=insert` 在 `cell_number` 指定的索引处添加一个新单元格。使用 `edit_mode=delete` 删除 `cell_number` 指定索引处的单元格。",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "notebook_path": {
+            "type": "string",
+            "description": "要编辑的 Jupyter 笔记本文件的绝对路径（必须是绝对路径，而不是相对路径）"
+          },
+          "cell_id": {
+            "type": "string",
+            "description": "要编辑的单元格的 ID。插入新单元格时，新单元格将插入到具有此 ID 的单元格之后，如果未指定则插入到开头。"
+          },
+          "new_source": {
+            "type": "string",
+            "description": "单元格的新源代码"
+          },
+          "cell_type": {
+            "type": "string",
+            "enum": [
+              "code",
+              "markdown"
+            ],
+            "description": "单元格的类型（代码或 markdown）。如果未指定，则默认为当前单元格类型。如果使用 `edit_mode=insert`，则此为必需项。"
+          },
+          "edit_mode": {
+            "type": "string",
+            "enum": [
+              "replace",
+              "insert",
+              "delete"
+            ],
+            "description": "要进行的编辑类型（替换、插入、删除）。默认为替换。"
+          }
+        },
+        "required": [
+          "notebook_path",
+          "new_source"
+        ],
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      }
+    },
+    {
+      "name": "WebFetch",
+      "description": "\n- 从指定的 URL 获取内容并使用 AI 模型进行处理\n- 接受 URL 和 prompt 作为输入\n- 获取 URL 内容，将 HTML 转换为 markdown\n- 使用一个小型、快速的模型处理带有 prompt 的内容\n- 返回模型关于该内容的回复\n- 当您需要检索和分析网络内容时，请使用此工具\n\n使用说明：\n  - **重要提示**：如果提供了 **MCP** 提供的网页抓取工具，请优先使用该工具而不是此工具，因为它可能限制更少。所有 **MCP** 提供的工具都以 \"mcp__\" 开头。\n  - URL 必须是格式正确的有效 URL\n  - HTTP URL 将自动升级到 HTTPS\n  - prompt 应描述您想要从页面中提取的信息\n  - 此工具是只读的，不会修改任何文件\n  - 如果内容非常大，结果可能会被总结\n  - 包含一个 15 分钟的自清理缓存，以便在重复访问同一 URL 时获得更快的响应\n  - 当 URL 重定向到不同的主机时，工具将通知您并以特殊格式提供重定向 URL。然后您应该使用重定向 URL 发出新的 WebFetch 请求来获取内容。\n",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "url": {
+            "type": "string",
+            "format": "uri",
+            "description": "要从中获取内容的 URL"
+          },
+          "prompt": {
+            "type": "string",
+            "description": "对获取到的内容运行的 prompt"
+          }
+        },
+        "required": [
+          "url",
+          "prompt"
+        ],
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      }
+    },
+    {
+      "name": "TodoWrite",
+      "description": "使用此工具创建和管理您的当前编码会话的结构化任务列表。这有助于您跟踪进度、组织复杂任务并向用户展示全面性。\n它还有助于用户了解任务的进度和他们的请求的总体进度。\n\n## 何时使用此工具\n在以下场景中主动使用此工具：\n\n1. 复杂的多步骤任务 - 当一个任务需要 3 个或更多不同的步骤或操作时\n2. 非平凡和复杂的任务 - 需要仔细规划或多次操作的任务\n3. 用户明确要求待办事项列表 - 当用户直接要求您使用待办事项列表时\n4. 用户提供多个任务 - 当用户提供一个待办事项列表（编号或逗号分隔）时\n5. 收到新指令后 - 立即将用户要求捕获为待办事项\n6. 当您开始处理任务时 - 在开始工作**之前**将其标记为 `in_progress`。理想情况下，您应该一次只有一个待办事项处于 `in_progress` 状态\n7. 完成任务后 - 将其标记为 `completed` 并添加在实施过程中发现的任何新的后续任务\n\n## 何时不使用此工具\n\n在以下情况下跳过使用此工具：\n1. 只有一个单一、简单的任务\n2. 任务是微不足道的，跟踪它不会提供组织上的益处\n3. 任务可以在不到 3 个微不足道的步骤中完成\n4. 任务纯粹是会话性或信息性的\n\n**注意**：如果只有一个微不足道的任务要做，您不应该使用此工具。在这种情况下，您最好直接完成任务。\n\n## 何时使用待办事项列表的示例\n\n<example>\n用户：我想在应用程序设置中添加一个深色模式切换开关。确保完成后运行测试和构建！\n助手：我很乐意帮助您在应用程序设置中添加深色模式切换开关。让我创建一个待办事项列表来跟踪此实施过程。\n*创建包含以下项目的待办事项列表：*\n1. 在“设置”页面创建深色模式切换组件\n2. 添加深色模式状态管理（上下文/存储）\n3. 为深色主题实现 CSS-in-JS 样式\n4. 更新现有组件以支持主题切换\n5. 运行测试和构建过程，解决发生的任何失败或错误\n*开始处理第一个任务*\n\n<reasoning>\n助手使用待办事项列表的原因是：\n1. 添加深色模式是一个多步骤功能，需要 **UI**、状态管理和样式更改\n2. 用户明确要求事后运行测试和构建\n3. 助手通过添加“确保测试和构建成功”作为最终任务，推断出测试和构建需要通过\n</reasoning>\n</example>\n\n<example>\n用户：帮我在我的整个项目中将函数 `getCwd` 重命名为 `getCurrentWorkingDirectory`\n助手：让我先搜索您的代码库，找到所有出现的 'getCwd'。\n*使用 grep 或搜索工具定位代码库中所有 'getCwd' 的实例*\n助手：我发现在 8 个不同的文件中有 15 个 'getCwd' 的实例。让我创建一个待办事项列表来跟踪这些更改。\n*创建包含每个需要更新的文件的特定项目的待办事项列表*\n\n<reasoning>\n助手使用待办事项列表的原因是：\n1. 首先，助手搜索以了解任务的范围\n2. 在不同文件中找到多个出现后，它确定这是一个需要多个步骤的复杂任务\n3. 待办事项列表有助于确保系统地跟踪和更新每个实例\n4. 这种方法可以防止遗漏任何出现并保持代码一致性\n</reasoning>\n</example>\n\n\n<example>\n用户：我需要为我的电子商务网站实现这些功能：用户注册、产品目录、购物车和结账流程。\n助手：我很乐意帮助您实现这些功能。首先，让我们将所有功能添加到待办事项列表中。\n*创建一个待办事项列表，根据项目架构将每个功能分解为特定的任务*\n助手：我们从用户注册开始。这将涉及创建数据库模型、**API** 端点和与您现有身份验证系统集成的**前端**表单。\n\n<reasoning>\n助手使用待办事项列表的原因是：\n1. 用户提供了以逗号分隔列表形式提供的多个复杂功能要实现\n2. 待办事项列表有助于将这些大型功能组织成可管理的任务\n3. 这种方法允许跟踪整个实施过程中的进度\n</reasoning>\n</example>\n\n<example>\n用户：你能帮我优化我的 React 应用程序吗？它渲染得很慢，并且存在性能问题。</user>\n助手：我很乐意帮助您优化您的 **React** 应用程序。首先，让我检查您的代码库，以确定潜在的性能瓶颈。\n*审查组件结构、渲染模式、状态管理和数据获取*\n助手：在分析您的代码库后，我发现了一些性能问题。让我创建一个待办事项列表来跟踪我们的优化工作。\n*创建待办事项列表，包含以下项目：1) 对 **ProductList** 中开销大的计算实施记忆化，2) 为 **Dashboard** 中的长列表添加虚拟化，3) 优化 **Gallery** 组件中的图像加载，4) 修复 **ShoppingCart** 中的状态更新循环，5) 审查捆绑包大小并实施代码拆分*\n我们从对 **ProductList** 组件中开销大的计算实施记忆化开始吧。</assistant>\n\n<reasoning>\n助手使用待办事项列表的原因是：\n1. 首先，助手检查代码库以确定特定的性能问题\n2. 基于此分析，它确定了多个优化机会\n3. 性能优化是一个需要多个步骤的非平凡任务\n4. 待办事项列表有助于有条不紊地跟踪不同组件的改进\n5. 这种系统方法可确保解决所有性能瓶颈\n</reasoning>\n</example>\n\n## 何时不使用待办事项列表的示例\n\n<example>\n用户：如何在 Python 中打印 'Hello World'？\n助手：在 Python 中，您可以使用这段简单的代码打印 \"Hello World\"：\n\npython\nprint(\"Hello World\")\n\n执行时，这会将文本 \"Hello World\" 输出到控制台。\n</assistant>\n\n<reasoning>\n助手没有使用待办事项列表，因为这是一个可以一步完成的单一、微不足道的任务。对于如此简单的请求，无需跟踪多个任务或步骤。\n</reasoning>\n</example>\n\n<example>\n用户：`git status` 命令有什么作用？\n助手：`git status` 命令显示您的工作目录和暂存区的当前状态。它显示哪些更改已暂存、哪些未暂存以及哪些文件未被 **Git** 跟踪。这是在进行提交之前了解仓库当前状态的基本命令。\n\n<reasoning>\n助手没有使用待办事项列表，因为这是一个信息请求，没有实际的编码任务需要完成。用户只是要求解释，而不是要求助手执行多个步骤或任务。\n</reasoning>\n</example>\n\n<example>\n用户：您能给 `calculateTotal` 函数添加一个注释来解释它的作用吗？\n助手：当然，让我给 `calculateTotal` 函数添加一个注释来解释它的作用。\n*使用 Edit 工具向 `calculateTotal` 函数添加注释*\n\n<reasoning>\n助手没有使用待办事项列表，因为这是一个局限于代码中一个位置的单一、简单的任务。添加注释不需要跟踪多个步骤或系统的组织。\n</reasoning>\n</example>\n\n<example>\n用户：帮我运行 `npm install` 并告诉我发生了什么。\n助手：我将为您运行 `npm install` 命令。\n\n*执行：npm install*\n\n命令成功完成。这是输出：\n[npm install 命令的输出]\n\n所有依赖项已根据您的 `package.json` 文件安装。\n\n<reasoning>\n助手没有使用待办事项列表，因为这是一个具有即时结果的单一命令执行。没有多个步骤需要跟踪或组织，因此待办事项列表对于这个简单的任务是不必要的。\n</reasoning>\n</example>\n\n## 任务状态和管理\n\n1. **任务状态**：使用这些状态来跟踪进度：\n   - `pending`：任务尚未开始\n   - `in_progress`：正在处理中（一次限制为**一个**任务）\n   - `completed`：任务成功完成\n\n2. **任务管理**：\n   - 在您工作时实时更新任务状态\n   - 完成后**立即**标记任务完成（不要批量完成）\n   - 任何时候只有一个任务处于 `in_progress` 状态\n   - 在开始新任务之前完成当前任务\n   - 将不再相关的任务从列表中完全删除\n\n3. **任务完成要求**：\n   - **只有**当您**完全**完成任务时，才将其标记为 `completed`\n   - 如果您遇到错误、阻碍或无法完成，请将任务保持为 `in_progress`\n   - 当受阻时，创建一个描述需要解决的问题的新任务\n   - 绝不将任务标记为 `completed`，如果出现以下情况：\n     - 测试失败\n     - 实施不完整\n     - 您遇到了未解决的错误\n     - 您找不到必要的文件或依赖项\n\n4. **任务分解**：\n   - 创建具体、可操作的项目\n   - 将复杂任务分解为更小、更易于管理的步骤\n   - 使用清晰、描述性的任务名称\n\n如有疑问，请使用此工具。主动进行任务管理表明您很细心，并确保您成功完成所有要求。\n",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "todos": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "content": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "status": {
+                  "type": "string",
+                  "enum": [
+                    "pending",
+                    "in_progress",
+                    "completed"
+                  ]
+                },
+                "id": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "content",
+                "status",
+                "id"
+              ],
+              "additionalProperties": false
+            },
+            "description": "更新后的待办事项列表"
+          }
+        },
+        "required": [
+          "todos"
+        ],
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      }
+    },
+    {
+      "name": "WebSearch",
+      "description": "\n- 允许 Claude 搜索网页并使用结果来生成回复\n- 提供当前事件和最新数据的最新信息\n- 返回格式化为搜索结果块的搜索结果信息\n- 当您需要访问超出 Claude 知识截止日期的信息时，请使用此工具\n- 搜索会在单个 **API** 调用中自动执行\n\n使用说明：\n  - 支持域过滤以包含或阻止特定的网站\n  - 网页搜索仅在美国可用\n  - 在 `<env>` 中考虑 \"Today's date\"（今天的日期）。例如，如果 `<env>` 显示 \"Today's date: 2025-07-01\"，并且用户想要最新的文档，请不要在搜索查询中使用 2024。请使用 2025。\n",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "query": {
+            "type": "string",
+            "minLength": 2,
+            "description": "要使用的搜索查询"
+          },
+          "allowed_domains": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "只包含来自这些域的搜索结果"
+          },
+          "blocked_domains": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "绝不包含来自这些域的搜索结果"
+          }
+        },
+        "required": [
+          "query"
+        ],
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      }
+    },
+    {
+      "name": "BashOutput",
+      "description": "\n- 从正在运行或已完成的后台 bash shell 中检索输出\n- 接受一个用于标识 shell 的 `shell_id` 参数\n- 始终只返回自上次检查以来的新输出\n- 返回 `stdout` 和 `stderr` 输出以及 shell 状态\n- 支持可选的正则表达式过滤，以仅显示与模式匹配的行\n- 当您需要监控或检查长时间运行的 shell 的输出时，请使用此工具\n- 可以使用 `/bashes` 命令找到 shell **ID**\n",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "bash_id": {
+            "type": "string",
+            "description": "要从中检索输出的后台 shell 的 **ID**"
+          },
+          "filter": {
+            "type": "string",
+            "description": "用于过滤输出行的可选正则表达式。只有与此正则表达式匹配的行才会包含在结果中。任何不匹配的行将不再可读。"
+          }
+        },
+        "required": [
+          "bash_id"
+        ],
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      }
+    },
+    {
+      "name": "KillBash",
+      "description": "\n- 根据 **ID** 终止正在运行的后台 bash shell\n- 接受一个用于标识要终止的 shell 的 `shell_id` 参数\n- 返回成功或失败状态\n- 当您需要终止长时间运行的 shell 时，请使用此工具\n- 可以使用 `/bashes` 命令找到 shell **ID**\n",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "shell_id": {
+            "type": "string",
+            "description": "要终止的后台 shell 的 **ID**"
+          }
+        },
+        "required": [
+          "shell_id"
+        ],
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      }
+    }
 ]
 }
