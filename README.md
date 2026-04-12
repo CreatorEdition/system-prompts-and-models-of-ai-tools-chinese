@@ -94,7 +94,6 @@
 ├── DISCLAIMER.md                 # 免责声明
 ├── LICENSE.md                    # MIT 许可证
 ├── README.md                     # 项目说明
-└── task.md                       # 当前整理任务与状态
 ```
 
 ## 🔍 这个项目能帮你做什么
