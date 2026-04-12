@@ -22,3 +22,7 @@ __pycache__/
 # 本地环境目录
 .venv/
 venv/
+
+# 本地任务与协作记录
+task.md
+.teamwork/
