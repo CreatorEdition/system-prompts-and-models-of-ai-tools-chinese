@@ -7,12 +7,14 @@
 - [x] 阅读 `README.md`、`task.md` 与 `.teamwork/` 目录
 - [x] 审计 git 历史、工作区状态与目录结构
 - [x] 识别高优先级问题：状态文档失真、异常目录名、Qoder 半迁移
+- [x] 拉取上游并确认 `origin/main` 无新增提交
 - [x] 更新 `README.md` 反映当前目录结构与整理状态
 - [x] 更新 `task.md` 反映真实进度与待收口事项
 - [x] 建立 `.teamwork` 任务与进度记录
 - [x] 规范化 `Bolt.new` 目录命名，移除隐藏字符影响
 - [x] 确认 `阿里 Qoder/` 以子目录结构纳入版本管理
 - [x] 翻译 Anthropic 首批英文资料（搜索指令 / 记忆系统 / XLSX 工具）
+- [x] 翻译短文档批次（OpenAI Monday / ChatGPT 4o-mini / Kimi K2.5）
 - [ ] 审阅其余未跟踪资料（Anthropic / OpenAI / Moonshot AI 等）
 - [ ] 继续清理未提交文档并按主题分批提交
 
@@ -24,13 +26,15 @@
 - 将异常命名目录 `‎Bolt.new` 规范化为 `Bolt.new`
 - 接受 `阿里 Qoder/` 从平铺文件向 `Qoder/` 子目录迁移的结构调整
 - 完成 Anthropic 首批英文资料的高确定性翻译
+- 完成短文档批次的英文资料翻译
 - 不主动并入未审阅的新文档内容，避免把不同主题的整理混在同一提交中
 
 ## 待处理
 
 - 继续处理 `Anthropic/` 下剩余英文资料（如 Browser Extensions、Core Models）
 - 审核 `Anthropic/` 下新增提示词与工具文档的归档边界
+- 继续处理 `OpenAI/` 下剩余英文资料（如 `o3`、`o4-mini`、`chatgpt.com-o4-mini`）
 - 审核 `OpenAI/` 下新增模型资料与 `Old/` 历史文件的保留策略
-- 审核 `月之暗面（Moonshot AI）/Kimi K2.5.txt` 等新增资料是否满足收录标准
+- 评估 `Comet Assistant/tools.json` 等工具定义文件是否需要中文化描述
 - 评估是否增加目录校验脚本，自动发现隐藏字符目录、占位符与重复路径
 - 已补充仓库级 `.gitignore`，仅忽略系统与临时文件；当前未跟踪的正文资料不应通过忽略规则掩盖
