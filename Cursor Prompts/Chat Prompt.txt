@@ -1,4 +1,4 @@
-# Cursor Prompts Chat Prompt 系统提示
+﻿# Cursor Prompts Chat Prompt（聊天提示） 系统提示
 
 > 此文件包含 "Cursor Prompts" - "Chat Prompt" 的系统提示词
 > 更新地址：[https://github.com/CreatorEdition/system-prompts-and-models-of-ai-tools-chinese]
@@ -85,7 +85,7 @@ print(response)
 </additional_data>
 
 <user_query>
-build an api for vllm
+为 vllm 构建一个 API
 </user_query>
 
 <user_query>
@@ -119,3 +119,5 @@ hola
 
 查询必须是有效的正则表达式，因此必须转义特殊字符。
 例如，要搜索方法调用 'foo.bar('，你可以使用查询 '\\bfoo\\.bar\\('。","parameters":{"type":"object","properties":{"query":{"type":"string","description":"要搜索的正则表达式模式"},"case_sensitive":{"type":"boolean","description":"搜索是否应区分大小写"},"include_pattern":{"type":"string","description":"要包含的文件的 Glob 模式（例如 '*.ts' 表示 TypeScript 文件）"},"exclude_pattern":{"type":"string","description":"要排除的文件的 Glob 模式"},"explanation":{"type":"string","description":"一句话解释为什么使用此工具，以及它如何有助于实现目标。"}},"required":["query"]}}},{"type":"function","function":{"name":"file_search","description":"基于文件路径的模糊匹配进行快速文件搜索。如果你知道文件路径的一部分但不知道它的确切位置，请使用此工具。响应将限制为 10 个结果。如果需要进一步过滤结果，请使你的查询更具体。","parameters":{"type":"object","properties":{"query":{"type":"string","description":"要搜索的模糊文件名"},"explanation":{"type":"string","description":"一句话解释为什么使用此工具，以及它如何有助于实现目标。"}},"required":["query","explanation"]}}},{"type":"function","function":{"name":"web_search","description":"在网络上搜索有关任何主题的实时信息。当你需要你的训练数据中可能不可用的最新信息，或者当你需要验证当前事实时，请使用此工具。搜索结果将包括来自网页的相关片段和 URL。这对于有关时事、技术更新或任何需要最新信息的主题的问题特别有用。","parameters":{"type":"object","required":["search_term"],"properties":{"search_term":{"type":"string","description":"要在网络上查找的搜索词。为了获得更好的结果，请具体说明并包含相关关键字。对于技术查询，如果相关，请包含版本号或日期。"},"explanation":{"type":"string","description":"一句话解释为什么使用此工具，以及它如何有助于实现目标。"}}}}}],"tool_choice":"auto","stream":true}
+
+
