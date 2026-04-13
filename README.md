@@ -2,7 +2,7 @@
 
 <div align="center">
 
-> **最近更新：** 2026-04-12
+> **最近更新：** 2026-04-13
 
 ![版本](https://img.shields.io/badge/版本-1.0.0-blue)
 ![许可](https://img.shields.io/badge/许可-MIT-green)
@@ -214,3 +214,10 @@ Tool Name/
 ## 📜 许可证
 
 本项目采用 MIT 许可证，详见 [LICENSE.md](./LICENSE.md)。
+
+## 本轮同步（2026-04-13）
+
+- 已拉取并比对 `upstream-x1xhlol/main` 与 `upstream-asgeirtj/main`。
+- 已补齐 `Cursor Prompts/` 扁平目录新增文件，并为 Anthropic 新路径补齐本地映射译稿。
+- 已新增 `task.md` 与 `CONTRIBUTING.md`，用于记录上游差异、目录映射规则与后续批次翻译任务。
+- `Anthropic/Claude Sonnet 4.6.txt` 以及 `OpenAI/`、`Google/`、`Misc/` 的更多新增文件仍在待翻译清单中。
