@@ -80,3 +80,23 @@
 - 校对并落地 `Anthropic/Claude Sonnet 4.6.txt`、`Anthropic/claude-opus-4.6.md`、`Anthropic/claude-sonnet-4.6.md` 的完整中文译文。
 - 评估是否补齐 `Anthropic/old/` 历史文件到本地，以便与 upstream-asgeirtj 的新结构对齐。
 - 决定是否为 `OpenAI/`、`Google/`、`Misc/` 新扁平路径保留与旧层级并存的双轨收录策略。
+## 本轮同步（2026-04-17）
+
+### 上游增量检查结果
+- 已重新抓取 `upstream-x1xhlol/main` 与 `upstream-asgeirtj/main`。
+- 与上次自动化记录相比，`upstream-asgeirtj/main` 新增了 `Anthropic/Official/claude-opus-4.7.md`，并继续更新 `Anthropic/claude-opus-4.6.md`、`Anthropic/claude-sonnet-4.6.md`、`OpenAI/gpt-5.4-thinking.md` 等既有文件。
+- `Anthropic/Official/README.md` 仅为上游档案链接说明，不属于新的提示词正文文件，当前先记录来源，不在本地单独建立对应中文文件。
+
+### 本地缺失并已补齐的文件
+- `Anthropic/Official/claude-opus-4.7.md` -> `Anthropic/claude-opus-4.7.md`
+
+### 本轮待合并的翻译批次
+- Anthropic 4.6 主提示词：`Anthropic/claude-opus-4.6.md`、`Anthropic/claude-opus-4.6-no-tools.md`
+- Anthropic 4.6 Sonnet 系列：`Anthropic/claude-sonnet-4.6.md`、`Anthropic/claude-sonnet-4.6-no-tools.md`、`Anthropic/Claude Sonnet 4.6.txt`
+- Anthropic 说明与辅助文档：`Anthropic/claude.ai-human-readable.md`、`Anthropic/claude-cowork.md`、`Anthropic/claude-desktop-code.md`、`Anthropic/claude-opus-4.7.md`
+- Anthropic raw：`Anthropic/raw/claude-opus-4.6-raw.md`、`Anthropic/raw/claude-sonnet-4.6-raw.md`
+- OpenAI / Google / Misc：`OpenAI/gpt-5.3-instant.md`、`OpenAI/gpt-5.4-thinking.md`、`Google/nano-banana-2-api.md`、`Misc/meta-ai.md`
+
+### 下一步处理原则
+- 继续维持“先补齐缺失原文，再就地覆盖中文译文”的策略，避免上游新增文件漏收。
+- 对上游目录重排但本地已有稳定中文映射的路径，优先记录映射关系，不重复制造双份同义文件。

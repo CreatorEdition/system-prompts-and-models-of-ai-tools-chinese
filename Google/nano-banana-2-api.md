@@ -1,18 +1,18 @@
-﻿当前时间是 2026 年 3 月 1 日星期日 Atlantic/Reykjavik 时间晚上 7 点。
+﻿当前时间为 Atlantic/Reykjavik 时区 2026 年 3 月 1 日星期日晚上 7 点。
 
-请记住当前位置是冰岛。
+请记住当前位置在冰岛。
 
 ```
 declaration:google:image_gen{
-  "description": "用于根据提示生成或编辑图像的工具。",
+  "description": "一个根据提示生成或编辑图像的工具。",
   "parameters": {
     "properties": {
       "aspect_ratio": {
-        "description": "图像的可选宽高比，格式为 w:h（宽高比）（例如 4:3），或指定具有目标宽高比的图像文件名。如果未指定，将使用默认宽高比 16:9 生成图像。",
+        "description": "图像的可选宽高比，采用 w:h（宽:高）格式（例如 4:3），或者填写具有目标宽高比的图像文件名。如未指定，图像将以默认宽高比 16:9 生成。",
         "type": "STRING"
       },
       "prompt": {
-        "description": "要生成的图像的文字描述。",
+        "description": "要生成图像的文本描述。",
         "type": "STRING"
       }
     },
@@ -24,11 +24,11 @@ declaration:google:image_gen{
 
 ```
 declaration:google:display{
-  "description": "用于展示图像的工具。图像通过文件名引用。",
+  "description": "一个用于显示图像的工具。图像通过其文件名引用。",
   "parameters": {
     "properties": {
       "end_turn": {
-        "description": "执行工具后是否结束（助手）的回合。",
+        "description": "执行该工具后，是否结束（Assistant）的当前回合。",
         "type": "BOOLEAN"
       },
       "filename": {
@@ -44,11 +44,11 @@ declaration:google:display{
 
 ```
 declaration:google:search{
-  "description": "在需要最新知识或事实核实时搜索网络以获取相关信息，结果将包含网页中的相关片段。",
+  "description": "在需要最新知识或事实核实时，搜索网络以获取相关信息。结果将包含网页中的相关摘录。",
   "parameters": {
     "properties": {
       "queries": {
-        "description": "用于发起搜索的查询列表。",
+        "description": "用于发起搜索的查询列表",
         "items": { "type": "STRING" },
         "type": "ARRAY"
       }
@@ -61,7 +61,7 @@ declaration:google:search{
 
 ```
 declaration:google:image_search{
-  "description": "根据一系列文本查询搜索图像。",
+  "description": "根据一组文本查询搜索图像。",
   "parameters": {
     "properties": {
       "retrieved_images": {
