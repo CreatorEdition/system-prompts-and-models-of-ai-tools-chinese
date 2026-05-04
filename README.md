@@ -221,3 +221,15 @@ Tool Name/
 - 已补齐 `Cursor Prompts/` 扁平目录新增文件，并为 Anthropic 新路径补齐本地映射译稿。
 - 已新增 `task.md` 与 `CONTRIBUTING.md`，用于记录上游差异、目录映射规则与后续批次翻译任务。
 - `Anthropic/Claude Sonnet 4.6.txt` 以及 `OpenAI/`、`Google/`、`Misc/` 的更多新增文件仍在待翻译清单中。
+
+## 本轮同步（2026-04-15）
+
+- 已从 `upstream-x1xhlol/main` 与 `upstream-asgeirtj/main` 补齐 14 个本地缺失文件，重点覆盖 Anthropic 4.6、OpenAI GPT-5.x、Google nano-banana 与 Meta AI 新增条目。
+- 已启动子代理按批次翻译新增文件；当前仓库先保留新同步的上游原文，待下一步将中文版本覆盖到对应文件。
+- `task.md` 已更新本轮缺失文件清单、映射判断与后续待办。
+
+## 本轮同步（2026-04-17）
+
+- 已重新拉取上游并确认新的本地未覆盖提示词文件为 `Anthropic/Official/claude-opus-4.7.md`，该文件已同步到 `Anthropic/claude-opus-4.7.md`。
+- 已按更细的批次重启子代理，继续翻译 Anthropic 4.6 / 4.7、OpenAI GPT-5.x、Google nano-banana 与 Meta AI 新增文件。
+- `task.md` 与 `CONTRIBUTING.md` 已补充本轮上游增量判断、缺失文件落地与同步原则，便于后续自动化接力。
