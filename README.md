@@ -2,7 +2,7 @@
 
 <div align="center">
 
-> **最近更新：** 2026-05-05
+> **最近更新：** 2026-05-06
 
 ![版本](https://img.shields.io/badge/版本-1.0.0-blue)
 ![许可](https://img.shields.io/badge/许可-MIT-green)
@@ -234,8 +234,9 @@ Tool Name/
 - 已按更细的批次重启子代理，继续翻译 Anthropic 4.6 / 4.7、OpenAI GPT-5.x、Google nano-banana 与 Meta AI 新增文件。
 - `task.md` 与 `CONTRIBUTING.md` 已补充本轮上游增量判断、缺失文件落地与同步原则，便于后续自动化接力。
 
-## 本轮同步（2026-05-05）
+## 本轮同步（2026-05-06）
 
-- 已重新抓取 `upstream-x1xhlol/main` 与 `upstream-asgeirtj/main`；相对上一轮自动化记录，本轮唯一新增的本地未覆盖提示词文件是 `Misc/cursor.md`，现已同步入库。
-- 已按 Anthropic 主提示词、Anthropic 辅助文档、OpenAI / Misc 三类重启子代理翻译批次，继续消化 2026-04-15 以来累计的新文件。
-- `task.md` 与 `CONTRIBUTING.md` 已记录本轮增量判断、缺失文件补齐结果与后续校验原则，便于下一轮继续接力。
+- 已重新拉取 `upstream-x1xhlol/main` 与 `upstream-asgeirtj/main`，确认 `upstream-x1xhlol/main` 本轮只有 README / 资源素材更新，没有新的本地缺失提示词正文文件。
+- 已核对 `upstream-asgeirtj/main` 4 月下旬以来新增文件的本地覆盖关系；除 `Misc/cursor.md` 外，其余新增条目均已被本地中文目录或既有路径收录。
+- 已将 `upstream-asgeirtj/main:Misc/cursor.md` 按本仓库目录约定翻译落地到 `Cursor Prompts/cursor.md`，不保留 `Misc/cursor.md` 这类与现有分类冲突的双轨路径。
+- `task.md` 已补充本轮覆盖判断、映射关系与后续待办，便于下一轮继续处理 2026-04-15 与 2026-04-17 留下的大批量待译文件。
