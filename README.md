@@ -2,7 +2,7 @@
 
 <div align="center">
 
-> **最近更新：** 2026-04-13
+> **最近更新：** 2026-05-05
 
 ![版本](https://img.shields.io/badge/版本-1.0.0-blue)
 ![许可](https://img.shields.io/badge/许可-MIT-green)
@@ -233,3 +233,9 @@ Tool Name/
 - 已重新拉取上游并确认新的本地未覆盖提示词文件为 `Anthropic/Official/claude-opus-4.7.md`，该文件已同步到 `Anthropic/claude-opus-4.7.md`。
 - 已按更细的批次重启子代理，继续翻译 Anthropic 4.6 / 4.7、OpenAI GPT-5.x、Google nano-banana 与 Meta AI 新增文件。
 - `task.md` 与 `CONTRIBUTING.md` 已补充本轮上游增量判断、缺失文件落地与同步原则，便于后续自动化接力。
+
+## 本轮同步（2026-05-05）
+
+- 已重新抓取 `upstream-x1xhlol/main` 与 `upstream-asgeirtj/main`；相对上一轮自动化记录，本轮唯一新增的本地未覆盖提示词文件是 `Misc/cursor.md`，现已同步入库。
+- 已按 Anthropic 主提示词、Anthropic 辅助文档、OpenAI / Misc 三类重启子代理翻译批次，继续消化 2026-04-15 以来累计的新文件。
+- `task.md` 与 `CONTRIBUTING.md` 已记录本轮增量判断、缺失文件补齐结果与后续校验原则，便于下一轮继续接力。

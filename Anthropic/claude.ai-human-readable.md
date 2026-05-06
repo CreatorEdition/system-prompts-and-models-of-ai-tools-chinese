@@ -1,4 +1,4 @@
-﻿# Claude System Prompt — Human-Readable Reference  
+# Claude System Prompt — Human-Readable Reference  
 
 ---  
 

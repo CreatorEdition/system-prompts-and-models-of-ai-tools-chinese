@@ -100,3 +100,23 @@
 ### 下一步处理原则
 - 继续维持“先补齐缺失原文，再就地覆盖中文译文”的策略，避免上游新增文件漏收。
 - 对上游目录重排但本地已有稳定中文映射的路径，优先记录映射关系，不重复制造双份同义文件。
+
+## 本轮同步（2026-05-05）
+
+### 上游增量检查结果
+- 已重新抓取 `upstream-x1xhlol/main`、`upstream-asgeirtj/main` 与 `origin/main`。
+- 相比 2026-04-17 的自动化记录，`upstream-asgeirtj/main` 新增了 `Misc/cursor.md`，并更新了上游 `README.md`。
+- `upstream-x1xhlol/main` 本轮未发现新的本地未覆盖提示词文件；仍以既有中文目录映射规则为准，不因上游重排重复落地同义路径。
+
+### 本地缺失并已补齐的文件
+- `Misc/cursor.md`
+
+### 本轮翻译批次
+- Anthropic Opus 4.6：`Anthropic/claude-opus-4.6.md`、`Anthropic/claude-opus-4.6-no-tools.md`
+- Anthropic Sonnet 4.6：`Anthropic/claude-sonnet-4.6.md`、`Anthropic/claude-sonnet-4.6-no-tools.md`、`Anthropic/Claude Sonnet 4.6.txt`
+- Anthropic 辅助文档与 raw：`Anthropic/claude.ai-human-readable.md`、`Anthropic/claude-cowork.md`、`Anthropic/claude-desktop-code.md`、`Anthropic/raw/claude-opus-4.6-raw.md`、`Anthropic/raw/claude-sonnet-4.6-raw.md`
+- OpenAI / Misc：`OpenAI/gpt-5.3-instant.md`、`OpenAI/gpt-5.4-thinking.md`、`Misc/meta-ai.md`、`Misc/cursor.md`
+
+### 下一步处理
+- 合并本轮子代理产出的中文译文，并做 UTF-8 可读性、代码围栏与标签结构校验。
+- 后续若 `upstream-asgeirtj/main` 的 `README.md` 再出现索引级变更，优先只同步本仓库需要的状态说明，不镜像无关英文说明。

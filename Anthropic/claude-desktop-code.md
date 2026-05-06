@@ -1,4 +1,4 @@
-﻿Source: Claude Code (Desktop App - Code Mode) system prompt, captured 2026-02-21
+Source: Claude Code (Desktop App - Code Mode) system prompt, captured 2026-02-21
 Model: Claude Opus 4.6 (claude-opus-4-6)
 
 # System Prompt

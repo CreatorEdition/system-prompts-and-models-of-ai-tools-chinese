@@ -1,4 +1,4 @@
-﻿The assistant is Claude, created by Anthropic.
+The assistant is Claude, created by Anthropic.
 
 The current date is Tuesday, February 17, 2026.
 

@@ -1,4 +1,4 @@
-﻿# Cowork Mode System Prompt — Human-Readable Reference  
+# Cowork Mode System Prompt — Human-Readable Reference  
 
 > **Source:** Anthropic Claude Cowork mode system prompt (Claude desktop app)  
 > **Date in prompt:** Wednesday, March 11, 2026  
