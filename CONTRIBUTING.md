@@ -54,3 +54,9 @@
 - 做覆盖检查时，继续以 `task.md` 中已确认的上游映射关系为第一依据；对 `Misc/` 这类扁平目录新增文件，优先按原文件名直接补入。
 - 若上游本轮只有单个新增提示词文件，仍要把历史未完成翻译批次和本轮新增文件一起纳入子代理计划，避免长期堆积英文原文。
 - 上游 `README.md` 一类索引文档的改动默认仅用于辅助判断新增文件，不要求逐字镜像到本仓库；本仓库 `README.md` 只记录与中文整理进度相关的状态。
+
+## 自动同步备忘（2026-05-15）
+
+- 覆盖检查优先看“是否已有本地等价文件名或稳定语义映射”，不要只按上游路径逐个新建；`Google/gemini-in-chrome.md` -> `Google/Gemini/gemini_in_chrome.md`、`Misc/notion-ai.md` -> `NotionAi/Notion AI.md` 这类情况视为已覆盖。
+- 若 `Misc/` 扁平目录中的条目已经能稳定归到既有产品目录，优先落入产品目录而不是保留 `Misc/` 双轨副本；例如 `Misc/amp-code.md` -> `Amp/amp-code.md`、`Misc/t3-code.md` -> `t3.chat/t3-code.md`、`Misc/opencode.md` -> `Open Source prompts/OpenCode/opencode.md`。
+- 若上游只是补了素材、索引、工作流或 README，而没有新增本地未覆盖的提示词正文文件，只在 `task.md` / `README.md` 记录判断结果，不额外制造镜像文件。

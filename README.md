@@ -240,3 +240,10 @@ Tool Name/
 - 已核对 `upstream-asgeirtj/main` 4 月下旬以来新增文件的本地覆盖关系；除 `Misc/cursor.md` 外，其余新增条目均已被本地中文目录或既有路径收录。
 - 已将 `upstream-asgeirtj/main:Misc/cursor.md` 按本仓库目录约定翻译落地到 `Cursor Prompts/cursor.md`，不保留 `Misc/cursor.md` 这类与现有分类冲突的双轨路径。
 - `task.md` 已补充本轮覆盖判断、映射关系与后续待办，便于下一轮继续处理 2026-04-15 与 2026-04-17 留下的大批量待译文件。
+
+## 本轮同步（2026-05-15）
+
+- 已重新拉取 `origin/main`、`upstream-x1xhlol/main` 与 `upstream-asgeirtj/main`；确认 `upstream-x1xhlol/main` 本轮没有新的本地未覆盖提示词正文文件，仍以素材与已覆盖路径重排为主。
+- 已按“文件名 + 语义映射”重新压缩 `upstream-asgeirtj/main` 的扁平新增路径，避免把已被本地产品目录承接的条目重复建成双轨文件。
+- 已补齐 10 个真正缺失的新文件，覆盖 Anthropic 历史/辅助文档、Google Gemini YouTube、Amp、Microsoft Copilot CLI、OpenCode、t3.chat、OpenAI Codex 与 xAI Grok Expert。
+- `task.md` 与 `CONTRIBUTING.md` 已补充 2026-05-15 的覆盖判断、映射原则与翻译批次，便于后续自动化继续接力。

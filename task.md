@@ -122,3 +122,39 @@
 - 合并本轮子代理产出的中文译文，并做 UTF-8 可读性、代码围栏与标签结构校验。
 - 后续若 `upstream-asgeirtj/main` 的 `README.md` 再出现索引级变更，优先只同步本仓库需要的状态说明，不镜像无关英文说明。
 - 对 `Misc/` 这类上游扁平目录新增文件，若本仓库已有稳定产品目录，应优先落入既有中文分类，不保留与现有结构冲突的双轨路径。
+
+## 本轮同步（2026-05-15）
+
+### 上游增量检查结果
+- 已重新抓取 `origin/main`、`upstream-x1xhlol/main` 与 `upstream-asgeirtj/main`。
+- `upstream-x1xhlol/main` 本轮相对 `origin/main` 仍以素材、目录重排和已覆盖文件为主；未发现新的本地未覆盖提示词正文文件。`Google/Gemini/AI Studio vibe-coder.txt` 这类大小写差异条目继续视作已被本地同名文件覆盖。
+- `upstream-asgeirtj/main` 在 `4633f00..8affcd4` 间新增了大量扁平路径；按本仓库既有语义映射和文件名覆盖规则压缩后，真正需要补入的仅为少量新文件，而不是整批重复镜像。
+
+### 已有本地等价内容，继续不重复新建
+- `Google/gemini-in-chrome.md` -> `Google/Gemini/gemini_in_chrome.md`
+- `Misc/kagi-assistant.md` -> `Kagi/Kagi Assistant.md`
+- `Misc/notion-ai.md` -> `NotionAi/Notion AI.md`
+- 其余 `OpenAI/`、`Anthropic/Features/`、`Anthropic/Tools_Plugins/`、`xAI/Personalities/` 等多数新增扁平路径，已可由本地旧层级同名文件承接，不再重复制造双轨文件。
+
+### 本地缺失并已补齐的文件
+- `upstream-asgeirtj/main:Anthropic/old/claude-3.7-full-system-message-with-all-tools.md` -> `Anthropic/old/claude-3.7-full-system-message-with-all-tools.md`
+- `upstream-asgeirtj/main:Anthropic/visualize.md` -> `Anthropic/visualize.md`
+- `upstream-asgeirtj/main:Google/gemini-youtube.md` -> `Google/Gemini/gemini-youtube.md`
+- `upstream-asgeirtj/main:Misc/amp-code.md` -> `Amp/amp-code.md`
+- `upstream-asgeirtj/main:Misc/copilot-cli.md` -> `Microsoft Copilot/copilot-cli.md`
+- `upstream-asgeirtj/main:Misc/opencode.md` -> `Open Source prompts/OpenCode/opencode.md`
+- `upstream-asgeirtj/main:Misc/t3-code.md` -> `t3.chat/t3-code.md`
+- `upstream-asgeirtj/main:OpenAI/codex/gpt-5.3-codex-spark.md` -> `OpenAI/Codex/gpt-5.3-codex-spark.md`
+- `upstream-asgeirtj/main:OpenAI/codex/plan_mode.md` -> `OpenAI/Codex/plan_mode.md`
+- `upstream-asgeirtj/main:xAI/grok-expert.md` -> `Grok（xAI）/Features/grok-expert.md`
+
+### 本轮翻译批次
+- Anthropic 历史/辅助：`Anthropic/old/claude-3.7-full-system-message-with-all-tools.md`、`Anthropic/visualize.md`
+- 产品文档：`Amp/amp-code.md`、`Microsoft Copilot/copilot-cli.md`、`Grok（xAI）/Features/grok-expert.md`
+- 新增小批次：`Google/Gemini/gemini-youtube.md`、`Open Source prompts/OpenCode/opencode.md`、`t3.chat/t3-code.md`
+- OpenAI Codex：`OpenAI/Codex/gpt-5.3-codex-spark.md`、`OpenAI/Codex/plan_mode.md`
+
+### 下一步处理
+- 本轮已完成中文落地：`Google/Gemini/gemini-youtube.md`、`Open Source prompts/OpenCode/opencode.md`、`t3.chat/t3-code.md`、`OpenAI/Codex/gpt-5.3-codex-spark.md`、`OpenAI/Codex/plan_mode.md`。
+- 本轮仍待后续继续翻译：`Anthropic/old/claude-3.7-full-system-message-with-all-tools.md`、`Anthropic/visualize.md`、`Amp/amp-code.md`、`Microsoft Copilot/copilot-cli.md`、`Grok（xAI）/Features/grok-expert.md`。阻塞原因是部分子代理所在 worktree 继续命中 `windows sandbox: setup refresh failed with status exit code: 1`。
+- 若后续继续追 `upstream-asgeirtj/main` 的扁平目录扩张，默认先做文件名/语义覆盖判断，再决定是否需要新增文件。
